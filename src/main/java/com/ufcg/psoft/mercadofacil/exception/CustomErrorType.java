@@ -17,7 +17,7 @@ public class CustomErrorType {
     private LocalDateTime timestamp;
     private String message;
     private List<String> errors;
-    public CustomErrorType(MercadoFacilException e) {
+    public CustomErrorType(PitsAException e) {
         this.timestamp = LocalDateTime.now();
         this.message = e.getMessage();
         this.errors = new ArrayList<>();

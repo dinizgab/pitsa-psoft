@@ -15,27 +15,29 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "produtos")
-public class Produto {
+public class Entregador {
     @JsonProperty("id")
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
     @JsonProperty("nome")
     @Column(nullable = false)
     private String nome;
+
     @JsonProperty("preco")
     @Column(nullable = false)
-    private Double preco;
+    private String placaVeiculo;
+
     @JsonProperty("codigoDeBarras")
     @Column(nullable = false)
-    private String codigoDeBarras;
+    private String tipoVeiculo;
+
     @JsonProperty("fabricante")
     @Column(nullable = false)
-    private String fabricante;
+    private String corVeiculo;
 
-    @JsonProperty("lotes")
-    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
-    private Set<Lote> lotes;
-
+    @JsonProperty("codigoAcesso")
+    @Column(nullable = false)
+    private String codigoAcesso;
 }
-

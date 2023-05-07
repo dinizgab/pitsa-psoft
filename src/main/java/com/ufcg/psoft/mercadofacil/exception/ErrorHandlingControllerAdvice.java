@@ -50,10 +50,10 @@ public class ErrorHandlingControllerAdvice {
         return customErrorType;
     }
 
-    @ExceptionHandler(MercadoFacilException.class)
+    @ExceptionHandler(PitsAException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public CustomErrorType onMercadoFacilException(MercadoFacilException e) {
+    public CustomErrorType onMercadoFacilException(PitsAException e) {
         return defaultCustomErrorTypeConstruct(
                 e.getMessage()
         );
