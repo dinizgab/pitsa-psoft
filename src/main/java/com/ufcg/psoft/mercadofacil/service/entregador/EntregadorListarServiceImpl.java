@@ -1,6 +1,7 @@
 package com.ufcg.psoft.mercadofacil.service.entregador;
 
 import com.ufcg.psoft.mercadofacil.dto.EntregadorReadDTO;
+import com.ufcg.psoft.mercadofacil.exception.EntregadorNaoExisteException;
 import com.ufcg.psoft.mercadofacil.model.Entregador;
 import com.ufcg.psoft.mercadofacil.repository.EntregadorRepository;
 import org.modelmapper.ModelMapper;
@@ -22,7 +23,7 @@ public class EntregadorListarServiceImpl implements EntregadorListarService{
         List<EntregadorReadDTO> listaResultado = new ArrayList<>();
 
         if (id != null && id > 0) {
-            Entregador resultadoBusca = entregadorRepository.findById(id).get();
+            Entregador resultadoBusca = entregadorRepository.findById(id).orElseThrow(EntregadorNaoExisteException::new);
 
             listaResultado.add(modelMapper.map(resultadoBusca, EntregadorReadDTO.class));
         } else {

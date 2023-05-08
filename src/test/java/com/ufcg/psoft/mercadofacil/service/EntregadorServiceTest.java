@@ -10,10 +10,8 @@ import com.ufcg.psoft.mercadofacil.repository.EntregadorRepository;
 import com.ufcg.psoft.mercadofacil.service.entregador.EntregadorAtualizarService;
 import com.ufcg.psoft.mercadofacil.service.entregador.EntregadorCriarService;
 import com.ufcg.psoft.mercadofacil.service.entregador.EntregadorListarService;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.ufcg.psoft.mercadofacil.service.entregador.EntregadorRemoverService;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -28,6 +26,8 @@ public class EntregadorServiceTest {
     EntregadorListarService driverListar;
     @Autowired
     EntregadorAtualizarService driverAtualizar;
+    @Autowired
+    EntregadorRemoverService driverRemover;
 
     @Autowired
     EntregadorRepository entregadorRepository;
@@ -154,7 +154,7 @@ public class EntregadorServiceTest {
 
         List<Entregador> resultBefore = entregadorRepository.findAll();
 
-        entregadorRepository.deleteById(entregadorId);
+        driverRemover.remover(entregadorId);
 
         List<Entregador> resultAfter = entregadorRepository.findAll();
 
