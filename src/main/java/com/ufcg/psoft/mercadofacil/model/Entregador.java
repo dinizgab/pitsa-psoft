@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -42,6 +43,6 @@ public class Entregador {
     private String codigoAcesso;
 
     @JsonProperty("estabelecimento")
-    @ManyToOne(optional = true)
-    private Estabelecimento estabelecimento;
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Estabelecimento> estabelecimentos;
 }

@@ -24,6 +24,9 @@ public class EntregadorPatchEstabelecimentoServiceImpl implements EntregadorPatc
     @Autowired
     ModelMapper modelMapper;
 
+    // TODO - Lista de entregadores pendentes em estabelecimento, e quando aprovar eles, tira da lista de pendentes e adiciona na lista de aprovados
+    // Quando for fazer uma operaçao sob um entregador de um estabelecimento, verifica se ele ta na lista de aprovados
+
     @Override
     public Entregador alteraParcialmente(Long entregadorId, Long estabelecimentoId, String codigoAcesso) {
         Entregador entregador = entregadorRepository.findById(entregadorId).orElseThrow(EntregadorNaoExisteException::new);
@@ -31,7 +34,7 @@ public class EntregadorPatchEstabelecimentoServiceImpl implements EntregadorPatc
 
         Estabelecimento estabelecimento = estabelecimentoListarService.listar(estabelecimentoId).get(0);
 
-        entregador.setEstabelecimento(estabelecimento);
+        entregador.getEstabelecimentos().add(estabelecimento);
         estabelecimento.getEntregadores().add(entregador);
 
         estabelecimentoPatchEntregador.alteraParcialmente(estabelecimentoId, modelMapper.map(estabelecimento, EstabelecimentoEntregadorDTO.class));

@@ -27,6 +27,6 @@ public class Estabelecimento {
     private String codigoAcesso;
 
     @JsonProperty("entregadores")
-    @OneToMany(mappedBy = "estabelecimento",fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "estabelecimentos",fetch = FetchType.LAZY)
     private List<Entregador> entregadores;
 }

@@ -39,6 +39,7 @@ public class EntregadorAssociacaoServiceTest {
                 .corVeiculo("Verde")
                 .placaVeiculo("FAS-5432")
                 .tipoVeiculo("Carro")
+                .estabelecimentos(new ArrayList<>())
                 .build()
         ).getId();
 
@@ -65,7 +66,7 @@ public class EntregadorAssociacaoServiceTest {
         Estabelecimento resultadoEstabelecimento = estabelecimentoRepository.findById(estabelecimentoId).get();
 
         assertTrue(resultadoEstabelecimento.getEntregadores().contains(resultado));
-        assertTrue(resultado.getEstabelecimento().equals(resultadoEstabelecimento));
+        assertTrue(resultado.getEstabelecimentos().contains(resultadoEstabelecimento));
     }
 
     @Test
