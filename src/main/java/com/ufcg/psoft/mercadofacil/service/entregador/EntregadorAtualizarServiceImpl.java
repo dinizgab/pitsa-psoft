@@ -15,15 +15,15 @@ public class EntregadorAtualizarServiceImpl implements EntregadorAtualizarServic
     @Autowired
     EntregadorRepository entregadorRepository;
     @Autowired
+    AutenticaEmpregadoService autenticaEmpregadoService;
+    @Autowired
     ModelMapper modelMapper;
 
     @Override
     public EntregadorReadDTO atualizar(Long id, EntregadorPostPutDTO entregadorAtualizado) throws CodigoAcessoInvalidoException {
         Entregador entregador = entregadorRepository.findById(id).orElseThrow(EntregadorNaoExisteException::new);
 
-        if (!entregador.getCodigoAcesso().equals(entregadorAtualizado.getCodigoAcesso())) {
-            throw new CodigoAcessoInvalidoException();
-        }
+        autenticaEmpregadoService.autenticar(entregador.getCodigoAcesso(), entregadorAtualizado.getCodigoAcesso());
 
         modelMapper.map(entregadorAtualizado, entregador);
         Entregador resultado = entregadorRepository.save(entregador);

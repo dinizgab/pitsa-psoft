@@ -40,4 +40,8 @@ public class Entregador {
     @JsonProperty("codigoAcesso")
     @Column(nullable = false)
     private String codigoAcesso;
+
+    @JsonProperty("estabelecimento")
+    @ManyToOne(optional = true)
+    private Estabelecimento estabelecimento;
 }
