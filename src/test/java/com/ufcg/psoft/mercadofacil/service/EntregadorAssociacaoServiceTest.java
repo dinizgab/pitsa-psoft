@@ -7,7 +7,6 @@ import com.ufcg.psoft.mercadofacil.repository.EntregadorRepository;
 import com.ufcg.psoft.mercadofacil.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.mercadofacil.service.entregador.EntregadorPatchEstabelecimentoService;
 import jakarta.transaction.Transactional;
-import org.hibernate.annotations.Fetch;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

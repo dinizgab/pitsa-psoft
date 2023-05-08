@@ -6,9 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
 
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -28,5 +27,5 @@ public class Estabelecimento {
 
     @JsonProperty("entregadores")
     @ManyToMany(mappedBy = "estabelecimentos",fetch = FetchType.LAZY)
-    private List<Entregador> entregadores;
+    private Set<Entregador> entregadores;
 }
