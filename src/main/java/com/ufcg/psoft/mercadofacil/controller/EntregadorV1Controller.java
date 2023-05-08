@@ -1,11 +1,10 @@
 package com.ufcg.psoft.mercadofacil.controller;
 
+import com.ufcg.psoft.mercadofacil.dto.EntregadorPatchEstabelecimentoDTO;
 import com.ufcg.psoft.mercadofacil.dto.EntregadorPostPutDTO;
+import com.ufcg.psoft.mercadofacil.dto.EntregadorReadDTO;
 import com.ufcg.psoft.mercadofacil.model.Entregador;
-import com.ufcg.psoft.mercadofacil.service.entregador.EntregadorAtualizarService;
-import com.ufcg.psoft.mercadofacil.service.entregador.EntregadorCriarService;
-import com.ufcg.psoft.mercadofacil.service.entregador.EntregadorListarService;
-import com.ufcg.psoft.mercadofacil.service.entregador.EntregadorRemoverService;
+import com.ufcg.psoft.mercadofacil.service.entregador.*;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +28,9 @@ public class EntregadorV1Controller {
     EntregadorAtualizarService entregadorAtualizarService;
     @Autowired
     EntregadorRemoverService entregadorExcluirService;
+    @Autowired
+    EntregadorPatchEstabelecimentoService entregadorPatchEstabelecimentoService;
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarUmEntregador(
@@ -72,4 +74,12 @@ public class EntregadorV1Controller {
                 .body("");
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> atualizarEntregador(
+            @PathVariable Long id,
+            @RequestBody @Valid EntregadorPatchEstabelecimentoDTO entregadorPatchEstabelecimentoDTO) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(entregadorPatchEstabelecimentoService.alteraParcialmente(id, entregadorPatchEstabelecimentoDTO));
+    }
 }

@@ -2,27 +2,27 @@ package com.ufcg.psoft.mercadofacil.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ufcg.psoft.mercadofacil.dto.EntregadorPatchEstabelecimentoDTO;
 import com.ufcg.psoft.mercadofacil.dto.EntregadorReadDTO;
 import com.ufcg.psoft.mercadofacil.exception.CustomErrorType;
 import com.ufcg.psoft.mercadofacil.model.Entregador;
 import com.ufcg.psoft.mercadofacil.dto.EntregadorPostPutDTO;
+import com.ufcg.psoft.mercadofacil.model.Estabelecimento;
 import com.ufcg.psoft.mercadofacil.repository.EntregadorRepository;
+import com.ufcg.psoft.mercadofacil.repository.EstabelecimentoRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -106,7 +106,8 @@ public class EntregadorV1ControllerTests {
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();
 
-            List<EntregadorReadDTO> resultado = objectMapper.readValue(responseJsonString, new TypeReference<>(){});
+            List<EntregadorReadDTO> resultado = objectMapper.readValue(responseJsonString, new TypeReference<>() {
+            });
 
             assertAll(
                     () -> assertEquals(3, resultado.size())
@@ -125,7 +126,8 @@ public class EntregadorV1ControllerTests {
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();
 
-            List<EntregadorReadDTO> listaResultados = objectMapper.readValue(responseJsonString, new TypeReference<>(){});
+            List<EntregadorReadDTO> listaResultados = objectMapper.readValue(responseJsonString, new TypeReference<>() {
+            });
             EntregadorReadDTO resultado = listaResultados.stream().findFirst().orElse(EntregadorReadDTO.builder().build());
 
             assertAll(
@@ -220,6 +222,61 @@ public class EntregadorV1ControllerTests {
                     .andReturn().getResponse().getContentAsString();
 
             assertTrue(responseJsonString.isBlank());
+        }
+    }
+
+    @Nested
+    @DisplayName("Testes associacao entregador-estabelecimento")
+    class TesteAssociacaoEntregador {
+        final String URI_ENTREGADORES = "/v1/entregadores";
+        @Autowired
+        EstabelecimentoRepository estabelecimentoRepository;
+        Estabelecimento estabelecimento;
+
+        @BeforeEach
+        void setUp() {
+            estabelecimento = estabelecimentoRepository.save(Estabelecimento.builder()
+                    .entregadores(new HashSet<>())
+                    .codigoAcesso("123456")
+                    .build()
+            );
+        }
+
+        void tearDown() {
+            estabelecimentoRepository.deleteAll();
+        }
+
+        // TODO - Corrigir o erro de recursao infinita ao printar o JSON
+        @Test
+        @DisplayName("Quando alteramos um entregador com codigo de acesso valido")
+        void quandoAlteramosEntregadorValido() throws Exception {
+            Long entregadorId = entregador.getId();
+            String codigoAcesso = entregador.getCodigoAcesso();
+
+            EntregadorPatchEstabelecimentoDTO entregadorEstabelecimentoDTO =
+                    EntregadorPatchEstabelecimentoDTO.builder()
+                            .estabelecimentoId(estabelecimento.getId())
+                            .codigoAcesso(codigoAcesso)
+                            .build();
+
+            String responseJsonString = driver.perform(patch(URI_ENTREGADORES + "/" + entregadorId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(entregadorEstabelecimentoDTO)))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            Entregador resultado = objectMapper.readValue(responseJsonString, Entregador.class);
+
+            assertAll(
+                    () -> assertEquals(entregadorId, entregador.getId().longValue()),
+                    () -> assertEquals(resultado.getNome(), entregador.getNome()),
+                    () -> assertEquals(resultado.getTipoVeiculo(), entregador.getTipoVeiculo()),
+                    () -> assertEquals(resultado.getPlacaVeiculo(), entregador.getPlacaVeiculo()),
+                    () -> assertEquals(resultado.getCorVeiculo(), entregador.getCorVeiculo()),
+                    () -> assertTrue(resultado.getEstabelecimentos().contains(estabelecimento)),
+                    () -> assertTrue(estabelecimento.getEntregadores().contains(resultado))
+            );
         }
     }
 }
