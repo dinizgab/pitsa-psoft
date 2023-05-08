@@ -50,7 +50,7 @@ public class EstabelecimentoServiceTest {
     @Test
     @DisplayName("Teste quando criamos um novo estabelecimento")
     void testeCriaNovoEstabelecimento() {
-        Estabelecimento resultado = driverCriar.salvar(Estabelecimento.builder()
+        Estabelecimento resultado = driverCriar.salvar(EstabelecimentoPutPostDTO.builder()
                 .codigoAcesso("654321")
                 .build()
         );
