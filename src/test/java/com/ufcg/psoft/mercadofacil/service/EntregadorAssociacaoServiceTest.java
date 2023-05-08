@@ -1,5 +1,6 @@
 package com.ufcg.psoft.mercadofacil.service;
 
+import com.ufcg.psoft.mercadofacil.dto.EntregadorPatchEstabelecimentoDTO;
 import com.ufcg.psoft.mercadofacil.exception.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.mercadofacil.model.Entregador;
 import com.ufcg.psoft.mercadofacil.model.Estabelecimento;
@@ -7,6 +8,7 @@ import com.ufcg.psoft.mercadofacil.repository.EntregadorRepository;
 import com.ufcg.psoft.mercadofacil.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.mercadofacil.service.entregador.EntregadorPatchEstabelecimentoService;
 import jakarta.transaction.Transactional;
+import org.hibernate.mapping.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,13 +41,13 @@ public class EntregadorAssociacaoServiceTest {
                 .corVeiculo("Verde")
                 .placaVeiculo("FAS-5432")
                 .tipoVeiculo("Carro")
-                .estabelecimentos(new ArrayList<>())
+                .estabelecimentos(new HashSet<>())
                 .build()
         ).getId();
 
         estabelecimentoId = estabelecimentoRepository.save(Estabelecimento.builder()
                 .codigoAcesso("123456")
-                .entregadores(new ArrayList<>())
+                .entregadores(new HashSet<>())
                 .build()
         ).getId();
     }
@@ -59,8 +62,12 @@ public class EntregadorAssociacaoServiceTest {
     @Transactional
     @DisplayName("Quando associamos um entregador a um estabelecimento com o codigo de acesso valido")
     void testeAssociaEntregadorValido() {
-        String codigoAcesso = "123467";
-        Entregador resultado = driver.alteraParcialmente(entregadorId, estabelecimentoId, codigoAcesso);
+        EntregadorPatchEstabelecimentoDTO entregadorDTO = EntregadorPatchEstabelecimentoDTO.builder()
+                .codigoAcesso("123467")
+                .estabelecimentoId(estabelecimentoId)
+                .build();
+
+        Entregador resultado = driver.alteraParcialmente(entregadorId, entregadorDTO);
 
         Estabelecimento resultadoEstabelecimento = estabelecimentoRepository.findById(estabelecimentoId).get();
 
@@ -71,6 +78,11 @@ public class EntregadorAssociacaoServiceTest {
     @Test
     @DisplayName("Quando associamos um entregador a um estabelecimento com o codigo de acesso invalido")
     void testeAssociaEntregadorInvalido() {
-        assertThrows(CodigoAcessoInvalidoException.class, () -> driver.alteraParcialmente(entregadorId, estabelecimentoId, "123456"));
+        EntregadorPatchEstabelecimentoDTO entregadorDTO = EntregadorPatchEstabelecimentoDTO.builder()
+                .codigoAcesso("123456")
+                .estabelecimentoId(estabelecimentoId)
+                .build();
+
+        assertThrows(CodigoAcessoInvalidoException.class, () -> driver.alteraParcialmente(entregadorId, entregadorDTO));
     }
 }

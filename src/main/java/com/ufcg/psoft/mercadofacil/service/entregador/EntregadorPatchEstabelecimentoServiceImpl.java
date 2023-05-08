@@ -1,6 +1,7 @@
 package com.ufcg.psoft.mercadofacil.service.entregador;
 
-import com.ufcg.psoft.mercadofacil.dto.EstabelecimentoEntregadorDTO;
+import com.ufcg.psoft.mercadofacil.dto.EntregadorPatchEstabelecimentoDTO;
+import com.ufcg.psoft.mercadofacil.dto.EstabelecimentoPatchEntregadorDTO;
 import com.ufcg.psoft.mercadofacil.exception.EntregadorNaoExisteException;
 import com.ufcg.psoft.mercadofacil.model.Entregador;
 import com.ufcg.psoft.mercadofacil.model.Estabelecimento;
@@ -28,7 +29,10 @@ public class EntregadorPatchEstabelecimentoServiceImpl implements EntregadorPatc
     // Quando for fazer uma operaçao sob um entregador de um estabelecimento, verifica se ele ta na lista de aprovados
 
     @Override
-    public Entregador alteraParcialmente(Long entregadorId, Long estabelecimentoId, String codigoAcesso) {
+    public Entregador alteraParcialmente(Long entregadorId, EntregadorPatchEstabelecimentoDTO entregadorDTO) {
+        String codigoAcesso = entregadorDTO.getCodigoAcesso();
+        Long estabelecimentoId = entregadorDTO.getEstabelecimentoId();
+
         Entregador entregador = entregadorRepository.findById(entregadorId).orElseThrow(EntregadorNaoExisteException::new);
         autenticaEmpregadoService.autenticar(entregador.getCodigoAcesso(), codigoAcesso);
 
@@ -37,7 +41,11 @@ public class EntregadorPatchEstabelecimentoServiceImpl implements EntregadorPatc
         entregador.getEstabelecimentos().add(estabelecimento);
         estabelecimento.getEntregadores().add(entregador);
 
-        estabelecimentoPatchEntregador.alteraParcialmente(estabelecimentoId, modelMapper.map(estabelecimento, EstabelecimentoEntregadorDTO.class));
+        EstabelecimentoPatchEntregadorDTO estabelecimentoEntregadorDTO = EstabelecimentoPatchEntregadorDTO.builder()
+                .entregadores(estabelecimento.getEntregadores())
+                .build();
+
+        estabelecimentoPatchEntregador.alteraParcialmente(estabelecimentoId, estabelecimentoEntregadorDTO);
 
         return entregador;
     }
