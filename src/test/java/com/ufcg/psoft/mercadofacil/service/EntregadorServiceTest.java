@@ -84,13 +84,13 @@ public class EntregadorServiceTest {
         entregadorRepository.saveAll(Arrays.asList(entregador1, entregador2));
         List<EntregadorReadDTO> resultado = driverListar.listar(null);
 
-        assertEquals(3, resultado.size());
+        assertEquals(2, resultado.size());
     }
 
-/*    @Test
+    @Test
     @DisplayName("Quando lista um entregador pelo seu ID")
     void testeListaEntregadorPorId() {
-        entregadorRepository.save(
+        Long entregadorId = entregadorRepository.save(
                 Entregador.builder()
                         .nome("Cleber")
                         .placaVeiculo("JHG-9843")
@@ -98,47 +98,63 @@ public class EntregadorServiceTest {
                         .corVeiculo("Prata")
                         .codigoAcesso("943845")
                         .build()
-        );
+        ).getId();
 
-        Entregador resultado = entregadorRepository.findById(7L).get();
+        EntregadorReadDTO resultado = driverListar.listar(entregadorId).get(0);
 
         assertAll(
                 () -> assertEquals("Cleber", resultado.getNome()),
                 () -> assertEquals("JHG-9843", resultado.getPlacaVeiculo()),
                 () -> assertEquals("Moto", resultado.getTipoVeiculo()),
-                () -> assertEquals("Prata", resultado.getCorVeiculo()),
-                () -> assertEquals("943845", resultado.getCodigoAcesso())
+                () -> assertEquals("Prata", resultado.getCorVeiculo())
         );
     }
 
     @Test
     @DisplayName("Quando atualizar um entregador cadastrado")
     void testeAtualizarEntregador() {
-        EntregadorDTO entregadorAtualizado = EntregadorDTO.builder()
-                    .nome("Junior")
+        Long entregadorId = entregadorRepository.save(Entregador.builder()
+                .nome("Cleber Junior")
+                .placaVeiculo("QJS-1235")
+                .tipoVeiculo("Moto")
+                .corVeiculo("Preto")
+                .codigoAcesso("653423")
+                .build()
+        ).getId();
+
+        EntregadorPostPutDTO entregadorAtualizado = EntregadorPostPutDTO.builder()
+                    .nome("Juliano junior")
                     .placaVeiculo("ASD-1234")
-                    .tipoVeiculo("Moto")
-                    .corVeiculo("Roxo")
-                    .codigoAcesso("843924")
+                    .tipoVeiculo("Carro")
+                    .corVeiculo("Vermelho")
+                    .codigoAcesso("653423")
                     .build();
 
-        Entregador resultado = driverAtualizar.atualizar(4L, entregadorAtualizado);
+        EntregadorReadDTO resultado = driverAtualizar.atualizar(entregadorId, entregadorAtualizado);
 
         assertAll(
-                () -> assertEquals("Junior", resultado.getNome()),
+                () -> assertEquals("Juliano junior", resultado.getNome()),
                 () -> assertEquals("ASD-1234", resultado.getPlacaVeiculo()),
-                () -> assertEquals("Moto", resultado.getTipoVeiculo()),
-                () -> assertEquals("Roxo", resultado.getCorVeiculo()),
-                () -> assertEquals("843924", resultado.getCodigoAcesso())
+                () -> assertEquals("Carro", resultado.getTipoVeiculo()),
+                () -> assertEquals("Vermelho", resultado.getCorVeiculo())
         );
     }
 
     @Test
     @DisplayName("Quando remover um entregador cadastrado")
     void testeRemoverEntregador() {
+        Long entregadorId = entregadorRepository.save(Entregador.builder()
+                .nome("Cleber Junior")
+                .placaVeiculo("QJS-1235")
+                .tipoVeiculo("Moto")
+                .corVeiculo("Preto")
+                .codigoAcesso("653423")
+                .build()
+        ).getId();
+
         List<Entregador> resultBefore = entregadorRepository.findAll();
 
-        entregadorRepository.deleteById(4L);
+        entregadorRepository.deleteById(entregadorId);
 
         List<Entregador> resultAfter = entregadorRepository.findAll();
 
@@ -146,5 +162,5 @@ public class EntregadorServiceTest {
                 () -> assertEquals(1, resultBefore.size()),
                 () -> assertEquals(0, resultAfter.size())
         );
-    }*/
+    }
 }
