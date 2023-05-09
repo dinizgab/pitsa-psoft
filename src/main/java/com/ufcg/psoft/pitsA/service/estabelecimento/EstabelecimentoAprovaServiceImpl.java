@@ -12,6 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class EstabelecimentoAprovaServiceImpl implements EstabelecimentoAprovaService{
     @Autowired
@@ -24,21 +26,22 @@ public class EstabelecimentoAprovaServiceImpl implements EstabelecimentoAprovaSe
     public EntregadorReadDTO aprova(Long estabelecimentoId, EstabelecimentoAprovaEntregadorDTO estabelecimentoDTO) {
         Long entregadorId = estabelecimentoDTO.getEntregadorId();
         String codigoAcesso = estabelecimentoDTO.getCodigoAcesso();
-        // TODO - Criacao do erro se o entregador nao estiver na lista de pendencia
 
         Estabelecimento estabelecimento = estabelecimentoRepository.findById(estabelecimentoId).orElseThrow(EstabelecimentoNaoExisteException::new);
         autenticaCodigoAcessoService.autenticar(estabelecimento.getCodigoAcesso(), codigoAcesso);
 
 
-        Entregador entregadorAprovado = estabelecimento.getEntregadoresPendentes()
+        Optional<Entregador> entregadorAprovado = estabelecimento.getEntregadoresPendentes()
                 .stream()
-                .filter(entregador -> entregador.getId() == entregadorId)
-                .findFirst().get();
+                .filter(entregador -> entregador.getId().equals(entregadorId))
+                .findFirst();
 
-        if (entregadorAprovado == null) throw new EntregadorNaoEstaPendenteException();
+        if (entregadorAprovado.isEmpty()) throw new EntregadorNaoEstaPendenteException();
 
-        estabelecimento.getEntregadoresPendentes().remove(entregadorAprovado);
-        estabelecimento.getEntregadoresAprovados().add(entregadorAprovado);
+        Entregador entregadorPresente = entregadorAprovado.get();
+
+        estabelecimento.getEntregadoresPendentes().remove(entregadorPresente);
+        estabelecimento.getEntregadoresAprovados().add(entregadorPresente);
 
         estabelecimentoRepository.save(estabelecimento);
 

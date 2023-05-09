@@ -24,7 +24,6 @@ public class Estabelecimento {
     @Column(nullable = false)
     private String codigoAcesso;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "estabelecimentos", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
@@ -32,7 +31,6 @@ public class Estabelecimento {
     private Set<Entregador> entregadoresPendentes = new HashSet<>();
 
     @Builder.Default
-    @JsonIgnore
     @ManyToMany(mappedBy = "estabelecimentos", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

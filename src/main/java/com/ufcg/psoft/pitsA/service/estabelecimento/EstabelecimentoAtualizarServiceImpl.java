@@ -1,10 +1,10 @@
 package com.ufcg.psoft.pitsA.service.estabelecimento;
 
-import com.ufcg.psoft.pitsA.dto.EstabelecimentoPutPostDTO;
+import com.ufcg.psoft.pitsA.dto.EstabelecimentoPutDTO;
 import com.ufcg.psoft.pitsA.exception.estabelecimento.EstabelecimentoNaoExisteException;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
-import org.modelmapper.ModelMapper;
+import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,14 +13,14 @@ public class EstabelecimentoAtualizarServiceImpl implements EstabelecimentoAtual
     @Autowired
     EstabelecimentoRepository estabelecimentoRepository;
     @Autowired
-    ModelMapper modelMapper;
+    AutenticaCodigoAcessoService autenticador;
 
     @Override
-    public Estabelecimento atualizar(Long id, EstabelecimentoPutPostDTO estabelecimentoPutPostDTO) {
+    public Estabelecimento atualizar(Long id, EstabelecimentoPutDTO putBody) {
         Estabelecimento estabelecimentoAtualizado = estabelecimentoRepository.findById(id).orElseThrow(EstabelecimentoNaoExisteException::new);
+        autenticador.autenticar(estabelecimentoAtualizado.getCodigoAcesso(), putBody.getCodigoAcesso());
 
-        modelMapper.map(estabelecimentoPutPostDTO, estabelecimentoAtualizado);
-
+        estabelecimentoAtualizado.setCodigoAcesso(putBody.getCodigoAcessoAlterado());
         return estabelecimentoRepository.save(estabelecimentoAtualizado);
     }
 }

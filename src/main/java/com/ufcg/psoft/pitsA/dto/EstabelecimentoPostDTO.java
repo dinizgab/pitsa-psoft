@@ -1,18 +1,16 @@
 package com.ufcg.psoft.pitsA.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Builder
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
-public class EstabelecimentoPutPostDTO {
-    @JsonProperty("codigoAcesso")
+@NoArgsConstructor
+public class EstabelecimentoPostDTO {
     @NotBlank(message = "O codigo de acesso e obrigatorio")
     private String codigoAcesso;
 }
