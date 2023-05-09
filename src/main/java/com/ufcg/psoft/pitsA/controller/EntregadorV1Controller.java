@@ -7,6 +7,7 @@ import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.service.entregador.*;
 
 import com.ufcg.psoft.pitsA.service.entregador.*;
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -85,7 +86,7 @@ public class EntregadorV1Controller {
     }
 
     @ExceptionHandler(CodigoAcessoInvalidoException.class)
-    public ResponseEntity<?> handleCodigoInvalido(CodigoAcessoInvalidoException err) {
+    public ResponseEntity<?> codigoAcessoInvalido(CodigoAcessoInvalidoException err) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorMessage(err));
