@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EstabelecimentoDeleteDTO {
+public class EstabelecimentoPostPutDTO {
     @NotBlank(message = "O codigo de acesso e obrigatorio")
     private String codigoAcesso;
+    @NotBlank(message = "O codigo de acesso para alterar e obrigatorio")
+    private String codigoAcessoAlterado;
 }

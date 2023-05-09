@@ -18,9 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -189,7 +187,7 @@ public class EstabelecimentoV1ControllerTests {
         void quandoExcluimosEstabelecimentoValido() throws Exception {
             Long estabelecimentoId = estabelecimento.getId();
             EstabelecimentoDeleteDTO deleteBodyValido = EstabelecimentoDeleteDTO.builder()
-                    .codigoAcesso("111111")
+                    .codigoAcesso("222222")
                     .build();
 
             String responseJsonString = driver.perform(delete(URI_ESTABELECIMENTO + "/" + estabelecimentoId)
@@ -205,7 +203,7 @@ public class EstabelecimentoV1ControllerTests {
 
     @Nested
     @DisplayName("Testes de endpoints basicos de entregadores")
-    class EntregadorAprovacaoTeste {
+    class EstabelecimentoAprovacaoTeste {
         final String URI_ESTABELECIMENTO = "/v1/estabelecimento";
         @Autowired
         EntregadorRepository entregadorRepository;

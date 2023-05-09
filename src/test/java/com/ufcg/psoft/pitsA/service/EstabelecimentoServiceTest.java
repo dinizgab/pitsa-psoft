@@ -111,7 +111,7 @@ public class EstabelecimentoServiceTest {
                 .codigoAcessoAlterado("123456")
                 .build();
 
-        Estabelecimento resultado = driverAtualizar.atualizar(estabelecimentoId, putBody);
+        Estabelecimento resultado = driverAtualizar.atualizar(estabelecimentoId, estabelecimentoAtualizado);
 
         assertAll(
                 () -> assertEquals(estabelecimentoId, resultado.getId()),
@@ -142,11 +142,11 @@ public class EstabelecimentoServiceTest {
                 .codigoAcesso("789342")
                 .build()).getId();
 
-        List<Estabelecimento> resultBefore = estabelecimentoRepository.findAll();
-
         EstabelecimentoDeleteDTO deleteBody = EstabelecimentoDeleteDTO.builder()
-                .codigoAcesso("789342")
+                .codigoAcesso(estabelecimento.getCodigoAcesso())
                 .build();
+
+        List<Estabelecimento> resultBefore = estabelecimentoRepository.findAll();
 
         driverRemover.remover(estabelecimentoId, deleteBody);
 
