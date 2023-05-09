@@ -1,4 +1,4 @@
-package com.ufcg.psoft.mercadofacil.dto;
+package com.ufcg.psoft.pitsA.dto.estabelecimento;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EstabelecimentoPostPutDTO {
+public class EstabelecimentoPostDTO {
     @NotBlank(message = "O codigo de acesso e obrigatorio")
     private String codigoAcesso;
-    @NotBlank(message = "O codigo de acesso para alterar e obrigatorio")
-    private String codigoAcessoAlterado;
 }

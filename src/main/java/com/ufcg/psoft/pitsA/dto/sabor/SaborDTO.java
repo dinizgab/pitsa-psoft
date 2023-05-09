@@ -1,4 +1,4 @@
-package com.ufcg.psoft.pitsA.dto;
+package com.ufcg.psoft.pitsA.dto.sabor;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;

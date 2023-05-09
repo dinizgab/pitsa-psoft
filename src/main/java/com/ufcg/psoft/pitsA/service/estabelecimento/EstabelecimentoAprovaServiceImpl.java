@@ -1,7 +1,7 @@
 package com.ufcg.psoft.pitsA.service.estabelecimento;
 
 import com.ufcg.psoft.pitsA.dto.EntregadorReadDTO;
-import com.ufcg.psoft.pitsA.dto.EstabelecimentoAprovaEntregadorDTO;
+import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoAprovaEntregadorDTO;
 import com.ufcg.psoft.pitsA.exception.entregador.EntregadorNaoEstaPendenteException;
 import com.ufcg.psoft.pitsA.exception.estabelecimento.EstabelecimentoNaoExisteException;
 import com.ufcg.psoft.pitsA.model.Entregador;

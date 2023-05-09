@@ -1,6 +1,6 @@
 package com.ufcg.psoft.pitsA.service.estabelecimento;
 
-import com.ufcg.psoft.pitsA.dto.EstabelecimentoPostDTO;
+import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoPostDTO;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import org.modelmapper.ModelMapper;

@@ -1,4 +1,4 @@
-package com.ufcg.psoft.pitsA.service;
+package com.ufcg.psoft.pitsA.service.entregador;
 
 import com.ufcg.psoft.pitsA.dto.EntregadorPatchEstabelecimentoDTO;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
@@ -6,7 +6,6 @@ import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
-import com.ufcg.psoft.pitsA.service.entregador.EntregadorPatchEstabelecimentoService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

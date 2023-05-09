@@ -1,4 +1,4 @@
-package com.ufcg.psoft.pitsA.dto;
+package com.ufcg.psoft.pitsA.dto.estabelecimento;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
