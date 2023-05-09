@@ -1,6 +1,6 @@
 package com.ufcg.psoft.mercadofacil.service.estabelecimento;
 
-import com.ufcg.psoft.mercadofacil.dto.EstabelecimentoPutPostDTO;
+import com.ufcg.psoft.mercadofacil.dto.EstabelecimentoPostPutDTO;
 import com.ufcg.psoft.mercadofacil.model.Estabelecimento;
 import com.ufcg.psoft.mercadofacil.repository.EstabelecimentoRepository;
 import org.modelmapper.ModelMapper;
@@ -15,7 +15,7 @@ public class EstabelecimentoCriarServiceImpl implements EstabelecimentoCriarServ
     ModelMapper modelMapper;
 
     @Override
-    public Estabelecimento salvar(EstabelecimentoPutPostDTO estabelecimentoSave) {
+    public Estabelecimento salvar(EstabelecimentoPostPutDTO estabelecimentoSave) {
         Estabelecimento estabelecimento = modelMapper.map(estabelecimentoSave, Estabelecimento.class);
 
         return estabelecimentoRepository.save(estabelecimento);

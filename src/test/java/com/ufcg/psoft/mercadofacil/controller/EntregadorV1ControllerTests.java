@@ -56,9 +56,9 @@ public class EntregadorV1ControllerTests {
 
     @Nested
     @DisplayName("Testes de endpoints basicos de entregadores")
-    class ProdutoVerificacaoFluxosBasicosApiRest {
+    class EntregadorVerificacaoFluxosBasicosApiRest {
 
-        final String URI_ENTREGADORES = "/v1/entregadores";
+        final String URI_ENTREGADORES = "/v1/entregador";
         EntregadorPostPutDTO entregadorPutRequestDTO;
         EntregadorPostPutDTO entregadorPostRequestDTO;
 

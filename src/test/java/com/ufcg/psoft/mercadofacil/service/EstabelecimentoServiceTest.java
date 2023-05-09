@@ -1,7 +1,7 @@
 package com.ufcg.psoft.mercadofacil.service;
 
-import com.ufcg.psoft.mercadofacil.dto.EstabelecimentoPutPostDTO;
-import com.ufcg.psoft.mercadofacil.exception.EstabelecimentoNaoExisteException;
+import com.ufcg.psoft.mercadofacil.dto.EstabelecimentoDeleteDTO;
+import com.ufcg.psoft.mercadofacil.dto.EstabelecimentoPostPutDTO;
 import com.ufcg.psoft.mercadofacil.model.Estabelecimento;
 import com.ufcg.psoft.mercadofacil.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.mercadofacil.service.estabelecimento.EstabelecimentoAtualizarService;
@@ -50,7 +50,7 @@ public class EstabelecimentoServiceTest {
     @Test
     @DisplayName("Teste quando criamos um novo estabelecimento")
     void testeCriaNovoEstabelecimento() {
-        Estabelecimento resultado = driverCriar.salvar(EstabelecimentoPutPostDTO.builder()
+        Estabelecimento resultado = driverCriar.salvar(EstabelecimentoPostPutDTO.builder()
                 .codigoAcesso("654321")
                 .build()
         );
@@ -102,8 +102,9 @@ public class EstabelecimentoServiceTest {
                 .codigoAcesso("789342")
                 .build()).getId();
 
-        EstabelecimentoPutPostDTO estabelecimentoAtualizado = EstabelecimentoPutPostDTO.builder()
+        EstabelecimentoPostPutDTO estabelecimentoAtualizado = EstabelecimentoPostPutDTO.builder()
                 .codigoAcesso("123456")
+                .codigoAcessoAlterado("444444")
                 .build();
 
         Estabelecimento resultado = driverAtualizar.atualizar(estabelecimentoId, estabelecimentoAtualizado);
@@ -122,9 +123,13 @@ public class EstabelecimentoServiceTest {
                 .codigoAcesso("789342")
                 .build()).getId();
 
+        EstabelecimentoDeleteDTO deleteBody = EstabelecimentoDeleteDTO.builder()
+                .codigoAcesso(estabelecimento.getCodigoAcesso())
+                .build();
+
         List<Estabelecimento> resultBefore = estabelecimentoRepository.findAll();
 
-        driverRemover.remover(estabelecimentoId);
+        driverRemover.remover(estabelecimentoId, deleteBody);
 
         List<Estabelecimento> resultAfter = estabelecimentoRepository.findAll();
 
