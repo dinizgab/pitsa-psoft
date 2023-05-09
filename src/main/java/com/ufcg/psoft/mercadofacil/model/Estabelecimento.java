@@ -1,5 +1,6 @@
 package com.ufcg.psoft.mercadofacil.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,8 +23,8 @@ public class Estabelecimento {
     @Column(nullable = false)
     private String codigoAcesso;
 
-    @JsonProperty("entregadores")
-    @ManyToMany(mappedBy = "estabelecimentos", fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ManyToMany(mappedBy = "estabelecimentos", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Entregador> entregadores;

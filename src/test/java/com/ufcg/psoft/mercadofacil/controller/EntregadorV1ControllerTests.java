@@ -237,11 +237,12 @@ public class EntregadorV1ControllerTests {
         void setUp() {
             estabelecimento = estabelecimentoRepository.save(Estabelecimento.builder()
                     .entregadores(new HashSet<>())
-                    .codigoAcesso("123456")
+                    .codigoAcesso("654321")
                     .build()
             );
         }
 
+        @AfterEach
         void tearDown() {
             estabelecimentoRepository.deleteAll();
         }
@@ -267,7 +268,10 @@ public class EntregadorV1ControllerTests {
                     .andReturn().getResponse().getContentAsString();
 
             Entregador resultado = objectMapper.readValue(responseJsonString, Entregador.class);
+            Estabelecimento resultadoEstabelecimento = estabelecimentoRepository.findById(estabelecimento.getId()).get();
 
+            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            System.out.println(resultadoEstabelecimento);
             assertAll(
                     () -> assertEquals(entregadorId, entregador.getId().longValue()),
                     () -> assertEquals(resultado.getNome(), entregador.getNome()),
@@ -275,7 +279,8 @@ public class EntregadorV1ControllerTests {
                     () -> assertEquals(resultado.getPlacaVeiculo(), entregador.getPlacaVeiculo()),
                     () -> assertEquals(resultado.getCorVeiculo(), entregador.getCorVeiculo()),
                     () -> assertTrue(resultado.getEstabelecimentos().contains(estabelecimento)),
-                    () -> assertTrue(estabelecimento.getEntregadores().contains(resultado))
+                    // TODO - Corrigir o getEntregadores que nao retorna nenhum valor
+                    () -> assertTrue(resultadoEstabelecimento.getEntregadores().contains(entregador))
             );
         }
     }
