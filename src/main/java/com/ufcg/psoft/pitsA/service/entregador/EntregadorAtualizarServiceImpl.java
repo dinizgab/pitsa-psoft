@@ -2,8 +2,8 @@ package com.ufcg.psoft.pitsA.service.entregador;
 
 import com.ufcg.psoft.pitsA.dto.EntregadorPostPutDTO;
 import com.ufcg.psoft.pitsA.dto.EntregadorReadDTO;
-import com.ufcg.psoft.pitsA.exception.CodigoAcessoInvalidoException;
-import com.ufcg.psoft.pitsA.exception.EntregadorNaoExisteException;
+import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
+import com.ufcg.psoft.pitsA.exception.entregador.EntregadorNaoExisteException;
 import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
 import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;

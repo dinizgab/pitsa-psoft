@@ -1,7 +1,7 @@
 package com.ufcg.psoft.pitsA.service.estabelecimento;
 
 import com.ufcg.psoft.pitsA.dto.EstabelecimentoPatchEntregadorDTO;
-import com.ufcg.psoft.pitsA.exception.EstabelecimentoNaoExisteException;
+import com.ufcg.psoft.pitsA.exception.estabelecimento.EstabelecimentoNaoExisteException;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import org.modelmapper.ModelMapper;

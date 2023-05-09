@@ -1,6 +1,6 @@
 package com.ufcg.psoft.pitsA.service.auth;
 
-import com.ufcg.psoft.pitsA.exception.CodigoAcessoInvalidoException;
+import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import org.springframework.stereotype.Service;
 
 @Service

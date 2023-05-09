@@ -2,7 +2,7 @@ package com.ufcg.psoft.pitsA.service.entregador;
 
 import com.ufcg.psoft.pitsA.dto.EntregadorPatchEstabelecimentoDTO;
 import com.ufcg.psoft.pitsA.dto.EstabelecimentoPatchEntregadorDTO;
-import com.ufcg.psoft.pitsA.exception.EntregadorNaoExisteException;
+import com.ufcg.psoft.pitsA.exception.entregador.EntregadorNaoExisteException;
 import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;

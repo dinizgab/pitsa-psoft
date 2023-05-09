@@ -1,4 +1,4 @@
-package com.ufcg.psoft.pitsA.exception.saborException;
+package com.ufcg.psoft.pitsA.exception.sabor;
 
 import com.ufcg.psoft.pitsA.exception.PitsAException;
 

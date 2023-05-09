@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufcg.psoft.pitsA.dto.EntregadorPatchEstabelecimentoDTO;
 import com.ufcg.psoft.pitsA.dto.EntregadorReadDTO;
-import com.ufcg.psoft.pitsA.exception.CodigoAcessoInvalidoException;
+import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.dto.EntregadorPostPutDTO;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
@@ -18,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
