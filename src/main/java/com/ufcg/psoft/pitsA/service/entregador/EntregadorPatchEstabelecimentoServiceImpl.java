@@ -1,13 +1,13 @@
-package com.ufcg.psoft.mercadofacil.service.entregador;
+package com.ufcg.psoft.pitsA.service.entregador;
 
-import com.ufcg.psoft.mercadofacil.dto.EntregadorPatchEstabelecimentoDTO;
-import com.ufcg.psoft.mercadofacil.dto.EstabelecimentoPatchEntregadorDTO;
-import com.ufcg.psoft.mercadofacil.exception.EntregadorNaoExisteException;
-import com.ufcg.psoft.mercadofacil.model.Entregador;
-import com.ufcg.psoft.mercadofacil.model.Estabelecimento;
-import com.ufcg.psoft.mercadofacil.repository.EntregadorRepository;
-import com.ufcg.psoft.mercadofacil.service.estabelecimento.EstabelecimentoListarService;
-import com.ufcg.psoft.mercadofacil.service.estabelecimento.EstabelecimentoPatchEntregador;
+import com.ufcg.psoft.pitsA.dto.EntregadorPatchEstabelecimentoDTO;
+import com.ufcg.psoft.pitsA.dto.EstabelecimentoPatchEntregadorDTO;
+import com.ufcg.psoft.pitsA.exception.EntregadorNaoExisteException;
+import com.ufcg.psoft.pitsA.model.Entregador;
+import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
+import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoListarService;
+import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoPatchEntregador;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,10 +39,10 @@ public class EntregadorPatchEstabelecimentoServiceImpl implements EntregadorPatc
         Estabelecimento estabelecimento = estabelecimentoListarService.listar(estabelecimentoId).get(0);
 
         entregador.getEstabelecimentos().add(estabelecimento);
-        estabelecimento.getEntregadores().add(entregador);
+        estabelecimento.getEntregadoresPendentes().add(entregador);
 
         EstabelecimentoPatchEntregadorDTO estabelecimentoEntregadorDTO = EstabelecimentoPatchEntregadorDTO.builder()
-                .entregadores(estabelecimento.getEntregadores())
+                .entregadores(estabelecimento.getEntregadoresPendentes())
                 .build();
 
         estabelecimentoPatchEntregador.alteraParcialmente(estabelecimentoId, estabelecimentoEntregadorDTO);

@@ -1,9 +1,9 @@
-package com.ufcg.psoft.mercadofacil.service.estabelecimento;
+package com.ufcg.psoft.pitsA.service.estabelecimento;
 
-import com.ufcg.psoft.mercadofacil.dto.EstabelecimentoPutPostDTO;
-import com.ufcg.psoft.mercadofacil.exception.EstabelecimentoNaoExisteException;
-import com.ufcg.psoft.mercadofacil.model.Estabelecimento;
-import com.ufcg.psoft.mercadofacil.repository.EstabelecimentoRepository;
+import com.ufcg.psoft.pitsA.dto.EstabelecimentoPutPostDTO;
+import com.ufcg.psoft.pitsA.exception.EstabelecimentoNaoExisteException;
+import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
