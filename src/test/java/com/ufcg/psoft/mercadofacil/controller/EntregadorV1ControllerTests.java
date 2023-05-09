@@ -247,7 +247,6 @@ public class EntregadorV1ControllerTests {
             estabelecimentoRepository.deleteAll();
         }
 
-        // TODO - Corrigir o erro de recursao infinita ao printar o JSON
         @Test
         @DisplayName("Quando alteramos um entregador com codigo de acesso valido")
         void quandoAlteramosEntregadorValido() throws Exception {
@@ -270,8 +269,6 @@ public class EntregadorV1ControllerTests {
             Entregador resultado = objectMapper.readValue(responseJsonString, Entregador.class);
             Estabelecimento resultadoEstabelecimento = estabelecimentoRepository.findById(estabelecimento.getId()).get();
 
-            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            System.out.println(resultadoEstabelecimento);
             assertAll(
                     () -> assertEquals(entregadorId, entregador.getId().longValue()),
                     () -> assertEquals(resultado.getNome(), entregador.getNome()),
@@ -281,6 +278,32 @@ public class EntregadorV1ControllerTests {
                     () -> assertTrue(resultado.getEstabelecimentos().contains(estabelecimento)),
                     // TODO - Corrigir o getEntregadores que nao retorna nenhum valor
                     () -> assertTrue(resultadoEstabelecimento.getEntregadores().contains(entregador))
+            );
+        }
+
+        @Test
+        @DisplayName("Quando associamos um entregador com codigo de acesso invalido")
+        void quandoAlteradorEntregadorInvalido() throws Exception {
+            Long entregadorId = entregador.getId();
+            String codigoAcesso = "777777";
+
+            EntregadorPatchEstabelecimentoDTO entregadorEstabelecimentoDTO =
+                    EntregadorPatchEstabelecimentoDTO.builder()
+                            .estabelecimentoId(estabelecimento.getId())
+                            .codigoAcesso(codigoAcesso)
+                            .build();
+
+            String responseJsonString = driver.perform(patch(URI_ENTREGADORES + "/" + entregadorId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(entregadorEstabelecimentoDTO)))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            CustomErrorType resultado = objectMapper.readValue(responseJsonString, CustomErrorType.class);
+
+            assertAll(
+                    () -> assertEquals("O codigo de acesso informado eh invalido", resultado.getMessage())
             );
         }
     }
