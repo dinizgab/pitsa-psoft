@@ -6,6 +6,7 @@ import com.ufcg.psoft.pitsA.exception.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.exception.EntregadorNaoExisteException;
 import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
+import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class EntregadorAtualizarServiceImpl implements EntregadorAtualizarServic
     @Autowired
     EntregadorRepository entregadorRepository;
     @Autowired
-    AutenticaEmpregadoService autenticaEmpregadoService;
+    AutenticaCodigoAcessoService autenticaEmpregadoService;
     @Autowired
     ModelMapper modelMapper;
 

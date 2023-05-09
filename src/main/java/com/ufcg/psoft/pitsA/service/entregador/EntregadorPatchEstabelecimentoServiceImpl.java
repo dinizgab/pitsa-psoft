@@ -6,6 +6,7 @@ import com.ufcg.psoft.pitsA.exception.EntregadorNaoExisteException;
 import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
+import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoListarService;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoPatchEntregador;
 import org.modelmapper.ModelMapper;
@@ -21,7 +22,7 @@ public class EntregadorPatchEstabelecimentoServiceImpl implements EntregadorPatc
     @Autowired
     EstabelecimentoPatchEntregador estabelecimentoPatchEntregador;
     @Autowired
-    AutenticaEmpregadoService autenticaEmpregadoService;
+    AutenticaCodigoAcessoService autenticaEmpregadoService;
     @Autowired
     ModelMapper modelMapper;
 
