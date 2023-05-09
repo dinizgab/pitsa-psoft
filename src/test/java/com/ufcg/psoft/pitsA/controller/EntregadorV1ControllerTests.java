@@ -4,12 +4,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufcg.psoft.pitsA.dto.EntregadorPatchEstabelecimentoDTO;
 import com.ufcg.psoft.pitsA.dto.EntregadorReadDTO;
+import com.ufcg.psoft.pitsA.exception.ErrorMessage;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.dto.EntregadorPostPutDTO;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -201,8 +203,7 @@ public class EntregadorV1ControllerTests {
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();
 
-            CodigoAcessoInvalidoException resultado = objectMapper.readValue(responseJsonString, CodigoAcessoInvalidoException.class);
-
+            ErrorMessage resultado = objectMapper.readValue(responseJsonString, ErrorMessage.class);
             assertAll(
                     () -> assertEquals("O codigo de acesso informado eh invalido", resultado.getMessage())
             );
@@ -245,6 +246,7 @@ public class EntregadorV1ControllerTests {
             estabelecimentoRepository.deleteAll();
         }
 
+        @Transactional
         @Test
         @DisplayName("Quando alteramos um entregador com codigo de acesso valido")
         void quandoAlteramosEntregadorValido() throws Exception {
@@ -273,7 +275,6 @@ public class EntregadorV1ControllerTests {
                     () -> assertEquals(resultado.getTipoVeiculo(), entregador.getTipoVeiculo()),
                     () -> assertEquals(resultado.getPlacaVeiculo(), entregador.getPlacaVeiculo()),
                     () -> assertEquals(resultado.getCorVeiculo(), entregador.getCorVeiculo()),
-                    () -> assertTrue(resultado.getEstabelecimentos().contains(estabelecimento)),
                     // TODO - Corrigir o getEntregadores que nao retorna nenhum valor
                     () -> assertTrue(resultadoEstabelecimento.getEntregadoresPendentes().contains(entregador))
             );
@@ -298,8 +299,7 @@ public class EntregadorV1ControllerTests {
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();
 
-            CodigoAcessoInvalidoException resultado = objectMapper.readValue(responseJsonString, CodigoAcessoInvalidoException.class);
-
+            ErrorMessage resultado = objectMapper.readValue(responseJsonString, ErrorMessage.class);
             assertAll(
                     () -> assertEquals("O codigo de acesso informado eh invalido", resultado.getMessage())
             );

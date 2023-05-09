@@ -1,12 +1,16 @@
 package com.ufcg.psoft.pitsA.service;
 
-import com.ufcg.psoft.pitsA.dto.EstabelecimentoPutPostDTO;
+import com.ufcg.psoft.pitsA.dto.EstabelecimentoDeleteDTO;
+import com.ufcg.psoft.pitsA.dto.EstabelecimentoPostDTO;
+import com.ufcg.psoft.pitsA.dto.EstabelecimentoPutDTO;
+import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoAtualizarService;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoCriarService;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoListarService;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoRemoverService;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,7 +53,7 @@ public class EstabelecimentoServiceTest {
     @Test
     @DisplayName("Teste quando criamos um novo estabelecimento")
     void testeCriaNovoEstabelecimento() {
-        Estabelecimento resultado = driverCriar.salvar(EstabelecimentoPutPostDTO.builder()
+        Estabelecimento resultado = driverCriar.salvar(EstabelecimentoPostDTO.builder()
                 .codigoAcesso("654321")
                 .build()
         );
@@ -74,6 +78,7 @@ public class EstabelecimentoServiceTest {
         assertEquals(3, resultado.size());
     }
 
+    @Transactional
     @Test
     @DisplayName("Teste quando listamos um estabelecimentos pelo id")
     void testeListaEstabelecimentoPorId() {
@@ -95,22 +100,38 @@ public class EstabelecimentoServiceTest {
 
     // TODO - Adicionar a validacao de codigo de acesso no momento que for atualizar um estabelecimento
     @Test
-    @DisplayName("Quando atualizamos um estabelecimento")
-    void testeAtualizaEstabelecimento() {
+    @DisplayName("Quando atualizamos um estabelecimento codigo valido")
+    void testeAtualizaEstabelecimentoValido() {
         Long estabelecimentoId = estabelecimentoRepository.save(Estabelecimento.builder()
                 .codigoAcesso("789342")
                 .build()).getId();
 
-        EstabelecimentoPutPostDTO estabelecimentoAtualizado = EstabelecimentoPutPostDTO.builder()
-                .codigoAcesso("123456")
+        EstabelecimentoPutDTO putBody = EstabelecimentoPutDTO.builder()
+                .codigoAcesso("789342")
+                .codigoAcessoAlterado("123456")
                 .build();
 
-        Estabelecimento resultado = driverAtualizar.atualizar(estabelecimentoId, estabelecimentoAtualizado);
+        Estabelecimento resultado = driverAtualizar.atualizar(estabelecimentoId, putBody);
 
         assertAll(
                 () -> assertEquals(estabelecimentoId, resultado.getId()),
                 () -> assertEquals("123456", resultado.getCodigoAcesso())
         );
+    }
+
+    @Test
+    @DisplayName("Quando atualizamos um estabelecimento codigo invalido")
+    void testeAtualizaEstabelecimentoInvalido() {
+        Long estabelecimentoId = estabelecimentoRepository.save(Estabelecimento.builder()
+                .codigoAcesso("789342")
+                .build()).getId();
+
+        EstabelecimentoPutDTO putBody = EstabelecimentoPutDTO.builder()
+                .codigoAcesso("111111")
+                .codigoAcessoAlterado("123456")
+                .build();
+
+        assertThrows(CodigoAcessoInvalidoException.class, () -> driverAtualizar.atualizar(estabelecimentoId, putBody));
     }
 
     // TODO - Adicionar a validacao de codigo de acesso no momento que for remover um estabelecimento
@@ -123,7 +144,11 @@ public class EstabelecimentoServiceTest {
 
         List<Estabelecimento> resultBefore = estabelecimentoRepository.findAll();
 
-        driverRemover.remover(estabelecimentoId);
+        EstabelecimentoDeleteDTO deleteBody = EstabelecimentoDeleteDTO.builder()
+                .codigoAcesso("789342")
+                .build();
+
+        driverRemover.remover(estabelecimentoId, deleteBody);
 
         List<Estabelecimento> resultAfter = estabelecimentoRepository.findAll();
 
@@ -131,5 +156,19 @@ public class EstabelecimentoServiceTest {
                 () -> assertEquals(2, resultBefore.size()),
                 () -> assertEquals(1, resultAfter.size())
         );
+    }
+
+    @Test
+    @DisplayName("Quando removemos um estabelecimento codigo invalido")
+    void testeRemoveEstabelecimentoInvalido() {
+        Long estabelecimentoId = estabelecimentoRepository.save(Estabelecimento.builder()
+                .codigoAcesso("789342")
+                .build()).getId();
+
+        EstabelecimentoDeleteDTO deleteBody = EstabelecimentoDeleteDTO.builder()
+                .codigoAcesso("111111")
+                .build();
+
+        assertThrows(CodigoAcessoInvalidoException.class, () -> driverRemover.remover(estabelecimentoId, deleteBody));
     }
 }

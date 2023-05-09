@@ -123,7 +123,7 @@ public class EstabelecimentoAprovaServiceTest {
 
         EstabelecimentoAprovaEntregadorDTO estabelecimentoDTO = EstabelecimentoAprovaEntregadorDTO.builder()
                 .entregadorId(12L)
-                .codigoAcesso("222222")
+                .codigoAcesso("111111")
                 .build();
 
         assertThrows(EntregadorNaoEstaPendenteException.class, () -> driver.aprova(estabelecimentoId, estabelecimentoDTO));
