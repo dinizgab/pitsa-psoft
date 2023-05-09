@@ -40,8 +40,13 @@ public class EstabelecimentoAprovaServiceImpl implements EstabelecimentoAprovaSe
 
         Entregador entregadorPresente = entregadorAprovado.get();
 
-        estabelecimento.getEntregadoresPendentes().remove(entregadorPresente);
-        estabelecimento.getEntregadoresAprovados().add(entregadorPresente);
+        // TODO - Trocar a operacao por um enum
+        if (estabelecimentoDTO.isAprovar()) {
+            estabelecimento.getEntregadoresPendentes().remove(entregadorPresente);
+            estabelecimento.getEntregadoresAprovados().add(entregadorPresente);
+        } else {
+            estabelecimento.getEntregadoresPendentes().remove(entregadorPresente);
+        }
 
         estabelecimentoRepository.save(estabelecimento);
 

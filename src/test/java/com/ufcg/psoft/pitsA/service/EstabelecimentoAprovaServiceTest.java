@@ -82,6 +82,7 @@ public class EstabelecimentoAprovaServiceTest {
         EstabelecimentoAprovaEntregadorDTO estabelecimentoDTO = EstabelecimentoAprovaEntregadorDTO.builder()
                 .entregadorId(entregadorId)
                 .codigoAcesso("111111")
+                .aprovar(true)
                 .build();
 
         EntregadorReadDTO resultado = driver.aprova(estabelecimentoId, estabelecimentoDTO);
@@ -96,9 +97,30 @@ public class EstabelecimentoAprovaServiceTest {
         );
     }
 
+    @Transactional
     @Test
+    @DisplayName("Teste quando ocorre a rejeicao do entregador")
     void testaRejeicao() {
+        assertTrue(estabelecimento.getEntregadoresPendentes().contains(entregador));
 
+        EstabelecimentoAprovaEntregadorDTO estabelecimentoDTO = EstabelecimentoAprovaEntregadorDTO.builder()
+                .entregadorId(entregadorId)
+                .codigoAcesso("111111")
+                .aprovar(false)
+                .build();
+
+        EntregadorReadDTO resultado = driver.aprova(estabelecimentoId, estabelecimentoDTO);
+
+        assertAll(
+                () -> assertFalse(estabelecimento.getEntregadoresAprovados().contains(entregador)),
+                () -> assertFalse(estabelecimento.getEntregadoresPendentes().contains(entregador)),
+
+                () -> assertEquals(0, estabelecimento.getEntregadoresPendentes().size()),
+                () -> assertEquals(entregador.getNome(), resultado.getNome()),
+                () -> assertEquals(entregador.getPlacaVeiculo(), resultado.getPlacaVeiculo()),
+                () -> assertEquals(entregador.getTipoVeiculo(), resultado.getTipoVeiculo()),
+                () -> assertEquals(entregador.getCorVeiculo(), resultado.getCorVeiculo())
+        );
     }
 
     @Transactional
@@ -109,6 +131,7 @@ public class EstabelecimentoAprovaServiceTest {
 
         EstabelecimentoAprovaEntregadorDTO estabelecimentoDTO = EstabelecimentoAprovaEntregadorDTO.builder()
                 .entregadorId(entregadorId)
+                .aprovar(true)
                 .codigoAcesso("222222")
                 .build();
 
@@ -117,12 +140,11 @@ public class EstabelecimentoAprovaServiceTest {
 
     @Transactional
     @Test
-    @DisplayName("Testa codigo de acesso invalido")
-    void testeEntregadorNaoPendente() {
-        assertTrue(estabelecimento.getEntregadoresPendentes().contains(entregador));
-
+    @DisplayName("Testa entregador nao esta presente na lista de pendencia")
+    void testaEntregadorNaoPresente() {
         EstabelecimentoAprovaEntregadorDTO estabelecimentoDTO = EstabelecimentoAprovaEntregadorDTO.builder()
                 .entregadorId(12L)
+                .aprovar(true)
                 .codigoAcesso("111111")
                 .build();
 

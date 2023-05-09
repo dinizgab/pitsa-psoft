@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufcg.psoft.pitsA.dto.*;
 import com.ufcg.psoft.pitsA.exception.ErrorMessage;
-import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
@@ -234,11 +233,6 @@ public class EstabelecimentoV1ControllerTests {
 
             entregadorId = entregador.getId();
             estabelecimentoId = estabelecimento.getId();
-
-            EntregadorPatchEstabelecimentoDTO entregadorDTO = EntregadorPatchEstabelecimentoDTO.builder()
-                    .estabelecimentoId(estabelecimentoId)
-                    .codigoAcesso("777777")
-                    .build();
         }
 
         @AfterEach
@@ -247,15 +241,15 @@ public class EstabelecimentoV1ControllerTests {
             estabelecimentoRepository.deleteAll();
         }
 
+        @Transactional
         @Test
         @DisplayName("Quando aprovamos um entregador valido")
-        void quandoAlteramosEstabelecimentoValido() throws Exception {
+        void quandoAprovamosUmEntregadorValido() throws Exception {
             EstabelecimentoAprovaEntregadorDTO aprovaBodyValido = EstabelecimentoAprovaEntregadorDTO.builder()
                     .codigoAcesso("111111")
+                    .aprovar(true)
                     .entregadorId(entregadorId)
                     .build();
-
-            System.out.println(estabelecimento);
 
             String responseJsonString = driver.perform(patch(URI_ESTABELECIMENTO + "/" + estabelecimentoId)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -279,13 +273,14 @@ public class EstabelecimentoV1ControllerTests {
         @Transactional
         @Test
         @DisplayName("Testa alteracao com codigo de acesso invalido")
-        void testaAlteracaoCodigoInvalido() throws Exception {
+        void quandoAprovamosUmEntregadorCodigoInvalido() throws Exception {
             EstabelecimentoAprovaEntregadorDTO aprovaBodyInvalido = EstabelecimentoAprovaEntregadorDTO.builder()
                     .entregadorId(entregadorId)
+                    .aprovar(false)
                     .codigoAcesso("222222")
                     .build();
 
-            String responseJsonString = driver.perform(put(URI_ESTABELECIMENTO + "/" + estabelecimentoId)
+            String responseJsonString = driver.perform(patch(URI_ESTABELECIMENTO + "/" + estabelecimentoId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(aprovaBodyInvalido)))
                     .andExpect(status().isBadRequest())
@@ -295,6 +290,59 @@ public class EstabelecimentoV1ControllerTests {
             ErrorMessage resultado = objectMapper.readValue(responseJsonString, ErrorMessage.class);
             assertAll(
                     () -> assertEquals("O codigo de acesso informado eh invalido", resultado.getMessage())
+            );
+        }
+
+        @Transactional
+        @Test
+        @DisplayName("Quando rejeitamos um entregador valido")
+        void quandoRejeitamosUmEntregador() throws Exception {
+            EstabelecimentoAprovaEntregadorDTO aprovaBodyValido = EstabelecimentoAprovaEntregadorDTO.builder()
+                    .codigoAcesso("111111")
+                    .aprovar(false)
+                    .entregadorId(entregadorId)
+                    .build();
+
+            String responseJsonString = driver.perform(patch(URI_ESTABELECIMENTO + "/" + estabelecimentoId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(aprovaBodyValido)))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            EntregadorReadDTO resultado = objectMapper.readValue(responseJsonString, EntregadorReadDTO.class);
+
+            assertAll(
+                    () -> assertFalse(estabelecimento.getEntregadoresPendentes().contains(entregador)),
+                    () -> assertFalse(estabelecimento.getEntregadoresAprovados().contains(entregador)),
+                    () -> assertEquals(0, estabelecimento.getEntregadoresPendentes().size()),
+                    () -> assertEquals(entregador.getNome(), resultado.getNome()),
+                    () -> assertEquals(entregador.getPlacaVeiculo(), resultado.getPlacaVeiculo()),
+                    () -> assertEquals(entregador.getTipoVeiculo(), resultado.getTipoVeiculo()),
+                    () -> assertEquals(entregador.getCorVeiculo(), resultado.getCorVeiculo())
+            );
+        }
+
+        @Transactional
+        @Test
+        @DisplayName("Testa aprovacao do entregador nao pendente")
+        void quandoAprovamosUmEntregadorNaoPendente() throws Exception {
+            EstabelecimentoAprovaEntregadorDTO aprovaBodyInvalido = EstabelecimentoAprovaEntregadorDTO.builder()
+                    .entregadorId(null)
+                    .aprovar(false)
+                    .codigoAcesso("111111")
+                    .build();
+
+            String responseJsonString = driver.perform(patch(URI_ESTABELECIMENTO + "/" + estabelecimentoId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(aprovaBodyInvalido)))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            ErrorMessage resultado = objectMapper.readValue(responseJsonString, ErrorMessage.class);
+            assertAll(
+                    () -> assertEquals("O Entregador consultado nao esta na lista de pendencia desse estabelecimento!", resultado.getMessage())
             );
         }
     }
