@@ -228,7 +228,7 @@ public class EntregadorV1ControllerTests {
     @Nested
     @DisplayName("Testes associacao entregador-estabelecimento")
     class TesteAssociacaoEntregador {
-        final String URI_ENTREGADORES = "/v1/entregadores";
+        final String URI_ENTREGADORES = "/v1/entregador";
         @Autowired
         EstabelecimentoRepository estabelecimentoRepository;
         Estabelecimento estabelecimento;

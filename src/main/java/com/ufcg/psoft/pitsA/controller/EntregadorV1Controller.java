@@ -2,6 +2,8 @@ package com.ufcg.psoft.pitsA.controller;
 
 import com.ufcg.psoft.pitsA.dto.EntregadorPatchEstabelecimentoDTO;
 import com.ufcg.psoft.pitsA.dto.EntregadorPostPutDTO;
+import com.ufcg.psoft.pitsA.exception.ErrorMessage;
+import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.service.entregador.*;
 
 import com.ufcg.psoft.pitsA.service.entregador.*;
@@ -80,5 +82,12 @@ public class EntregadorV1Controller {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(entregadorPatchEstabelecimentoService.alteraParcialmente(id, entregadorPatchEstabelecimentoDTO));
+    }
+
+    @ExceptionHandler(CodigoAcessoInvalidoException.class)
+    public ResponseEntity<?> handleCodigoInvalido(CodigoAcessoInvalidoException err) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorMessage(err));
     }
 }

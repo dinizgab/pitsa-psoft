@@ -92,7 +92,7 @@ public class EstabelecimentoV1Controller {
     }
 
     @ExceptionHandler(EntregadorNaoEstaPendenteException.class)
-    public ResponseEntity<?> codigoAcessoInvalido(EntregadorNaoEstaPendenteException err) {
+    public ResponseEntity<?> entregadorNaoPendente(EntregadorNaoEstaPendenteException err) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorMessage(err));
