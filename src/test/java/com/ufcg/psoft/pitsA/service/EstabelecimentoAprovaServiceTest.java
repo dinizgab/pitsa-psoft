@@ -3,6 +3,8 @@ package com.ufcg.psoft.pitsA.service;
 import com.ufcg.psoft.pitsA.dto.EntregadorPatchEstabelecimentoDTO;
 import com.ufcg.psoft.pitsA.dto.EntregadorReadDTO;
 import com.ufcg.psoft.pitsA.dto.EstabelecimentoAprovaEntregadorDTO;
+import com.ufcg.psoft.pitsA.exception.CodigoAcessoInvalidoException;
+import com.ufcg.psoft.pitsA.exception.EntregadorNaoEstaPendenteException;
 import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
@@ -97,5 +99,33 @@ public class EstabelecimentoAprovaServiceTest {
     @Test
     void testaRejeicao() {
 
+    }
+
+    @Transactional
+    @Test
+    @DisplayName("Testa codigo de acesso invalido")
+    void testaCodigoInvalido() {
+        assertTrue(estabelecimento.getEntregadoresPendentes().contains(entregador));
+
+        EstabelecimentoAprovaEntregadorDTO estabelecimentoDTO = EstabelecimentoAprovaEntregadorDTO.builder()
+                .entregadorId(entregadorId)
+                .codigoAcesso("222222")
+                .build();
+
+        assertThrows(CodigoAcessoInvalidoException.class, () -> driver.aprova(estabelecimentoId, estabelecimentoDTO));
+    }
+
+    @Transactional
+    @Test
+    @DisplayName("Testa codigo de acesso invalido")
+    void testeEntregadorNaoPendente() {
+        assertTrue(estabelecimento.getEntregadoresPendentes().contains(entregador));
+
+        EstabelecimentoAprovaEntregadorDTO estabelecimentoDTO = EstabelecimentoAprovaEntregadorDTO.builder()
+                .entregadorId(12L)
+                .codigoAcesso("222222")
+                .build();
+
+        assertThrows(EntregadorNaoEstaPendenteException.class, () -> driver.aprova(estabelecimentoId, estabelecimentoDTO));
     }
 }
