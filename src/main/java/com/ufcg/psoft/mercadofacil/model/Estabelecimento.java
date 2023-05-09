@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -27,5 +28,8 @@ public class Estabelecimento {
     @ManyToMany(mappedBy = "estabelecimentos", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Set<Entregador> entregadores;
+    private Set<Entregador> entregadores = new HashSet<>();
+
+    @OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Sabor> cardapio = new HashSet<>();
 }
