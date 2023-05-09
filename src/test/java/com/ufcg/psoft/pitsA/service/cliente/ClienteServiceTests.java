@@ -1,7 +1,9 @@
 package com.ufcg.psoft.pitsA.service.cliente;
 
+import com.ufcg.psoft.pitsA.dto.cliente.ClienteDeleteDTO;
 import com.ufcg.psoft.pitsA.dto.cliente.ClientePostPutDTO;
 import com.ufcg.psoft.pitsA.dto.cliente.ClienteReadDTO;
+import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -14,12 +16,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @DisplayName("Testes dos servicos de Cliente")
-public class ClienteService {
+public class ClienteServiceTests {
     @Autowired
     ClienteCriarService driverCriar;
     @Autowired
@@ -28,7 +29,6 @@ public class ClienteService {
     ClienteAtualizarService driverAtualizar;
     @Autowired
     ClienteRemoverService driverRemover;
-
     @Autowired
     ClienteRepository clienteRepository;
     ClientePostPutDTO cliente;
@@ -82,7 +82,7 @@ public class ClienteService {
     @Test
     @DisplayName("Quando lista um entregador pelo seu ID")
     void testeListaClientePorId() {
-        Long entregadorId = clienteRepository.save(
+        Long clienteId = clienteRepository.save(
                 Cliente.builder()
                         .nome("Cleber Junior")
                         .endereco("Rua 28 de outubro, 2810")
@@ -99,9 +99,9 @@ public class ClienteService {
     }
 
     @Test
-    @DisplayName("Quando atualizar um Cliente cadastrado")
-    void testeAtualizarCliente() {
-        Long entregadorId = clienteRepository.save(Cliente.builder()
+    @DisplayName("Quando atualizar um Cliente cadastrado com codigo de acesso valido")
+    void testeAtualizarClienteCodigoValido() {
+        Long clienteId = clienteRepository.save(Cliente.builder()
                 .nome("Gabriel Pombo Diniz")
                 .endereco("Rua 13 de maio, 778")
                 .codigoAcesso("676767")
@@ -111,10 +111,10 @@ public class ClienteService {
         ClientePostPutDTO clienteAtualizado = ClientePostPutDTO.builder()
                 .nome("Juliano junior")
                 .endereco("Rua Legal, 100")
-                .codigoAcesso("653432")
+                .codigoAcesso("676767")
                 .build();
 
-        ClienteReadDTO resultado = driverAtualizar.atualizar(clienteId, clienteAtualizado);
+        ClienteReadDTO resultado = driverAtualizar.alterar(clienteId, clienteAtualizado);
 
         assertAll(
                 () -> assertEquals("Juliano junior", resultado.getNome()),
@@ -123,24 +123,63 @@ public class ClienteService {
     }
 
     @Test
-    @DisplayName("Quando remover um cliente cadastrado")
-    void testeRemoverCliente() {
+    @DisplayName("Quando atualizar um Cliente cadastrado com codigo de acesso invalido")
+    void testeAtualizarClienteCodigoInvalido() {
+        Long clienteId = clienteRepository.save(Cliente.builder()
+                .nome("Gabriel Pombo Diniz")
+                .endereco("Rua 13 de maio, 778")
+                .codigoAcesso("111111")
+                .build()
+        ).getId();
+
+        ClientePostPutDTO putDTO = ClientePostPutDTO.builder()
+                .nome("Juliano junior")
+                .endereco("Rua Legal, 100")
+                .codigoAcesso("653432")
+                .build();
+
+        assertThrows(CodigoAcessoInvalidoException.class, () -> driverAtualizar.alterar(clienteId, putDTO));
+    }
+
+    @Test
+    @DisplayName("Quando remover um cliente cadastrado com o codigo de acessp valido")
+    void testeRemoverClienteCodigoValido() {
         Long clienteId = clienteRepository.save(Cliente.builder()
                 .nome("Cleber Junior")
                 .endereco("Sem ideia, 0000")
                 .codigoAcesso("123456")
                 .build()
         ).getId();
+        ClienteDeleteDTO deleteDTO = ClienteDeleteDTO.builder()
+                .codigoAcesso("123456")
+                .build();
 
-        List<ClienteReadDTO> resultBefore = clienteRepository.findAll();
 
-        driverRemover.remover(clienteId);
+        List<Cliente> resultBefore = clienteRepository.findAll();
 
-        List<ClienteReadDTO> resultAfter = clienteRepository.findAll();
+        driverRemover.remover(clienteId, deleteDTO);
+
+        List<Cliente> resultAfter = clienteRepository.findAll();
 
         assertAll(
                 () -> assertEquals(1, resultBefore.size()),
                 () -> assertEquals(0, resultAfter.size())
         );
+    }
+
+    @Test
+    @DisplayName("Quando remover um cliente cadastrado com o codigo de acesso invalido")
+    void testeRemoverClienteCodigoInvlido() {
+        Long clienteId = clienteRepository.save(Cliente.builder()
+                .nome("Cleber Junior")
+                .endereco("Sem ideia, 0000")
+                .codigoAcesso("123456")
+                .build()
+        ).getId();
+        ClienteDeleteDTO deleteDTO = ClienteDeleteDTO.builder()
+                .codigoAcesso("654321")
+                .build();
+
+        assertThrows(CodigoAcessoInvalidoException.class, () -> driverRemover.remover(clienteId, deleteDTO));
     }
 }
