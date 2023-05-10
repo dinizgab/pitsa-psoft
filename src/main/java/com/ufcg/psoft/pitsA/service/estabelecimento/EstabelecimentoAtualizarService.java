@@ -1,6 +1,6 @@
 package com.ufcg.psoft.pitsA.service.estabelecimento;
 
-import com.ufcg.psoft.pitsA.dto.EstabelecimentoPutDTO;
+import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoPutDTO;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 
 @FunctionalInterface

@@ -1,9 +1,9 @@
 package com.ufcg.psoft.pitsA.controller;
 
-import com.ufcg.psoft.pitsA.dto.EstabelecimentoAprovaEntregadorDTO;
-import com.ufcg.psoft.pitsA.dto.EstabelecimentoDeleteDTO;
-import com.ufcg.psoft.pitsA.dto.EstabelecimentoPostDTO;
-import com.ufcg.psoft.pitsA.dto.EstabelecimentoPutDTO;
+import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoAprovaEntregadorDTO;
+import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoDeleteDTO;
+import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoPostDTO;
+import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoPutDTO;
 import com.ufcg.psoft.pitsA.exception.ErrorMessage;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.exception.entregador.EntregadorNaoEstaPendenteException;

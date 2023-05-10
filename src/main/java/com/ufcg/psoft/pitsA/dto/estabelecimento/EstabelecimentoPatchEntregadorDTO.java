@@ -1,4 +1,4 @@
-package com.ufcg.psoft.pitsA.dto;
+package com.ufcg.psoft.pitsA.dto.estabelecimento;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ufcg.psoft.pitsA.model.Entregador;

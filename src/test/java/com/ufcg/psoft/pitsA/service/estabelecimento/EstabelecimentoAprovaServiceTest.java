@@ -1,8 +1,8 @@
-package com.ufcg.psoft.pitsA.service;
+package com.ufcg.psoft.pitsA.service.estabelecimento;
 
 import com.ufcg.psoft.pitsA.dto.EntregadorPatchEstabelecimentoDTO;
 import com.ufcg.psoft.pitsA.dto.EntregadorReadDTO;
-import com.ufcg.psoft.pitsA.dto.EstabelecimentoAprovaEntregadorDTO;
+import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoAprovaEntregadorDTO;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.exception.entregador.EntregadorNaoEstaPendenteException;
 import com.ufcg.psoft.pitsA.model.Entregador;
@@ -13,7 +13,6 @@ import com.ufcg.psoft.pitsA.service.entregador.EntregadorPatchEstabelecimentoSer
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoAprovaService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -143,7 +142,7 @@ public class EstabelecimentoAprovaServiceTest {
     @DisplayName("Testa entregador nao esta presente na lista de pendencia")
     void testaEntregadorNaoPresente() {
         EstabelecimentoAprovaEntregadorDTO estabelecimentoDTO = EstabelecimentoAprovaEntregadorDTO.builder()
-                .entregadorId(12L)
+                .entregadorId(null)
                 .aprovar(true)
                 .codigoAcesso("111111")
                 .build();

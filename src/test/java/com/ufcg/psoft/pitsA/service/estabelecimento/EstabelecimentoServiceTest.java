@@ -1,15 +1,11 @@
-package com.ufcg.psoft.pitsA.service;
+package com.ufcg.psoft.pitsA.service.estabelecimento;
 
-import com.ufcg.psoft.pitsA.dto.EstabelecimentoDeleteDTO;
-import com.ufcg.psoft.pitsA.dto.EstabelecimentoPostDTO;
-import com.ufcg.psoft.pitsA.dto.EstabelecimentoPutDTO;
+import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoDeleteDTO;
+import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoPostDTO;
+import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoPutDTO;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
-import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoAtualizarService;
-import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoCriarService;
-import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoListarService;
-import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoRemoverService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;

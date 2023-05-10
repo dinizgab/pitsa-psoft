@@ -1,7 +1,6 @@
 package com.ufcg.psoft.pitsA.controller;
 
-import com.ufcg.psoft.pitsA.dto.SaborDTO;
-import com.ufcg.psoft.pitsA.service.sabor.*;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborDTO;
 import com.ufcg.psoft.pitsA.service.sabor.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

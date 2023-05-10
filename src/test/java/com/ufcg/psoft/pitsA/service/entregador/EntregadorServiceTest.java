@@ -1,4 +1,4 @@
-package com.ufcg.psoft.pitsA.service;
+package com.ufcg.psoft.pitsA.service.entregador;
 
 import java.util.Arrays;
 import java.util.List;

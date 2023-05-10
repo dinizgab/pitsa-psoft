@@ -1,16 +1,16 @@
-package com.ufcg.psoft.pitsA.dto;
+package com.ufcg.psoft.pitsA.dto.cliente;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EstabelecimentoDeleteDTO {
-    @NotBlank(message = "O codigo de acesso e obrigatorio")
+public class ClientePostPutDTO {
+    private String nome;
+    private String endereco;
     private String codigoAcesso;
 }

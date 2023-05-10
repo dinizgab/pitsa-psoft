@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -20,21 +21,12 @@ public class EntregadorListarServiceImpl implements EntregadorListarService{
 
     @Override
     public List<EntregadorReadDTO> listar(Long id) {
-        List<EntregadorReadDTO> listaResultado = new ArrayList<>();
-
         if (id != null && id > 0) {
             Entregador resultadoBusca = entregadorRepository.findById(id).orElseThrow(EntregadorNaoExisteException::new);
 
-            listaResultado.add(modelMapper.map(resultadoBusca, EntregadorReadDTO.class));
+            return Arrays.asList(modelMapper.map(resultadoBusca, EntregadorReadDTO.class));
         } else {
-            List<Entregador> resultadoBusca = entregadorRepository.findAll();
-
-            for (Entregador entregador : resultadoBusca) {
-                EntregadorReadDTO entregadorReadDTO = modelMapper.map(entregador, EntregadorReadDTO.class);
-                listaResultado.add(entregadorReadDTO);
-            }
+            return entregadorRepository.findAll().stream().map(entregador -> modelMapper.map(entregador, EntregadorReadDTO.class)).toList();
         }
-
-        return listaResultado;
     }
 }
