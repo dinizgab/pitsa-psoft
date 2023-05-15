@@ -2,7 +2,7 @@ package com.ufcg.psoft.pitsA.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ufcg.psoft.pitsA.dto.*;
+import com.ufcg.psoft.pitsA.dto.EntregadorReadDTO;
 import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoAprovaEntregadorDTO;
 import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoDeleteDTO;
 import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoPostDTO;
