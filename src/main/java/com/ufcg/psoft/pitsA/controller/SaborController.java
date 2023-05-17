@@ -1,6 +1,9 @@
 package com.ufcg.psoft.pitsA.controller;
 
 import com.ufcg.psoft.pitsA.dto.sabor.SaborDTO;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborDeleteDTO;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborPostDTO;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborPutDTO;
 import com.ufcg.psoft.pitsA.service.sabor.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,24 +21,18 @@ public class SaborController {
     private SaborCreateService saborCreateService;
 
     @Autowired
-    private SaborFindByIdService saborFindByIdService;
+    private SaborListarService saborListarService;
 
     @Autowired
-    private SaborFindByName saborFindByName;
-
-    @Autowired
-    private SaborUpDateService saborUpdateService;
+    private SaborUpdateService saborUpdateService;
 
     @Autowired
     private SaborRemoverService saborRemoverService;
 
-    @Autowired
-    private SaborFindAllService saborFindAllService;
-
     @PostMapping("/{id}")
     public ResponseEntity<SaborDTO> create(
             @PathVariable Long estabelecimentoId,
-            @RequestBody @Valid SaborDTO saborDTO
+            @RequestBody @Valid SaborPostDTO saborDTO
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -43,35 +40,32 @@ public class SaborController {
 
     }
 
+    @GetMapping
+    public ResponseEntity<List<SaborDTO>> findAll() {
+        List<SaborDTO> saboresDTO = saborListarService.listar(null);
+        return ResponseEntity.ok(saboresDTO);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id){
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(saborFindByIdService.findById(id));
-    }
-
-    @GetMapping("/{name}")
-    public ResponseEntity<SaborDTO> getSaborByName(@PathVariable String name) {
-        SaborDTO saborDTO = saborFindByName.findByName(name);
-        return ResponseEntity.ok().body(saborDTO);
+                .body(saborListarService.listar(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<SaborDTO> update
-            (@PathVariable Long id, @RequestBody SaborDTO saborDTO) {
-        SaborDTO updatedSabor = saborUpdateService.update(saborDTO);
+            (@PathVariable Long id, @RequestBody SaborPutDTO saborDTO) {
+        SaborDTO updatedSabor = saborUpdateService.update(id, saborDTO);
         return ResponseEntity.ok(updatedSabor);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> remover(@PathVariable Long id) {
-        saborRemoverService.remover(id);
+    public ResponseEntity<Void> remover(
+            @PathVariable Long id,
+            @RequestBody@Valid SaborDeleteDTO saborDTO
+    ) {
+        saborRemoverService.remover(id, saborDTO);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping
-    public ResponseEntity<List<SaborDTO>> findAll() {
-        List<SaborDTO> saboresDTO = saborFindAllService.findAll();
-        return ResponseEntity.ok(saboresDTO);
     }
 }

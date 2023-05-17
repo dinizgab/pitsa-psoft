@@ -30,6 +30,9 @@ public class Sabor {
     @Column(nullable = false)
     private Double precoGrande;
 
+    @Column(nullable = false)
+    private boolean disponivel;
+
     @ManyToOne()
     Estabelecimento estabelecimento;
 }

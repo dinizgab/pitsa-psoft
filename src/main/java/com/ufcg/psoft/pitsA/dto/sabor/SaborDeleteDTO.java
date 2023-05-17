@@ -1,6 +1,5 @@
 package com.ufcg.psoft.pitsA.dto.sabor;
 
-import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -12,15 +11,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SaborDTO {
+public class SaborDeleteDTO {
+    @NotBlank(message = "O id do estabelecimento nao pode ser vazio")
+    private Long estabelecimentoId;
 
-    private String nome;
-
-    private boolean tipo;
-
-    private Double precoMedio;
-
-    private Double precoGrande;
-
-    private Estabelecimento estabelecimento;
+    @NotBlank(message = "Codigo de acesso nao pode ser vazio")
+    private String codigoAcesso;
 }

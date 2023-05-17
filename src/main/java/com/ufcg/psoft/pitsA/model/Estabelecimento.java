@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -38,5 +40,5 @@ public class Estabelecimento {
 
     @Builder.Default
     @OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Sabor> cardapio = new HashSet<>();
+    private List<Sabor> cardapio = new ArrayList<>();
 }
