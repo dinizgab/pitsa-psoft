@@ -7,6 +7,7 @@ import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.Sabor;
 import com.ufcg.psoft.pitsA.repository.SaborRepository;
 import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;
+import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoAtualizaSaborService;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoListarService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class SaborUpdateImplService implements SaborUpdateService {
    @Autowired
    EstabelecimentoListarService estabelecimentoListarService;
    @Autowired
+   EstabelecimentoAtualizaSaborService estabelecimentoAtualizaSaborService;
+   @Autowired
    AutenticaCodigoAcessoService autenticador;
    @Autowired
    private ModelMapper modelMapper;
@@ -30,6 +33,8 @@ public class SaborUpdateImplService implements SaborUpdateService {
         autenticador.autenticar(estabelecimento.getCodigoAcesso(), saborDTO.getCodigoAcesso());
 
         Sabor sabor = saborRepository.findById(saborId).get();
+
+        estabelecimentoAtualizaSaborService.atualizaSabor(saborDTO.getEstabelecimentoId(), sabor);
 
         modelMapper.map(saborDTO, sabor);
         Sabor saborSalvo = saborRepository.save(sabor);
