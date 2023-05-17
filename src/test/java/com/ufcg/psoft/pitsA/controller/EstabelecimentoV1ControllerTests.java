@@ -76,8 +76,8 @@ public class EstabelecimentoV1ControllerTests {
         }
 
         @Test
-        @DisplayName("Quando buscamos por todos os entregadores salvos")
-        void quandoBuscamosPorTodosEntregadorSalvos() throws Exception {
+        @DisplayName("Quando buscamos por todos os estabelecimentos salvos")
+        void quandoBuscamosPorTodosEstabelecimentosSalvos() throws Exception {
             Estabelecimento estabelecimento1 = Estabelecimento.builder()
                     .codigoAcesso("444444")
                     .build();
@@ -102,8 +102,8 @@ public class EstabelecimentoV1ControllerTests {
         }
 
         @Test
-        @DisplayName("Quando buscamos um entregador salvo pelo id")
-        void quandoBuscamosPorUmEntregadorSalvo() throws Exception {
+        @DisplayName("Quando buscamos um estabelecimento salvo pelo id")
+        void quandoBuscamosPorUmEstabelecimentoSalvo() throws Exception {
             Long estabelecimentoId = estabelecimento.getId();
 
             String responseJsonString = driver.perform(get(URI_ESTABELECIMENTO + "/" + estabelecimentoId)
@@ -122,7 +122,7 @@ public class EstabelecimentoV1ControllerTests {
         }
 
         @Test
-        @DisplayName("Quando criamos um novo entregador")
+        @DisplayName("Quando criamos um novo estabelecimento")
         void quandoCriarEntregadorValido() throws Exception {
             String responseJsonString = driver.perform(post(URI_ESTABELECIMENTO)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -206,7 +206,7 @@ public class EstabelecimentoV1ControllerTests {
     }
 
     @Nested
-    @DisplayName("Testes de endpoints basicos de entregadores")
+    @DisplayName("Testes de endpoints basicos de estabelecimentos")
     class EstabelecimentoAprovacaoTeste {
         final String URI_ESTABELECIMENTO = "/v1/estabelecimento";
         @Autowired

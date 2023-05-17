@@ -169,7 +169,7 @@ public class ClienteServiceTests {
 
     @Test
     @DisplayName("Quando remover um cliente cadastrado com o codigo de acesso invalido")
-    void testeRemoverClienteCodigoInvlido() {
+    void testeRemoverClienteCodigoInvalido() {
         Long clienteId = clienteRepository.save(Cliente.builder()
                 .nome("Cleber Junior")
                 .endereco("Sem ideia, 0000")
