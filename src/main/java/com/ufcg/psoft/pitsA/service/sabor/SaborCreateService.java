@@ -4,5 +4,5 @@ import com.ufcg.psoft.pitsA.dto.sabor.SaborDTO;
 
 @FunctionalInterface
 public interface SaborCreateService {
-    SaborDTO create(SaborDTO saborDTO);
+    SaborDTO create(Long estabelecimentoId, SaborDTO saborDTO);
 }

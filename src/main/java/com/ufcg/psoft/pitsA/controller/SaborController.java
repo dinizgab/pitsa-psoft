@@ -32,11 +32,14 @@ public class SaborController {
     @Autowired
     private SaborFindAllService saborFindAllService;
 
-    @PostMapping()
-    public ResponseEntity<SaborDTO> create(@RequestBody @Valid SaborDTO saborDTO){
+    @PostMapping("/{id}")
+    public ResponseEntity<SaborDTO> create(
+            @PathVariable Long estabelecimentoId,
+            @RequestBody @Valid SaborDTO saborDTO
+    ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(saborCreateService.create(saborDTO));
+                .body(saborCreateService.create(estabelecimentoId, saborDTO));
 
     }
 
