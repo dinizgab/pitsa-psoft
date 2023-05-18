@@ -18,16 +18,16 @@ import java.util.List;
 public class SaborController {
 
     @Autowired
-    private SaborCreateService saborCreateService;
+    SaborCreateService saborCreateService;
 
     @Autowired
-    private SaborListarService saborListarService;
+    SaborListarService saborListarService;
 
     @Autowired
-    private SaborUpdateService saborUpdateService;
+    SaborUpdateService saborUpdateService;
 
     @Autowired
-    private SaborRemoverService saborRemoverService;
+    SaborRemoverService saborRemoverService;
 
     @PostMapping("/{id}")
     public ResponseEntity<SaborDTO> create(

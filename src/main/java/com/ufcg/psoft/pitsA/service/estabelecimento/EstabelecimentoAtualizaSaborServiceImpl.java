@@ -18,7 +18,7 @@ public class EstabelecimentoAtualizaSaborServiceImpl implements EstabelecimentoA
 
         Sabor resultBusca = estabelecimento.getCardapio()
                 .stream()
-                .filter(result -> result.getId() == sabor.getId())
+                .filter(result -> result.getId().equals(sabor.getId()))
                 .findFirst()
                 .get();
 

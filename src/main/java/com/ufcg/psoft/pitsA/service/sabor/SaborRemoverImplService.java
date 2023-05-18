@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SaborRemoverImplService implements SaborRemoverService{
     @Autowired
-    private SaborRepository saborRepository;
+    SaborRepository saborRepository;
     @Autowired
     EstabelecimentoListarService estabelecimentoListarService;
     @Autowired

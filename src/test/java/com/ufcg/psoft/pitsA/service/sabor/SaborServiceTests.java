@@ -3,7 +3,6 @@ package com.ufcg.psoft.pitsA.service.sabor;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborDeleteDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborPostDTO;
-import com.ufcg.psoft.pitsA.dto.sabor.SaborPutDTO;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.Sabor;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;

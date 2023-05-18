@@ -15,9 +15,9 @@ import java.util.List;
 public class SaborListarServiceImpl implements SaborListarService {
 
     @Autowired
-    private SaborRepository saborRepository;
+    SaborRepository saborRepository;
     @Autowired
-    private ModelMapper modelMapper;
+    ModelMapper modelMapper;
 
     @Override
     public List<SaborDTO> listar(Long id){

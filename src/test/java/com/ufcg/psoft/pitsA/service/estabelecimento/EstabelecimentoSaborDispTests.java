@@ -7,9 +7,6 @@ import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.Sabor;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.pitsA.repository.SaborRepository;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,8 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @DisplayName("Testes para troca de disponibilidade de sabor")

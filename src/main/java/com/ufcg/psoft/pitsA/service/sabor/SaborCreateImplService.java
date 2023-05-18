@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SaborCreateImplService implements SaborCreateService{
     @Autowired
-    private SaborRepository saborRepository;
+    SaborRepository saborRepository;
     @Autowired
     EstabelecimentoAdicionaSaborService estabelecimentoAdicionaSabor;
     @Autowired
@@ -24,7 +24,7 @@ public class SaborCreateImplService implements SaborCreateService{
     AutenticaCodigoAcessoService autenticador;
 
     @Autowired
-    private ModelMapper modelMapper;
+    ModelMapper modelMapper;
 
     @Override
     public SaborDTO create(Long estabelecimentoId, SaborPostDTO saborDTO) {
