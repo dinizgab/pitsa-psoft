@@ -32,7 +32,8 @@ public class Sabor {
     private Double precoGrande;
 
     @Column(nullable = false)
-    private boolean disponivel;
+    @Builder.Default
+    private boolean disponivel = true;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -40,7 +41,6 @@ public class Sabor {
 
     @ManyToMany(mappedBy = "interessesSabores", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @Builder.Default
     private List<Cliente> interesses = new ArrayList<>();
 }

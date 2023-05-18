@@ -57,7 +57,8 @@ public class ClienteV1Controller {
     @PutMapping("/{id}")
     public ResponseEntity<?> atualizarCliente(
             @PathVariable Long id,
-            @RequestBody @Valid ClientePostPutDTO clientePostPutRequestDTO) {
+            @RequestBody @Valid ClientePostPutDTO clientePostPutRequestDTO
+    ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(clienteAtualizarService.alterar(id, clientePostPutRequestDTO));
@@ -78,7 +79,7 @@ public class ClienteV1Controller {
     public ResponseEntity<?> buscarUmCardapio(
             @PathVariable("id") Long clienteId,
             @RequestBody @Valid ClienteCardapioDTO clienteCardapioDTO
-            ) {
+    ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(clienteListarCardapioService.listarCardapio(clienteId, clienteCardapioDTO));

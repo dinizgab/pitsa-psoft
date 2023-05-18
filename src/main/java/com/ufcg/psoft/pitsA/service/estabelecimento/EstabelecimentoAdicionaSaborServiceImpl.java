@@ -17,7 +17,6 @@ public class EstabelecimentoAdicionaSaborServiceImpl implements EstabelecimentoA
         Estabelecimento estabelecimento = estabelecimentoRepository.findById(id).orElseThrow(EstabelecimentoNaoExisteException::new);
 
         estabelecimento.getCardapio().add(sabor);
-
         estabelecimentoRepository.save(estabelecimento);
     }
 

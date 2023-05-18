@@ -35,7 +35,8 @@ public class EstabelecimentoV1Controller {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarUmEntregador(
-            @PathVariable Long id) {
+            @PathVariable Long id
+    ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(estabelecimentoListarService.listar(id));

@@ -32,12 +32,12 @@ public class SaborController {
 
     @PostMapping("/{id}")
     public ResponseEntity<SaborReadDTO> create(
-            @PathVariable Long estabelecimentoId,
+            @PathVariable Long id,
             @RequestBody @Valid SaborPostDTO saborDTO
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(saborCreateService.create(estabelecimentoId, saborDTO));
+                .body(saborCreateService.create(id, saborDTO));
 
     }
 
@@ -48,15 +48,19 @@ public class SaborController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id){
+    public ResponseEntity<?> findById(
+            @PathVariable Long id
+    ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(saborListarService.listar(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SaborReadDTO> update
-            (@PathVariable Long id, @RequestBody SaborPutDTO saborDTO) {
+    public ResponseEntity<SaborReadDTO> update(
+            @PathVariable Long id,
+            @RequestBody SaborPutDTO saborDTO
+    ) {
         SaborReadDTO updatedSabor = saborUpdateService.update(id, saborDTO);
         return ResponseEntity.ok(updatedSabor);
     }

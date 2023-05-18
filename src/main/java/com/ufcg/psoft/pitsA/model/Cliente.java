@@ -1,10 +1,9 @@
 package com.ufcg.psoft.pitsA.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.apache.commons.lang3.builder.HashCodeExclude;
+import org.apache.commons.lang3.builder.ToStringExclude;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,5 +29,7 @@ public class Cliente {
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
+    @ToStringExclude
+    @EqualsAndHashCode.Exclude
     private List<Sabor> interessesSabores = new ArrayList<>();
 }
