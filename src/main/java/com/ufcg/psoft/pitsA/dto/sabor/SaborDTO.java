@@ -18,6 +18,8 @@ public class SaborDTO {
 
     private boolean tipo;
 
+    private boolean disponivel;
+
     private Double precoMedio;
 
     private Double precoGrande;
