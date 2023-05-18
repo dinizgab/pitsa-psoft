@@ -42,7 +42,7 @@ public class EstabelecimentoAprovaServiceImpl implements EstabelecimentoAprovaSe
 
         // TODO - Trocar a operacao por um enum
         if (estabelecimentoDTO.isAprovar()) {
-            // TODO - Corrigir bug, o entregador nao ta sendo removido da lista de pendentes
+            // TODO - Corrigir bug === o entregador nao ta sendo removido da lista de pendentes
             estabelecimento.getEntregadoresPendentes().remove(entregadorPresente);
             estabelecimento.getEntregadoresAprovados().add(entregadorPresente);
         } else {

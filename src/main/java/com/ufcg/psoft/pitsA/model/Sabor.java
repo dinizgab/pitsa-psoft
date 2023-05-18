@@ -3,6 +3,10 @@ package com.ufcg.psoft.pitsA.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.modelmapper.internal.bytebuddy.build.ToStringPlugin;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -33,4 +37,10 @@ public class Sabor {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     Estabelecimento estabelecimento;
+
+    @ManyToMany(mappedBy = "interessesSabores", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @Builder.Default
+    private List<Cliente> interesses = new ArrayList<>();
 }

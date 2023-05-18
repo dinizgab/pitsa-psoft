@@ -1,10 +1,10 @@
 package com.ufcg.psoft.pitsA.service.sabor;
 
-import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
+import com.ufcg.psoft.pitsA.model.Sabor;
 
 import java.util.List;
 
 @FunctionalInterface
 public interface SaborListarService {
-    List<SaborReadDTO> listar(Long id);
+    List<Sabor> listar(Long id);
 }

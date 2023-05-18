@@ -4,6 +4,7 @@ import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborDeleteDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborPostDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborPutDTO;
+import com.ufcg.psoft.pitsA.model.Sabor;
 import com.ufcg.psoft.pitsA.service.sabor.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +42,9 @@ public class SaborController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SaborReadDTO>> findAll() {
-        List<SaborReadDTO> saboresDTO = saborListarService.listar(null);
-        return ResponseEntity.ok(saboresDTO);
+    public ResponseEntity<?> findAll() {
+        List<Sabor> sabores = saborListarService.listar(null);
+        return ResponseEntity.ok(sabores);
     }
 
     @GetMapping("/{id}")

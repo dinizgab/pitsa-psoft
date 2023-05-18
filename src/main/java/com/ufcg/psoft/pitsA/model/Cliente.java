@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Builder
 @Data
 @Entity
@@ -24,4 +27,8 @@ public class Cliente {
 
     @Column(nullable = false)
     private String codigoAcesso;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Sabor> interessesSabores = new ArrayList<>();
 }

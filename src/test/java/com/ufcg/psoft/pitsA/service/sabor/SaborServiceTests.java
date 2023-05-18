@@ -91,7 +91,7 @@ public class SaborServiceTests {
     @Test
     @DisplayName("Lista sabor pelo id")
     void testeListaSaborId() {
-        SaborReadDTO resultado = driverListar.listar(sabor.getId()).get(0);
+        Sabor resultado = driverListar.listar(sabor.getId()).get(0);
 
         assertAll(
                 () -> assertEquals("Calabresa", resultado.getNome()),
