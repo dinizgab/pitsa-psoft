@@ -1,7 +1,7 @@
 package com.ufcg.psoft.pitsA.service.estabelecimento;
 
 import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoPatchDispDTO;
-import com.ufcg.psoft.pitsA.dto.sabor.SaborDTO;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.Sabor;
@@ -73,7 +73,7 @@ public class EstabelecimentoSaborDispTests {
                 .saborId(saborId)
                 .build();
 
-        SaborDTO resultado = driver.alteraDisponibilidade(estabelecimentoId, alteraDisponibilidadeDTO);
+        SaborReadDTO resultado = driver.alteraDisponibilidade(estabelecimentoId, alteraDisponibilidadeDTO);
 
         assertFalse(resultado.isDisponivel());
     }

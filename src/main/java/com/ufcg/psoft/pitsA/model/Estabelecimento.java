@@ -39,5 +39,7 @@ public class Estabelecimento {
 
     @Builder.Default
     @OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<Sabor> cardapio = new ArrayList<>();
 }

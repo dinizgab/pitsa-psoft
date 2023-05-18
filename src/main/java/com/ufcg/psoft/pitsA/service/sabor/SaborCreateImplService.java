@@ -4,7 +4,7 @@ import com.ufcg.psoft.pitsA.dto.sabor.SaborPostDTO;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.Sabor;
 import com.ufcg.psoft.pitsA.repository.SaborRepository;
-import com.ufcg.psoft.pitsA.dto.sabor.SaborDTO;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoAdicionaSaborService;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoListarService;
@@ -27,7 +27,7 @@ public class SaborCreateImplService implements SaborCreateService{
     ModelMapper modelMapper;
 
     @Override
-    public SaborDTO create(Long estabelecimentoId, SaborPostDTO saborDTO) {
+    public SaborReadDTO create(Long estabelecimentoId, SaborPostDTO saborDTO) {
         Estabelecimento estabelecimento = estabelecimentoListarService.listar(estabelecimentoId).get(0);
         autenticador.autenticar(estabelecimento.getCodigoAcesso(), saborDTO.getCodigoAcesso());
 
@@ -37,7 +37,7 @@ public class SaborCreateImplService implements SaborCreateService{
         Sabor saborSalvo = saborRepository.save(sabor);
 
         estabelecimentoAdicionaSabor.adicionaSabor(estabelecimentoId, saborSalvo);
-        return modelMapper.map(saborSalvo, SaborDTO.class);
+        return modelMapper.map(saborSalvo, SaborReadDTO.class);
     }
 }
 

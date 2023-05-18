@@ -1,6 +1,6 @@
 package com.ufcg.psoft.pitsA.service.sabor;
 
-import com.ufcg.psoft.pitsA.dto.sabor.SaborDTO;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborDeleteDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborPostDTO;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
@@ -77,7 +77,7 @@ public class SaborServiceTests {
                 .precoMedio(22.0)
                 .build();
 
-        SaborDTO resultado = driverCriar.create(estabelecimento.getId(), postBody);
+        SaborReadDTO resultado = driverCriar.create(estabelecimento.getId(), postBody);
 
         assertAll(
                 () -> assertEquals(estabelecimento, resultado.getEstabelecimento()),
@@ -91,7 +91,7 @@ public class SaborServiceTests {
     @Test
     @DisplayName("Lista sabor pelo id")
     void testeListaSaborId() {
-        SaborDTO resultado = driverListar.listar(sabor.getId()).get(0);
+        SaborReadDTO resultado = driverListar.listar(sabor.getId()).get(0);
 
         assertAll(
                 () -> assertEquals("Calabresa", resultado.getNome()),
@@ -138,7 +138,7 @@ public class SaborServiceTests {
                 .build();
 
 
-        SaborDTO resultado = driverAtualizar.update(sabor.getId(), putBody);
+        SaborReadDTO resultado = driverAtualizar.update(sabor.getId(), putBody);
 
         assertAll(
                 () -> assertEquals("Frango com bacon", resultado.getNome()),

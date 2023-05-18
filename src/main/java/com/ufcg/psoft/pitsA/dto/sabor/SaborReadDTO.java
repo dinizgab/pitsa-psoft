@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SaborDTO {
+public class SaborReadDTO {
 
     private String nome;
 

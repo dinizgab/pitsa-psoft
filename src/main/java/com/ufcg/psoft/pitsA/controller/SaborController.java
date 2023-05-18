@@ -1,6 +1,6 @@
 package com.ufcg.psoft.pitsA.controller;
 
-import com.ufcg.psoft.pitsA.dto.sabor.SaborDTO;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborDeleteDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborPostDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborPutDTO;
@@ -30,7 +30,7 @@ public class SaborController {
     SaborRemoverService saborRemoverService;
 
     @PostMapping("/{id}")
-    public ResponseEntity<SaborDTO> create(
+    public ResponseEntity<SaborReadDTO> create(
             @PathVariable Long estabelecimentoId,
             @RequestBody @Valid SaborPostDTO saborDTO
     ) {
@@ -41,8 +41,8 @@ public class SaborController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SaborDTO>> findAll() {
-        List<SaborDTO> saboresDTO = saborListarService.listar(null);
+    public ResponseEntity<List<SaborReadDTO>> findAll() {
+        List<SaborReadDTO> saboresDTO = saborListarService.listar(null);
         return ResponseEntity.ok(saboresDTO);
     }
 
@@ -54,9 +54,9 @@ public class SaborController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SaborDTO> update
+    public ResponseEntity<SaborReadDTO> update
             (@PathVariable Long id, @RequestBody SaborPutDTO saborDTO) {
-        SaborDTO updatedSabor = saborUpdateService.update(id, saborDTO);
+        SaborReadDTO updatedSabor = saborUpdateService.update(id, saborDTO);
         return ResponseEntity.ok(updatedSabor);
     }
 

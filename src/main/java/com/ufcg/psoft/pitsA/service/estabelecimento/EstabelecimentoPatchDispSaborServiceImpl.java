@@ -1,7 +1,7 @@
 package com.ufcg.psoft.pitsA.service.estabelecimento;
 
 import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoPatchDispDTO;
-import com.ufcg.psoft.pitsA.dto.sabor.SaborDTO;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.exception.estabelecimento.EstabelecimentoNaoExisteException;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.Sabor;
@@ -24,7 +24,7 @@ public class EstabelecimentoPatchDispSaborServiceImpl implements Estabelecimento
     ModelMapper modelMapper;
 
     @Override
-    public SaborDTO alteraDisponibilidade(Long estabelecimentoId, EstabelecimentoPatchDispDTO estabelecimentoPatchDispDTO) {
+    public SaborReadDTO alteraDisponibilidade(Long estabelecimentoId, EstabelecimentoPatchDispDTO estabelecimentoPatchDispDTO) {
         Long saborId = estabelecimentoPatchDispDTO.getSaborId();
         Estabelecimento estabelecimento = estabelecimentoRepository.findById(estabelecimentoId).orElseThrow(EstabelecimentoNaoExisteException::new);
         autenticador.autenticar(estabelecimento.getCodigoAcesso(), estabelecimentoPatchDispDTO.getCodigoAcesso());
@@ -39,6 +39,6 @@ public class EstabelecimentoPatchDispSaborServiceImpl implements Estabelecimento
         saborResult.setDisponivel(!saborResult.isDisponivel());
         estabelecimento.getCardapio().add(saborResult);
 
-        return modelMapper.map(saborResult, SaborDTO.class);
+        return modelMapper.map(saborResult, SaborReadDTO.class);
     }
 }

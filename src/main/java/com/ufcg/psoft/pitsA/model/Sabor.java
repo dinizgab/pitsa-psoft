@@ -1,10 +1,7 @@
 package com.ufcg.psoft.pitsA.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Data
@@ -13,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "sabores")
 public class Sabor {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,6 +29,6 @@ public class Sabor {
     @Column(nullable = false)
     private boolean disponivel;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     Estabelecimento estabelecimento;
 }

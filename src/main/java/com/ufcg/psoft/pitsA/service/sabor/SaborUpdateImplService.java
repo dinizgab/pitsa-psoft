@@ -1,6 +1,6 @@
 package com.ufcg.psoft.pitsA.service.sabor;
 
-import com.ufcg.psoft.pitsA.dto.sabor.SaborDTO;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborPutDTO;
 import com.ufcg.psoft.pitsA.exception.sabor.SaborNaoExistenteException;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
@@ -30,7 +30,7 @@ public class SaborUpdateImplService implements SaborUpdateService {
    ModelMapper modelMapper;
 
     @Override
-    public SaborDTO update(Long saborId, SaborPutDTO saborDTO) {
+    public SaborReadDTO update(Long saborId, SaborPutDTO saborDTO) {
         Estabelecimento estabelecimento = estabelecimentoListarService.listar(saborDTO.getEstabelecimentoId()).get(0);
         autenticador.autenticar(estabelecimento.getCodigoAcesso(), saborDTO.getCodigoAcesso());
 
@@ -43,6 +43,6 @@ public class SaborUpdateImplService implements SaborUpdateService {
         modelMapper.map(saborDTO, sabor);
         Sabor saborSalvo = saborRepository.save(sabor);
 
-        return modelMapper.map(saborSalvo, SaborDTO.class);
+        return modelMapper.map(saborSalvo, SaborReadDTO.class);
     }
 }
