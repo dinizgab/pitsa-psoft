@@ -2,11 +2,16 @@ package com.ufcg.psoft.pitsA.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ufcg.psoft.pitsA.dto.cliente.ClienteCardapioDTO;
 import com.ufcg.psoft.pitsA.dto.cliente.ClienteDeleteDTO;
 import com.ufcg.psoft.pitsA.dto.cliente.ClientePostPutDTO;
 import com.ufcg.psoft.pitsA.dto.cliente.ClienteReadDTO;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.model.Cliente;
+import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.Sabor;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
+import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,7 +57,7 @@ public class ClienteV1ControllerTests {
 
     @Nested
     @DisplayName("Testes de endpoints basicos de clientes")
-    class EntregadorVerificacaoFluxosBasicosApiRest {
+    class ClienteVerificacaoFluxosBasicosApiRest {
 
         final String URI_CLIENTE = "/v1/cliente";
         ClientePostPutDTO clientePutDTO;
@@ -175,6 +181,85 @@ public class ClienteV1ControllerTests {
                     .andReturn().getResponse().getContentAsString();
 
             assertTrue(responseJsonString.isBlank());
+        }
+    }
+
+    @Nested
+    @DisplayName("Testes de endpoints de listagem de cardapio")
+    class ClienteListagemCardapio {
+        final String URI_CLIENTE = "/v1/cliente";
+        @Autowired
+        EstabelecimentoRepository estabelecimentoRepository;
+        Estabelecimento estabelecimento;
+
+        @BeforeEach
+        void setUp() {
+            estabelecimento = Estabelecimento.builder()
+                    .codigoAcesso("123456")
+                    .build();
+
+            List<Sabor> cardapio = new ArrayList<>();
+            cardapio.add(Sabor.builder()
+                    .estabelecimento(estabelecimento)
+                    .precoGrande(55.0)
+                    .precoMedio(27.5)
+                    .nome("Calabresa")
+                    .disponivel(false)
+                    .build()
+            );
+            cardapio.add(Sabor.builder()
+                    .estabelecimento(estabelecimento)
+                    .precoGrande(50.0)
+                    .precoMedio(25.0)
+                    .nome("4 Queijos")
+                    .disponivel(true)
+                    .build()
+            );
+
+            cardapio.add(Sabor.builder()
+                    .estabelecimento(estabelecimento)
+                    .precoGrande(60.0)
+                    .precoMedio(30.0)
+                    .nome("Frango com bacon")
+                    .disponivel(false)
+                    .build()
+            );
+
+            estabelecimento.setCardapio(cardapio);
+            estabelecimento = estabelecimentoRepository.save(estabelecimento);
+        }
+
+        @AfterEach
+        void tearDown() {
+            estabelecimentoRepository.deleteAll();
+        }
+
+        @Test
+        @DisplayName("Quando buscamos um cardapio de um estabelecimento")
+        void quandoBuscamosPorUmCardapioSalvo() throws Exception {
+            Long clienteId = cliente.getId();
+            ClienteCardapioDTO clienteCardapioDTO = ClienteCardapioDTO.builder()
+                    .codigoAcesso(cliente.getCodigoAcesso())
+                    .estabelecimentoId(estabelecimento.getId())
+                    .build();
+
+            String responseJsonString = driver.perform(get(URI_CLIENTE + "/" + clienteId + "/cardapio")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(clienteCardapioDTO)))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            List<SaborReadDTO> listaResultados = objectMapper.readValue(responseJsonString, new TypeReference<>(){});
+            SaborReadDTO resultado = listaResultados.stream().findFirst().orElse(SaborReadDTO.builder().build());
+
+            assertAll(
+                    () -> assertEquals(estabelecimento.getCardapio().size(), listaResultados.size()),
+                    () -> assertEquals("4 Queijos", resultado.getNome()),
+                    () -> assertTrue(resultado.isDisponivel()),
+                    () -> assertEquals(50.0, resultado.getPrecoGrande()),
+                    () -> assertEquals(25.0, resultado.getPrecoMedio())
+            );
         }
     }
 }

@@ -1,13 +1,11 @@
 package com.ufcg.psoft.pitsA.controller;
 
+import com.ufcg.psoft.pitsA.dto.cliente.ClienteCardapioDTO;
 import com.ufcg.psoft.pitsA.dto.cliente.ClienteDeleteDTO;
 import com.ufcg.psoft.pitsA.dto.cliente.ClientePostPutDTO;
 import com.ufcg.psoft.pitsA.exception.ErrorMessage;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
-import com.ufcg.psoft.pitsA.service.cliente.ClienteAtualizarService;
-import com.ufcg.psoft.pitsA.service.cliente.ClienteCriarService;
-import com.ufcg.psoft.pitsA.service.cliente.ClienteListarService;
-import com.ufcg.psoft.pitsA.service.cliente.ClienteRemoverService;
+import com.ufcg.psoft.pitsA.service.cliente.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +27,9 @@ public class ClienteV1Controller {
     ClienteCriarService clienteCriarService;
     @Autowired
     ClienteRemoverService clienteExcluirService;
+    @Autowired
+    ClienteListarCardapioService clienteListarCardapioService;
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarUmCliente(
@@ -71,6 +72,16 @@ public class ClienteV1Controller {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .body("");
+    }
+
+    @GetMapping("/{id}/cardapio")
+    public ResponseEntity<?> buscarUmCardapio(
+            @PathVariable("id") Long clienteId,
+            @RequestBody @Valid ClienteCardapioDTO clienteCardapioDTO
+            ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(clienteListarCardapioService.listarCardapio(clienteId, clienteCardapioDTO));
     }
 
     @ExceptionHandler(CodigoAcessoInvalidoException.class)

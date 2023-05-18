@@ -1,5 +1,6 @@
 package com.ufcg.psoft.pitsA.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,6 +30,7 @@ public class Sabor {
     @Column(nullable = false)
     private boolean disponivel;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     Estabelecimento estabelecimento;
 }
