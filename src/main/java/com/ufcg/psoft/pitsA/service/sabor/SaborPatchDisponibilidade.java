@@ -1,6 +1,8 @@
 package com.ufcg.psoft.pitsA.service.sabor;
 
+import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
+
 @FunctionalInterface
 public interface SaborPatchDisponibilidade {
-    void alteraDisponibilidade(Long saborId);
+    SaborReadDTO alteraDisponibilidade(Long saborId);
 }

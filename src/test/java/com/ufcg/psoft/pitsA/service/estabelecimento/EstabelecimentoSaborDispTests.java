@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,9 +42,9 @@ public class EstabelecimentoSaborDispTests {
                 .build();
 
         saborDisponivel = saborRepository.save(Sabor.builder()
-                        .nome("Carne de sol")
-                        .precoGrande(30.0)
-                        .precoMedio(15.0)
+                        .nome("Frango com bacon")
+                        .precoGrande(50.0)
+                        .precoMedio(25.0)
                         .estabelecimento(estabelecimento)
                         .tipo(true)
                 .build()
@@ -66,6 +65,7 @@ public class EstabelecimentoSaborDispTests {
                 .estabelecimento(estabelecimento)
                 .interesses(interessados)
                 .tipo(false)
+                .disponivel(false)
                 .build()
         );
 
@@ -117,7 +117,7 @@ public class EstabelecimentoSaborDispTests {
 
     @Test
     @Transactional
-    @DisplayName("Testes se a lista de interessados eh limpa apos trocar disponibilidade")
+    @DisplayName("Teste se a lista de interessados eh limpa apos trocar disponibilidade")
     void testeLimpaListaInteressados() {
         Long saborId = saborIndisponivel.getId();
         Long estabelecimentoId = estabelecimento.getId();
@@ -128,7 +128,8 @@ public class EstabelecimentoSaborDispTests {
                 .build();
 
         SaborReadDTO resultado = driver.alteraDisponibilidade(estabelecimentoId, alteraDisponibilidadeDTO);
-
+        System.out.println(resultado);
+        System.out.println(estabelecimento.getCardapio());
         assertAll(
                 () -> assertTrue(resultado.isDisponivel()),
                 () -> assertTrue(resultado.getInteresses().isEmpty())

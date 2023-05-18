@@ -27,31 +27,9 @@ public class EstabelecimentoPatchDispSaborServiceImpl implements Estabelecimento
     public SaborReadDTO alteraDisponibilidade(Long estabelecimentoId, EstabelecimentoPatchDispDTO estabelecimentoPatchDispDTO) {
         Long saborId = estabelecimentoPatchDispDTO.getSaborId();
         Estabelecimento estabelecimento = estabelecimentoRepository.findById(estabelecimentoId).orElseThrow(EstabelecimentoNaoExisteException::new);
+
         autenticador.autenticar(estabelecimento.getCodigoAcesso(), estabelecimentoPatchDispDTO.getCodigoAcesso());
 
-        saborPatchDisponibilidade.alteraDisponibilidade(saborId);
-        Sabor saborResult = estabelecimento.getCardapio()
-                .stream()
-                .filter(sabor -> sabor.getId().equals(saborId))
-                .findFirst().get();
-
-        estabelecimento.getCardapio().remove(saborResult);
-        saborResult.setDisponivel(!saborResult.isDisponivel());
-
-        if (saborResult.isDisponivel()) {
-            saborResult.getInteresses()
-                    .forEach(cliente -> {
-                        System.out.println("\nO sabor que voce demonstrou interesse esta disponivel novamente:");
-                        System.out.println(cliente);
-                        System.out.println();
-                    });
-
-            saborResult.getInteresses().clear();
-        }
-
-        estabelecimento.getCardapio().add(saborResult);
-
-
-        return modelMapper.map(saborResult, SaborReadDTO.class);
+        return modelMapper.map(saborPatchDisponibilidade.alteraDisponibilidade(saborId), SaborReadDTO.class);
     }
 }

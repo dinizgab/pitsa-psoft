@@ -28,7 +28,5 @@ public class Cliente {
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
-    @ToStringExclude
-    @EqualsAndHashCode.Exclude
     private List<Sabor> interessesSabores = new ArrayList<>();
 }
