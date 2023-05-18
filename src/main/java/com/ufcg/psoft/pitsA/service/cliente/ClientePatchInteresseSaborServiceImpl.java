@@ -36,7 +36,7 @@ public class ClientePatchInteresseSaborServiceImpl implements ClientePatchIntere
         Cliente cliente = clienteRepository.findById(clienteId).orElseThrow(ClienteNaoExisteException::new);
         autenticador.autenticar(cliente.getCodigoAcesso(), clienteInteresseDTO.getCodigoAcesso());
 
-        Sabor sabor = saborListarService.listar(clienteInteresseDTO.getSaborId()).get(0);
+        Sabor sabor = saborListarService.listar(saborId).get(0);
         if (sabor.isDisponivel()) throw new SaborEstaDisponivelException();
 
         cliente.getInteressesSabores().add(sabor);

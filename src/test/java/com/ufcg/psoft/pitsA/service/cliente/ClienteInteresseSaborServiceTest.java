@@ -2,12 +2,15 @@ package com.ufcg.psoft.pitsA.service.cliente;
 
 import com.ufcg.psoft.pitsA.dto.cliente.ClienteInteresseDTO;
 import com.ufcg.psoft.pitsA.dto.cliente.ClienteReadDTO;
+import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
+import com.ufcg.psoft.pitsA.exception.sabor.SaborEstaDisponivelException;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.Sabor;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.pitsA.repository.SaborRepository;
+import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoPatchDispSaborService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +30,8 @@ public class ClienteInteresseSaborServiceTest {
     @Autowired
     ClientePatchInteresseSaborService driver;
     @Autowired
+    EstabelecimentoPatchDispSaborService estabelecimentoPatchDispSaborService;
+    @Autowired
     ClienteRepository clienteRepository;
     @Autowired
     SaborRepository saborRepository;
@@ -36,8 +41,6 @@ public class ClienteInteresseSaborServiceTest {
     Sabor sabor;
     Estabelecimento estabelecimento;
 
-    // TODO - Adicionar uma lista de clientes dentro do sabor, que sera os clientes que demonstraram interesse
-    // TODO - Adicionar a lista de sabores que o cliente tem interesse em cliente (relacao, many to many) --- Quando a disp. eh alterada, remove da lista
     // TODO - Quando alterar a disponibilidade do sabor, a lista sera limpa e printara no terminal quem estava dentro dela
 
     @BeforeEach
@@ -87,11 +90,55 @@ public class ClienteInteresseSaborServiceTest {
 
         ClienteInteresseDTO clienteInteresseDTO = ClienteInteresseDTO.builder()
                 .codigoAcesso("123456")
+                .saborId(sabor.getId())
                 .estabelecimentoId(estabelecimentoId)
                 .build();
 
         ClienteReadDTO resultado = driver.demonstraInteresse(clienteId, clienteInteresseDTO);
 
         assertTrue(resultado.getInteressesSabores().contains(sabor));
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Quando um cliente demonstra interesse em um sabor ja disponivel")
+    void testeDemonstraInteresseSaborDisponivel() {
+        Long clienteId = cliente.getId();
+        Long estabelecimentoId = estabelecimento.getId();
+
+        Sabor saborInvalido = saborRepository.save(
+                Sabor.builder()
+                        .nome("4 Queijos")
+                        .precoGrande(50.0)
+                        .precoMedio(25.0)
+                        .tipo(true)
+                        .disponivel(true)
+                        .estabelecimento(estabelecimento)
+                        .build()
+        );
+
+        ClienteInteresseDTO clienteInteresseDTO = ClienteInteresseDTO.builder()
+                .codigoAcesso("123456")
+                .saborId(saborInvalido.getId())
+                .estabelecimentoId(estabelecimentoId)
+                .build();
+
+        assertThrows(SaborEstaDisponivelException.class, () -> driver.demonstraInteresse(clienteId, clienteInteresseDTO));
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Quando um cliente demonstra interesse com um codigo invalido")
+    void testeDemonstraInteresseCodigoInvalido() {
+        Long clienteId = cliente.getId();
+        Long estabelecimentoId = estabelecimento.getId();
+
+        ClienteInteresseDTO clienteInteresseDTO = ClienteInteresseDTO.builder()
+                .codigoAcesso("654321")
+                .saborId(sabor.getId())
+                .estabelecimentoId(estabelecimentoId)
+                .build();
+
+        assertThrows(CodigoAcessoInvalidoException.class, () -> driver.demonstraInteresse(clienteId, clienteInteresseDTO));
     }
 }
