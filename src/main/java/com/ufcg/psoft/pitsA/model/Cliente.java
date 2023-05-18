@@ -2,7 +2,6 @@ package com.ufcg.psoft.pitsA.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.apache.commons.lang3.builder.HashCodeExclude;
 import org.apache.commons.lang3.builder.ToStringExclude;
 
 import java.util.ArrayList;

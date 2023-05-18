@@ -275,7 +275,6 @@ public class EntregadorV1ControllerTests {
                     () -> assertEquals(resultado.getTipoVeiculo(), entregador.getTipoVeiculo()),
                     () -> assertEquals(resultado.getPlacaVeiculo(), entregador.getPlacaVeiculo()),
                     () -> assertEquals(resultado.getCorVeiculo(), entregador.getCorVeiculo()),
-                    // TODO - Corrigir o getEntregadores que nao retorna nenhum valor
                     () -> assertTrue(resultadoEstabelecimento.getEntregadoresPendentes().contains(entregador))
             );
         }

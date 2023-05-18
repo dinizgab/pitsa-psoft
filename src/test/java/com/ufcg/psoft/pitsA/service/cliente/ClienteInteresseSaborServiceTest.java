@@ -30,8 +30,6 @@ public class ClienteInteresseSaborServiceTest {
     @Autowired
     ClientePatchInteresseSaborService driver;
     @Autowired
-    EstabelecimentoPatchDispSaborService estabelecimentoPatchDispSaborService;
-    @Autowired
     ClienteRepository clienteRepository;
     @Autowired
     SaborRepository saborRepository;

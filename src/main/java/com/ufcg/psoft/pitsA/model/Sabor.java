@@ -3,7 +3,6 @@ package com.ufcg.psoft.pitsA.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.modelmapper.internal.bytebuddy.build.ToStringPlugin;
 
 import java.util.ArrayList;
 import java.util.List;

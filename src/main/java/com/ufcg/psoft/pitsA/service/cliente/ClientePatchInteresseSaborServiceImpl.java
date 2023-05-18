@@ -41,7 +41,7 @@ public class ClientePatchInteresseSaborServiceImpl implements ClientePatchIntere
 
         cliente.getInteressesSabores().add(sabor);
         sabor.getInteresses().add(cliente);
-        ;
+
         estabelecimentoAtualizaSaborService.atualizaSabor(estabelecimentoId, sabor);
 
         return modelMapper.map(clienteRepository.save(cliente), ClienteReadDTO.class);

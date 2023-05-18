@@ -1,6 +1,5 @@
 package com.ufcg.psoft.pitsA.dto.cliente;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ufcg.psoft.pitsA.model.Sabor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -31,22 +31,22 @@ public class EstabelecimentoAprovaServiceImpl implements EstabelecimentoAprovaSe
         autenticaCodigoAcessoService.autenticar(estabelecimento.getCodigoAcesso(), codigoAcesso);
 
 
-        Optional<Entregador> entregadorAprovado = estabelecimento.getEntregadoresPendentes()
+        Optional<Entregador> maybeEntregador = estabelecimento.getEntregadoresPendentes()
                 .stream()
                 .filter(entregador -> entregador.getId().equals(entregadorId))
                 .findFirst();
 
-        if (entregadorAprovado.isEmpty()) throw new EntregadorNaoEstaPendenteException();
+        if (maybeEntregador.isEmpty()) throw new EntregadorNaoEstaPendenteException();
 
-        Entregador entregadorPresente = entregadorAprovado.get();
+        Entregador entregadorAprovado = maybeEntregador.get();
 
         // TODO - Trocar a operacao por um enum
         if (estabelecimentoDTO.isAprovar()) {
             // TODO - Corrigir bug === o entregador nao ta sendo removido da lista de pendentes
-            estabelecimento.getEntregadoresPendentes().remove(entregadorPresente);
-            estabelecimento.getEntregadoresAprovados().add(entregadorPresente);
+            estabelecimento.getEntregadoresPendentes().remove(entregadorAprovado);
+            estabelecimento.getEntregadoresAprovados().add(entregadorAprovado);
         } else {
-            estabelecimento.getEntregadoresPendentes().remove(entregadorPresente);
+            estabelecimento.getEntregadoresPendentes().remove(entregadorAprovado);
         }
 
         estabelecimentoRepository.save(estabelecimento);

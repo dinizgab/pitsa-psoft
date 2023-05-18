@@ -40,7 +40,6 @@ public class EstabelecimentoPatchDispSaborServiceImpl implements Estabelecimento
 
         if (saborResult.isDisponivel()) {
             saborResult.getInteresses()
-                    .stream()
                     .forEach(cliente -> System.out.println(cliente));
 
             saborResult.getInteresses().clear();
