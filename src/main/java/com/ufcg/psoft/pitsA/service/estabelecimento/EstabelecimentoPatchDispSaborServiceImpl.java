@@ -40,12 +40,17 @@ public class EstabelecimentoPatchDispSaborServiceImpl implements Estabelecimento
 
         if (saborResult.isDisponivel()) {
             saborResult.getInteresses()
-                    .forEach(cliente -> System.out.println(cliente));
+                    .forEach(cliente -> {
+                        System.out.println("\nO sabor que voce demonstrou interesse esta disponivel novamente:");
+                        System.out.println(cliente);
+                        System.out.println();
+                    });
 
             saborResult.getInteresses().clear();
         }
 
         estabelecimento.getCardapio().add(saborResult);
+
 
         return modelMapper.map(saborResult, SaborReadDTO.class);
     }

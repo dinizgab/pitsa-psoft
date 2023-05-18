@@ -3,6 +3,7 @@ package com.ufcg.psoft.pitsA.service.estabelecimento;
 import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoPatchDispDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
+import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.Sabor;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,7 +32,8 @@ public class EstabelecimentoSaborDispTests {
     @Autowired
     SaborRepository saborRepository;
     Estabelecimento estabelecimento;
-    Sabor sabor;
+    Sabor saborDisponivel;
+    Sabor saborIndisponivel;
 
     @BeforeEach
     @Transactional
@@ -39,7 +42,7 @@ public class EstabelecimentoSaborDispTests {
                         .codigoAcesso("123456")
                 .build();
 
-        sabor = saborRepository.save(Sabor.builder()
+        saborDisponivel = saborRepository.save(Sabor.builder()
                         .nome("Carne de sol")
                         .precoGrande(30.0)
                         .precoMedio(15.0)
@@ -48,8 +51,27 @@ public class EstabelecimentoSaborDispTests {
                 .build()
         );
 
+
+        List<Cliente> interessados = new ArrayList<>();
+        interessados.add(Cliente.builder()
+                .nome("Gabriel")
+                .endereco("5432 Costa Sousa, 342")
+                .codigoAcesso("123456")
+                .build()
+        );
+        saborIndisponivel = saborRepository.save(Sabor.builder()
+                .nome("Carne de sol")
+                .precoGrande(30.0)
+                .precoMedio(15.0)
+                .estabelecimento(estabelecimento)
+                .interesses(interessados)
+                .tipo(false)
+                .build()
+        );
+
         List<Sabor> cardapio = new ArrayList<>();
-        cardapio.add(sabor);
+        cardapio.add(saborDisponivel);
+        cardapio.add(saborIndisponivel);
 
         estabelecimento.setCardapio(cardapio);
         estabelecimento = estabelecimentoRepository.save(estabelecimento);
@@ -65,7 +87,7 @@ public class EstabelecimentoSaborDispTests {
     @Transactional
     @DisplayName("Teste altera disponibilidade valido")
     void testeAlteraDisponibilidadeValido() {
-        Long saborId = sabor.getId();
+        Long saborId = saborDisponivel.getId();
         Long estabelecimentoId = estabelecimento.getId();
 
         EstabelecimentoPatchDispDTO alteraDisponibilidadeDTO = EstabelecimentoPatchDispDTO.builder()
@@ -82,7 +104,7 @@ public class EstabelecimentoSaborDispTests {
     @Transactional
     @DisplayName("Teste altera disponibilidade invalido")
     void testeAlteraDisponibilidadeInvalido() {
-        Long saborId = sabor.getId();
+        Long saborId = saborDisponivel.getId();
         Long estabelecimentoId = estabelecimento.getId();
 
         EstabelecimentoPatchDispDTO alteraDisponibilidadeDTO = EstabelecimentoPatchDispDTO.builder()
@@ -91,5 +113,25 @@ public class EstabelecimentoSaborDispTests {
                 .build();
 
         assertThrows(CodigoAcessoInvalidoException.class, () -> driver.alteraDisponibilidade(estabelecimentoId, alteraDisponibilidadeDTO));
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Testes se a lista de interessados eh limpa apos trocar disponibilidade")
+    void testeLimpaListaInteressados() {
+        Long saborId = saborIndisponivel.getId();
+        Long estabelecimentoId = estabelecimento.getId();
+
+        EstabelecimentoPatchDispDTO alteraDisponibilidadeDTO = EstabelecimentoPatchDispDTO.builder()
+                .codigoAcesso("123456")
+                .saborId(saborId)
+                .build();
+
+        SaborReadDTO resultado = driver.alteraDisponibilidade(estabelecimentoId, alteraDisponibilidadeDTO);
+
+        assertAll(
+                () -> assertTrue(resultado.isDisponivel()),
+                () -> assertTrue(resultado.getInteresses().isEmpty())
+        );
     }
 }
