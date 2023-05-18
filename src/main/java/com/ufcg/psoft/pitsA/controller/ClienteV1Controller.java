@@ -2,6 +2,7 @@ package com.ufcg.psoft.pitsA.controller;
 
 import com.ufcg.psoft.pitsA.dto.cliente.ClienteCardapioDTO;
 import com.ufcg.psoft.pitsA.dto.cliente.ClienteDeleteDTO;
+import com.ufcg.psoft.pitsA.dto.cliente.ClienteInteresseDTO;
 import com.ufcg.psoft.pitsA.dto.cliente.ClientePostPutDTO;
 import com.ufcg.psoft.pitsA.exception.ErrorMessage;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
@@ -29,6 +30,8 @@ public class ClienteV1Controller {
     ClienteRemoverService clienteExcluirService;
     @Autowired
     ClienteListarCardapioService clienteListarCardapioService;
+    @Autowired
+    ClientePatchInteresseSaborService clientePatchInteresseSaborService;
 
 
     @GetMapping("/{id}")
@@ -83,6 +86,16 @@ public class ClienteV1Controller {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(clienteListarCardapioService.listarCardapio(clienteId, clienteCardapioDTO));
+    }
+
+    @PatchMapping("/{id}/sabor")
+    public ResponseEntity<?> demonstrarInteresseSabor(
+            @PathVariable("id") Long clienteId,
+            @RequestBody @Valid ClienteInteresseDTO clienteInteresseDTO
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(clientePatchInteresseSaborService.demonstraInteresse(clienteId, clienteInteresseDTO));
     }
 
     @ExceptionHandler(CodigoAcessoInvalidoException.class)

@@ -16,6 +16,6 @@ public class ClienteInteresseDTO {
     private String codigoAcesso;
     @NotNull(message = "O id do estabelecimento nao pode ser vazio")
     private Long estabelecimentoId;
-    @NotBlank(message = "O id do sabor nao pode ser vazio")
+    @NotNull(message = "O id do sabor nao pode ser vazio")
     private Long saborId;
 }

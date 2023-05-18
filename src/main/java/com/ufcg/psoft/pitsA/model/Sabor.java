@@ -42,5 +42,6 @@ public class Sabor {
     @ManyToMany(mappedBy = "interessesSabores", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ToString.Exclude
     @Builder.Default
+    @JsonIgnore
     private List<Cliente> interesses = new ArrayList<>();
 }

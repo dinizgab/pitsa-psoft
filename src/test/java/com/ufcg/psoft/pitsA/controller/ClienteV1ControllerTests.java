@@ -2,16 +2,14 @@ package com.ufcg.psoft.pitsA.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ufcg.psoft.pitsA.dto.cliente.ClienteCardapioDTO;
-import com.ufcg.psoft.pitsA.dto.cliente.ClienteDeleteDTO;
-import com.ufcg.psoft.pitsA.dto.cliente.ClientePostPutDTO;
-import com.ufcg.psoft.pitsA.dto.cliente.ClienteReadDTO;
+import com.ufcg.psoft.pitsA.dto.cliente.*;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.Sabor;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -99,7 +97,8 @@ public class ClienteV1ControllerTests {
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();
 
-            List<ClienteReadDTO> resultado = objectMapper.readValue(responseJsonString, new TypeReference<>(){});
+            List<ClienteReadDTO> resultado = objectMapper.readValue(responseJsonString, new TypeReference<>() {
+            });
 
             assertAll(
                     () -> assertEquals(3, resultado.size())
@@ -118,7 +117,8 @@ public class ClienteV1ControllerTests {
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();
 
-            List<ClienteReadDTO> listaResultados = objectMapper.readValue(responseJsonString, new TypeReference<>(){});
+            List<ClienteReadDTO> listaResultados = objectMapper.readValue(responseJsonString, new TypeReference<>() {
+            });
             ClienteReadDTO resultado = listaResultados.stream().findFirst().orElse(ClienteReadDTO.builder().build());
 
             assertAll(
@@ -160,8 +160,8 @@ public class ClienteV1ControllerTests {
             ClienteReadDTO resultado = objectMapper.readValue(responseJsonString, ClienteReadDTO.class);
 
             assertAll(
-                    () -> assertEquals(clientePutDTO.getEndereco() ,resultado.getEndereco()),
-                    () -> assertEquals(clientePutDTO.getNome() ,resultado.getNome())
+                    () -> assertEquals(clientePutDTO.getEndereco(), resultado.getEndereco()),
+                    () -> assertEquals(clientePutDTO.getNome(), resultado.getNome())
             );
         }
 
@@ -194,6 +194,14 @@ public class ClienteV1ControllerTests {
 
         @BeforeEach
         void setUp() {
+            cliente = clienteRepository.save(
+                    Cliente.builder()
+                            .nome("Gabriel")
+                            .endereco("Rua 123 da Silva 4")
+                            .codigoAcesso("111111")
+                            .build()
+            );
+
             estabelecimento = Estabelecimento.builder()
                     .codigoAcesso("123456")
                     .build();
@@ -250,7 +258,7 @@ public class ClienteV1ControllerTests {
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();
 
-            List<SaborReadDTO> listaResultados = objectMapper.readValue(responseJsonString, new TypeReference<>(){});
+            List<SaborReadDTO> listaResultados = objectMapper.readValue(responseJsonString, new TypeReference<>() {});
             SaborReadDTO resultado = listaResultados.stream().findFirst().orElse(SaborReadDTO.builder().build());
 
             assertAll(
@@ -259,6 +267,101 @@ public class ClienteV1ControllerTests {
                     () -> assertTrue(resultado.isDisponivel()),
                     () -> assertEquals(50.0, resultado.getPrecoGrande()),
                     () -> assertEquals(25.0, resultado.getPrecoMedio())
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("Testes de endpoints de demonstrar interesse num sabor do cardapio")
+    class ClienteInteresseTestes {
+        final String URI_CLIENTE = "/v1/cliente";
+        @Autowired
+        EstabelecimentoRepository estabelecimentoRepository;
+        Estabelecimento estabelecimento;
+        Sabor sabor;
+        Cliente cliente;
+
+
+        @BeforeEach
+        void setUp() {
+            estabelecimento = Estabelecimento.builder()
+                    .codigoAcesso("123456")
+                    .build();
+
+            cliente = Cliente.builder()
+                            .nome("Gabriel")
+                            .endereco("Rua 123 da Silva 4")
+                            .codigoAcesso("111111")
+                            .build();
+
+            List<Sabor> cardapio = new ArrayList<>();
+            cardapio.add(Sabor.builder()
+                    .estabelecimento(estabelecimento)
+                    .precoGrande(55.0)
+                    .precoMedio(27.5)
+                    .nome("Calabresa")
+                    .disponivel(false)
+                    .build()
+            );
+            cardapio.add(Sabor.builder()
+                    .estabelecimento(estabelecimento)
+                    .precoGrande(50.0)
+                    .precoMedio(25.0)
+                    .nome("4 Queijos")
+                    .disponivel(true)
+                    .build()
+            );
+
+            sabor = Sabor.builder()
+                    .estabelecimento(estabelecimento)
+                    .precoGrande(60.0)
+                    .precoMedio(30.0)
+                    .nome("Frango com bacon")
+                    .disponivel(false)
+                    .build();
+
+            cliente = clienteRepository.save(cliente);
+
+            cardapio.add(sabor);
+            estabelecimento.setCardapio(cardapio);
+            estabelecimento = estabelecimentoRepository.save(estabelecimento);
+        }
+
+        @AfterEach
+        void tearDown() {
+            estabelecimentoRepository.deleteAll();
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("Quando demonstramos interesse por um sabor do cardapio de um estabelecimento")
+        void quandoDemonstramosInteresseComSucesso() throws Exception {
+            Long clienteId = cliente.getId();
+            Long estabelecimentoId = estabelecimento.getId();
+            Long saborId = sabor.getId();
+
+            ClienteInteresseDTO clienteInteresseDTO = ClienteInteresseDTO.builder()
+                    .codigoAcesso(cliente.getCodigoAcesso())
+                    .estabelecimentoId(estabelecimentoId)
+                    .saborId(saborId)
+                .build();
+
+            String responseJsonString = driver.perform(patch(URI_CLIENTE + "/" + clienteId + "/sabor")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(clienteInteresseDTO)))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            ClienteReadDTO resultado = objectMapper.readValue(responseJsonString,ClienteReadDTO.class);
+            Sabor resultadoInteresse = resultado.getInteressesSabores().get(0);
+
+            assertAll(
+                    () -> assertEquals(cliente.getNome(), resultado.getNome()),
+                    () -> assertEquals(cliente.getEndereco(), resultado.getEndereco()),
+                    () -> assertEquals(sabor.getNome(), resultadoInteresse.getNome()),
+                    () -> assertEquals(sabor.getPrecoMedio(), resultadoInteresse.getPrecoMedio()),
+                    () -> assertEquals(sabor.getPrecoGrande(), resultadoInteresse.getPrecoGrande())
             );
         }
     }
