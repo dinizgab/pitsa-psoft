@@ -1,9 +1,6 @@
 package com.ufcg.psoft.pitsA.controller;
 
-import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoAprovaEntregadorDTO;
-import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoDeleteDTO;
-import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoPostDTO;
-import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoPutDTO;
+import com.ufcg.psoft.pitsA.dto.estabelecimento.*;
 import com.ufcg.psoft.pitsA.exception.ErrorMessage;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.exception.entregador.EntregadorNaoEstaPendenteException;
@@ -30,6 +27,8 @@ public class EstabelecimentoV1Controller {
     EstabelecimentoAtualizarService estabelecimentoAtualizarService;
     @Autowired
     EstabelecimentoAprovaService estabelecimentoAprovaService;
+    @Autowired
+    EstabelecimentoPatchDispSaborService estabelecimentoPatchDispSaborService;
     @Autowired
     EstabelecimentoRemoverService estabelecimentoExcluirService;
 
@@ -83,6 +82,15 @@ public class EstabelecimentoV1Controller {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(estabelecimentoAprovaService.aprova(id, aprovaBody));
+    }
+
+    @PatchMapping("/{id}/sabor")
+    public ResponseEntity<?> alteraDisponibilidadeSabor(
+            @PathVariable("id") Long id,
+            @RequestBody @Valid EstabelecimentoPatchDispDTO dispBody) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(estabelecimentoPatchDispSaborService.alteraDisponibilidade(id, dispBody));
     }
 
     @ExceptionHandler(CodigoAcessoInvalidoException.class)

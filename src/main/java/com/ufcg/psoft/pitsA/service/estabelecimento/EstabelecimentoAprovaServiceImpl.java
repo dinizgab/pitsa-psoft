@@ -40,10 +40,8 @@ public class EstabelecimentoAprovaServiceImpl implements EstabelecimentoAprovaSe
             estabelecimento.getEntregadoresAprovados().add(entregador);
         }
 
-        // TODO - Corrigir bug === o entregador nao ta sendo removido da lista de pendentes
         estabelecimento.getEntregadoresPendentes().removeIf(e -> e.getId().equals(entregadorId));
 
-        System.out.println(estabelecimento);
         estabelecimentoRepository.save(estabelecimento);
 
         return modelMapper.map(entregador, EntregadorReadDTO.class);

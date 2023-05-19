@@ -1,14 +1,11 @@
 package com.ufcg.psoft.pitsA.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ufcg.psoft.pitsA.dto.EntregadorReadDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -40,3 +37,5 @@ public class Estabelecimento {
     @EqualsAndHashCode.Exclude
     private List<Sabor> cardapio = new ArrayList<>();
 }
+
+// TODO - refactoring criando um EstabelecimentoReadDTO

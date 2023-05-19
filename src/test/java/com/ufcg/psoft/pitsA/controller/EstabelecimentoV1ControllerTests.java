@@ -1,15 +1,17 @@
 package com.ufcg.psoft.pitsA.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufcg.psoft.pitsA.dto.entregador.EntregadorReadDTO;
 import com.ufcg.psoft.pitsA.dto.estabelecimento.*;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.exception.ErrorMessage;
-import com.ufcg.psoft.pitsA.model.Entregador;
-import com.ufcg.psoft.pitsA.model.Estabelecimento;
-import com.ufcg.psoft.pitsA.model.TipoVeiculoEntregador;
+import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
+import com.ufcg.psoft.pitsA.model.*;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
+import com.ufcg.psoft.pitsA.repository.SaborRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +93,8 @@ public class EstabelecimentoV1ControllerTests {
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();
 
-            List<Estabelecimento> resultado = objectMapper.readValue(responseJsonString, new TypeReference<>(){});
+            List<Estabelecimento> resultado = objectMapper.readValue(responseJsonString, new TypeReference<>() {
+            });
 
             assertAll(
                     () -> assertEquals(3, resultado.size())
@@ -110,7 +113,8 @@ public class EstabelecimentoV1ControllerTests {
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();
 
-            List<Estabelecimento> listaResultados = objectMapper.readValue(responseJsonString, new TypeReference<>(){});
+            List<Estabelecimento> listaResultados = objectMapper.readValue(responseJsonString, new TypeReference<>() {
+            });
             Estabelecimento resultado = listaResultados.stream().findFirst().orElse(Estabelecimento.builder().build());
 
             assertAll(
@@ -157,7 +161,7 @@ public class EstabelecimentoV1ControllerTests {
 
             assertAll(
                     () -> assertEquals(estabelecimentoId, resultado.getId().longValue()),
-                    () -> assertEquals("123456" ,resultado.getCodigoAcesso())
+                    () -> assertEquals("123456", resultado.getCodigoAcesso())
             );
         }
 
@@ -264,6 +268,7 @@ public class EstabelecimentoV1ControllerTests {
 
             assertAll(
                     () -> assertTrue(estabelecimento.getEntregadoresAprovados().contains(entregador)),
+                    () -> assertFalse(estabelecimento.getEntregadoresPendentes().contains(entregador)),
                     () -> assertEquals(0, estabelecimento.getEntregadoresPendentes().size()),
                     () -> assertEquals(entregador.getNome(), resultado.getNome()),
                     () -> assertEquals(entregador.getPlacaVeiculo(), resultado.getPlacaVeiculo()),
@@ -346,6 +351,78 @@ public class EstabelecimentoV1ControllerTests {
             assertAll(
                     () -> assertEquals("O Entregador consultado nao esta na lista de pendencia desse estabelecimento!", resultado.getMessage())
             );
+        }
+    }
+
+    @Nested
+    @DisplayName("Testes de endpoints de modificar disponibilidade de sabor")
+    class EstabelecimentoSaborDisponibilidadeTeste {
+        final String URI_ESTABELECIMENTO = "/v1/estabelecimento";
+        @Autowired
+        SaborRepository saborRepository;
+        Sabor sabor;
+
+        @BeforeEach
+        void setUp() {
+            sabor = saborRepository.save(Sabor.builder()
+                    .nome("Chocolate")
+                    .tipo(TipoSaborPizza.DOCE)
+                    .estabelecimento(estabelecimento)
+                    .precoGrande(50.0)
+                    .precoMedio(25.0)
+                    .build());
+
+            estabelecimento.getCardapio().add(sabor);
+
+            estabelecimento = estabelecimentoRepository.save(estabelecimento);
+        }
+
+        @Test
+        @DisplayName("Quando alteramos a disponibilidade com sucesso")
+        void testeAlteraDisponibilidadeSucesso() throws Exception {
+            Long estabelecimentoId = estabelecimento.getId();
+            EstabelecimentoPatchDispDTO patchBody = EstabelecimentoPatchDispDTO.builder()
+                    .codigoAcesso(estabelecimento.getCodigoAcesso())
+                    .saborId(sabor.getId())
+                    .build();
+
+            String responseJsonString = driver.perform(patch(URI_ESTABELECIMENTO + "/" + estabelecimentoId + "/sabor")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(patchBody)))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            SaborReadDTO resultado = objectMapper.readValue(responseJsonString, SaborReadDTO.class);
+
+
+            assertAll(
+                    () -> assertEquals(sabor.getNome(), resultado.getNome()),
+                    () -> assertFalse(resultado.isDisponivel()),
+                    () -> assertEquals(sabor.getPrecoGrande(), resultado.getPrecoGrande()),
+                    () -> assertEquals(sabor.getPrecoMedio(), resultado.getPrecoMedio())
+            );
+        }
+
+        @Test
+        @DisplayName("Quando o codigo de acesso e invalido")
+        void testeQuandoCodigoAcessoInvalido() throws Exception {
+            Long estabelecimentoId = estabelecimento.getId();
+            EstabelecimentoPatchDispDTO patchBody = EstabelecimentoPatchDispDTO.builder()
+                    .codigoAcesso("abcabcabc")
+                    .saborId(sabor.getId())
+                    .build();
+
+            String responseJsonString = driver.perform(patch(URI_ESTABELECIMENTO + "/" + estabelecimentoId + "/sabor")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(patchBody)))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            CodigoAcessoInvalidoException resultado = objectMapper.readValue(responseJsonString, CodigoAcessoInvalidoException.class);
+
+            assertEquals(resultado.getMessage(), "O codigo de acesso informado eh invalido");
         }
     }
 }
