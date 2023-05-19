@@ -2,6 +2,7 @@ package com.ufcg.psoft.pitsA.service.estabelecimento;
 
 import com.ufcg.psoft.pitsA.dto.EntregadorReadDTO;
 import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoAprovaEntregadorDTO;
+import com.ufcg.psoft.pitsA.dto.estabelecimento.StatusAprovacao;
 import com.ufcg.psoft.pitsA.exception.entregador.EntregadorNaoEstaPendenteException;
 import com.ufcg.psoft.pitsA.exception.estabelecimento.EstabelecimentoNaoExisteException;
 import com.ufcg.psoft.pitsA.model.Entregador;
@@ -26,31 +27,27 @@ public class EstabelecimentoAprovaServiceImpl implements EstabelecimentoAprovaSe
     public EntregadorReadDTO aprova(Long estabelecimentoId, EstabelecimentoAprovaEntregadorDTO estabelecimentoDTO) {
         Long entregadorId = estabelecimentoDTO.getEntregadorId();
         String codigoAcesso = estabelecimentoDTO.getCodigoAcesso();
+        StatusAprovacao aprovacao = estabelecimentoDTO.getAprovar();
 
         Estabelecimento estabelecimento = estabelecimentoRepository.findById(estabelecimentoId).orElseThrow(EstabelecimentoNaoExisteException::new);
         autenticaCodigoAcessoService.autenticar(estabelecimento.getCodigoAcesso(), codigoAcesso);
 
-
-        Optional<Entregador> maybeEntregador = estabelecimento.getEntregadoresPendentes()
+        Entregador entregador = estabelecimento.getEntregadoresPendentes()
                 .stream()
-                .filter(entregador -> entregador.getId().equals(entregadorId))
-                .findFirst();
+                .filter(e -> e.getId().equals(entregadorId))
+                .findFirst()
+                .orElseThrow(EntregadorNaoEstaPendenteException::new);
 
-        if (maybeEntregador.isEmpty()) throw new EntregadorNaoEstaPendenteException();
-
-        Entregador entregadorAprovado = maybeEntregador.get();
-
-        // TODO - Trocar a operacao por um enum
-        if (estabelecimentoDTO.isAprovar()) {
-            // TODO - Corrigir bug === o entregador nao ta sendo removido da lista de pendentes
-            estabelecimento.getEntregadoresPendentes().remove(entregadorAprovado);
-            estabelecimento.getEntregadoresAprovados().add(entregadorAprovado);
-        } else {
-            estabelecimento.getEntregadoresPendentes().remove(entregadorAprovado);
+        if (aprovacao.isAprovado()) {
+            estabelecimento.getEntregadoresAprovados().add(entregador);
         }
 
+        // TODO - Corrigir bug === o entregador nao ta sendo removido da lista de pendentes
+        estabelecimento.getEntregadoresPendentes().removeIf(e -> e.getId().equals(entregadorId));
+
+        System.out.println(estabelecimento);
         estabelecimentoRepository.save(estabelecimento);
 
-        return modelMapper.map(entregadorAprovado, EntregadorReadDTO.class);
+        return modelMapper.map(entregador, EntregadorReadDTO.class);
     }
 }

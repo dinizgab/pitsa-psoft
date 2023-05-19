@@ -21,6 +21,7 @@ public class Sabor {
     @Column(nullable = false)
     private String nome;
 
+    // TODO - Trocar o tipoSabor por um ENUM
     @Column(nullable = false)
     private boolean tipo;
 

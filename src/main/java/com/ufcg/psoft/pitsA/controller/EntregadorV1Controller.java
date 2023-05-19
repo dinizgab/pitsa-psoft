@@ -77,7 +77,7 @@ public class EntregadorV1Controller {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> atualizarEntregador(
+    public ResponseEntity<?> adicionarEstabelecimento(
             @PathVariable Long id,
             @RequestBody @Valid EntregadorPatchEstabelecimentoDTO entregadorPatchEstabelecimentoDTO) {
         return ResponseEntity

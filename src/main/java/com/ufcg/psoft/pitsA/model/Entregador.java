@@ -28,6 +28,7 @@ public class Entregador {
     @Column(nullable = false)
     private String placaVeiculo;
 
+    // TODO - Trocar o tipoVeiculo por um ENUM
     @JsonProperty("codigoDeBarras")
     @Column(nullable = false)
     private String tipoVeiculo;
@@ -42,7 +43,6 @@ public class Entregador {
 
     @JsonIgnore
     @Builder.Default
-    @JsonProperty("estabelecimento")
     @ManyToMany(fetch = FetchType.LAZY)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

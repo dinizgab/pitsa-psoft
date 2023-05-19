@@ -1,6 +1,7 @@
 package com.ufcg.psoft.pitsA.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ufcg.psoft.pitsA.dto.EntregadorReadDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,16 +27,12 @@ public class Estabelecimento {
     private String codigoAcesso;
 
     @ManyToMany(mappedBy = "estabelecimentos", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @Builder.Default
-    private Set<Entregador> entregadoresPendentes = new HashSet<>();
+    private List<Entregador> entregadoresPendentes = new ArrayList<>();
 
     @Builder.Default
-    @ManyToMany(mappedBy = "estabelecimentos", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Set<Entregador> entregadoresAprovados = new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Entregador> entregadoresAprovados = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

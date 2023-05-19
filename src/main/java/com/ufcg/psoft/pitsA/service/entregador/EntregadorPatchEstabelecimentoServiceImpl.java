@@ -22,7 +22,7 @@ public class EntregadorPatchEstabelecimentoServiceImpl implements EntregadorPatc
     @Autowired
     EstabelecimentoPatchEntregador estabelecimentoPatchEntregador;
     @Autowired
-    AutenticaCodigoAcessoService autenticaEmpregadoService;
+    AutenticaCodigoAcessoService autenticador;
     @Autowired
     ModelMapper modelMapper;
 
@@ -32,18 +32,12 @@ public class EntregadorPatchEstabelecimentoServiceImpl implements EntregadorPatc
         Long estabelecimentoId = entregadorDTO.getEstabelecimentoId();
 
         Entregador entregador = entregadorRepository.findById(entregadorId).orElseThrow(EntregadorNaoExisteException::new);
-        autenticaEmpregadoService.autenticar(entregador.getCodigoAcesso(), codigoAcesso);
+        autenticador.autenticar(entregador.getCodigoAcesso(), codigoAcesso);
 
         Estabelecimento estabelecimento = estabelecimentoListarService.listar(estabelecimentoId).get(0);
-
         entregador.getEstabelecimentos().add(estabelecimento);
-        estabelecimento.getEntregadoresPendentes().add(entregador);
 
-        EstabelecimentoPatchEntregadorDTO estabelecimentoEntregadorDTO = EstabelecimentoPatchEntregadorDTO.builder()
-                .entregadores(estabelecimento.getEntregadoresPendentes())
-                .build();
-
-        estabelecimentoPatchEntregador.alteraParcialmente(estabelecimentoId, estabelecimentoEntregadorDTO);
+        estabelecimentoPatchEntregador.alteraParcialmente(estabelecimentoId, entregador);
 
         return entregador;
     }
