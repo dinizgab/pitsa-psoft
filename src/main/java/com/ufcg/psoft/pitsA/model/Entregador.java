@@ -31,7 +31,7 @@ public class Entregador {
     // TODO - Trocar o tipoVeiculo por um ENUM
     @JsonProperty("codigoDeBarras")
     @Column(nullable = false)
-    private String tipoVeiculo;
+    private TipoVeiculoEntregador tipoVeiculo;
 
     @JsonProperty("fabricante")
     @Column(nullable = false)

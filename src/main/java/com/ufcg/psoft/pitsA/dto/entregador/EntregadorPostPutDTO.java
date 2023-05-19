@@ -1,6 +1,7 @@
 package com.ufcg.psoft.pitsA.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ufcg.psoft.pitsA.model.TipoVeiculoEntregador;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +23,7 @@ public class EntregadorPostPutDTO {
 
     @JsonProperty("tipoVeiculo")
     @NotBlank(message = "O tipo do veiculo e obrigatorio")
-    private String tipoVeiculo;
+    private TipoVeiculoEntregador tipoVeiculo;
 
     @JsonProperty("corVeiculo")
     @NotBlank(message = "A cor do veiculo e obrigatoria")
