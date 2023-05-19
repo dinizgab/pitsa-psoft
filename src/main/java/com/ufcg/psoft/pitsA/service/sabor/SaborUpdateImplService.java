@@ -31,14 +31,13 @@ public class SaborUpdateImplService implements SaborUpdateService {
 
     @Override
     public SaborReadDTO update(Long saborId, SaborPutDTO saborDTO) {
-        Estabelecimento estabelecimento = estabelecimentoListarService.listar(saborDTO.getEstabelecimentoId()).get(0);
+        Long estabelecimentoId = saborDTO.getEstabelecimentoId();
+        Estabelecimento estabelecimento = estabelecimentoListarService.listar(estabelecimentoId).get(0);
         autenticador.autenticar(estabelecimento.getCodigoAcesso(), saborDTO.getCodigoAcesso());
 
-        Optional<Sabor> maybeSabor = saborRepository.findById(saborId);
-        if (!maybeSabor.isPresent()) throw new SaborNaoExistenteException();
-        Sabor sabor = maybeSabor.get();
+        Sabor sabor = saborRepository.findById(saborId).orElseThrow(SaborNaoExistenteException::new);
 
-        estabelecimentoAtualizaSaborService.atualizaSabor(saborDTO.getEstabelecimentoId(), sabor);
+        estabelecimentoAtualizaSaborService.atualizaSabor(estabelecimentoId, sabor);
 
         modelMapper.map(saborDTO, sabor);
         Sabor saborSalvo = saborRepository.save(sabor);

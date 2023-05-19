@@ -58,7 +58,16 @@ public class SaborServiceTests {
                         .build()
         );
 
+        Sabor sabor2 = saborRepository.save(Sabor.builder()
+                .nome("Calabresa")
+                .tipo(TipoSaborPizza.SALGADO)
+                .precoGrande(44.0)
+                .precoMedio(22.0)
+                .estabelecimento(estabelecimento)
+                .build());
+
         estabelecimento.getCardapio().add(sabor);
+        estabelecimento.getCardapio().add(sabor2);
         estabelecimento = estabelecimentoRepository.save(estabelecimento);
     }
 
@@ -92,37 +101,25 @@ public class SaborServiceTests {
     }
 
     @Test
+    @Transactional
     @DisplayName("Lista sabor pelo id")
     void testeListaSaborId() {
         Sabor resultado = driverListar.listar(sabor.getId()).get(0);
 
         assertAll(
-                () -> assertEquals("Calabresa", resultado.getNome()),
-                () -> assertEquals(44.0, resultado.getPrecoGrande()),
-                () -> assertEquals(22.0, resultado.getPrecoMedio()),
+                () -> assertEquals(sabor.getNome(), resultado.getNome()),
+                () -> assertEquals(sabor.getPrecoGrande(), resultado.getPrecoGrande()),
+                () -> assertEquals(sabor.getPrecoMedio(), resultado.getPrecoMedio()),
                 () -> assertTrue(resultado.getTipo().isSalgado()),
-                () -> assertNull(resultado.getEstabelecimento())
+                () -> assertEquals(estabelecimento, resultado.getEstabelecimento())
         );
     }
 
     @Test
+    @Transactional
     @DisplayName("Lista todos os sabores")
     void testeListaTodosSabores() {
-            Sabor sabor1 = Sabor.builder()
-                    .nome("Calabresa")
-                    .tipo(TipoSaborPizza.SALGADO)
-                    .precoGrande(44.0)
-                    .precoMedio(22.0)
-                    .build();
-
-            Sabor sabor2 = Sabor.builder()
-                    .nome("Frango")
-                    .tipo(TipoSaborPizza.SALGADO)
-                    .precoGrande(44.0)
-                    .precoMedio(22.0)
-                    .build();
-
-            List<Sabor> resultado = saborRepository.saveAll(Arrays.asList(sabor1, sabor2));
+            List<Sabor> resultado = driverListar.listar(null);
             assertEquals(2, resultado.size());
     }
 
@@ -151,16 +148,9 @@ public class SaborServiceTests {
     }
 
     @Test
+    @Transactional
     @DisplayName("Remove um sabor")
     void testeRemoveSabor() {
-        saborRepository.save(Sabor.builder()
-                .nome("Calabresa")
-                .tipo(TipoSaborPizza.SALGADO)
-                .precoGrande(44.0)
-                .precoMedio(22.0)
-                .estabelecimento(estabelecimento)
-                .build());
-
         SaborDeleteDTO deleteBody = SaborDeleteDTO
                 .builder()
                 .estabelecimentoId(estabelecimento.getId())

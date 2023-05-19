@@ -19,3 +19,4 @@ public class PitsAApplication {
 
 // Fixes
 // TODO - Corrigir o erro nesses testes de listar Cliente -- Modelmapper nao consegue fazer o mapeamento
+// TODO - Corrigir teste de atualizar um sabor, erro de troca de ID
