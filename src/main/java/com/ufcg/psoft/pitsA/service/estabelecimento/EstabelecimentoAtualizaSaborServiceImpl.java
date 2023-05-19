@@ -1,6 +1,7 @@
 package com.ufcg.psoft.pitsA.service.estabelecimento;
 
 import com.ufcg.psoft.pitsA.exception.estabelecimento.EstabelecimentoNaoExisteException;
+import com.ufcg.psoft.pitsA.exception.estabelecimento.SaborNaoPertenceCardapio;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.Sabor;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
@@ -20,7 +21,7 @@ public class EstabelecimentoAtualizaSaborServiceImpl implements EstabelecimentoA
                 .stream()
                 .filter(result -> result.getId().equals(sabor.getId()))
                 .findFirst()
-                .get();
+                .orElseThrow(SaborNaoPertenceCardapio::new);
 
         estabelecimento.getCardapio().remove(resultBusca);
         estabelecimento.getCardapio().add(sabor);

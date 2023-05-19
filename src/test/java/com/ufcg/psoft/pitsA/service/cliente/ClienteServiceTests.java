@@ -58,7 +58,6 @@ public class ClienteServiceTests {
         );
     }
 
-    // TODO - Corrigir o erro nesses testes na hora de listar -- Modelmapper nao consegue fazer o mapeamento
     @Test
     @DisplayName("Quando lista todos os entregadores cadastrados")
     void testeListaTodosClientes() {

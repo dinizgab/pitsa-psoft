@@ -1,5 +1,6 @@
 package com.ufcg.psoft.pitsA.service.sabor;
 
+import com.ufcg.psoft.pitsA.dto.sabor.SaborPutDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborDeleteDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborPostDTO;
@@ -43,6 +44,9 @@ public class SaborServiceTests {
     @BeforeEach
     @Transactional
     void setUp() {
+        estabelecimento = Estabelecimento.builder()
+                .codigoAcesso("123456")
+                .build();
 
         sabor = saborRepository.save(
                 Sabor.builder()
@@ -50,14 +54,12 @@ public class SaborServiceTests {
                         .tipo(TipoSaborPizza.SALGADO)
                         .precoGrande(44.0)
                         .precoMedio(22.0)
+                        .estabelecimento(estabelecimento)
                         .build()
         );
 
-        estabelecimento = estabelecimentoRepository.save(
-                Estabelecimento.builder()
-                        .codigoAcesso("123456")
-                        .build()
-        );
+        estabelecimento.getCardapio().add(sabor);
+        estabelecimento = estabelecimentoRepository.save(estabelecimento);
     }
 
     @AfterEach
@@ -124,7 +126,6 @@ public class SaborServiceTests {
             assertEquals(2, resultado.size());
     }
 
-    /*
     @Test
     @Transactional
     @DisplayName("Atualiza um sabor")
@@ -142,13 +143,12 @@ public class SaborServiceTests {
         SaborReadDTO resultado = driverAtualizar.update(sabor.getId(), putBody);
 
         assertAll(
-                () -> assertEquals("Frango com bacon", resultado.getNome()),
-                () -> assertEquals(20.0, resultado.getPrecoGrande()),
-                () -> assertEquals(10.0, resultado.getPrecoMedio()),
-                () -> assertTrue(resultado.isTipo())
+                () -> assertEquals(putBody.getNome(), resultado.getNome()),
+                () -> assertEquals(putBody.getPrecoGrande(), resultado.getPrecoGrande()),
+                () -> assertEquals(putBody.getPrecoMedio(), resultado.getPrecoMedio()),
+                () -> assertTrue(resultado.getTipo().isSalgado())
         );
     }
-    */
 
     @Test
     @DisplayName("Remove um sabor")

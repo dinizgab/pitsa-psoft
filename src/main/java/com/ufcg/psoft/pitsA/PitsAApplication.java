@@ -9,3 +9,13 @@ public class PitsAApplication {
         SpringApplication.run(PitsAApplication.class, args);
     }
 }
+
+// Feats
+// TODO - Criar testes para Sabor
+
+// Refactoring
+// TODO - Criar um EstabelecimentoReadDTO para as operacoes de leitura de um estabelecimento
+// TODO - Trocar os valores dos bodies que usam IDs como pesquisa por RequestParams
+
+// Fixes
+// TODO - Corrigir o erro nesses testes de listar Cliente -- Modelmapper nao consegue fazer o mapeamento

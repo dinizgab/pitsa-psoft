@@ -39,8 +39,6 @@ public class ClienteInteresseSaborServiceTest {
     Sabor sabor;
     Estabelecimento estabelecimento;
 
-    // TODO - Quando alterar a disponibilidade do sabor, a lista sera limpa e printara no terminal quem estava dentro dela
-
     @BeforeEach
     void setUp() {
         cliente = clienteRepository.save(

@@ -1,13 +1,11 @@
 package com.ufcg.psoft.pitsA.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufcg.psoft.pitsA.dto.entregador.EntregadorReadDTO;
 import com.ufcg.psoft.pitsA.dto.estabelecimento.*;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.exception.ErrorMessage;
-import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.model.*;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
@@ -420,7 +418,7 @@ public class EstabelecimentoV1ControllerTests {
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();
 
-            CodigoAcessoInvalidoException resultado = objectMapper.readValue(responseJsonString, CodigoAcessoInvalidoException.class);
+            ErrorMessage resultado = objectMapper.readValue(responseJsonString, ErrorMessage.class);
 
             assertEquals(resultado.getMessage(), "O codigo de acesso informado eh invalido");
         }

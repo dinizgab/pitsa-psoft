@@ -210,7 +210,6 @@ public class EntregadorV1ControllerTests {
             );
         }
 
-        // TODO - Corrigir esse teste, colocando o do body
         @Test
         @DisplayName("Quando excluímos um entregador salvo com codigo de acesso valido")
         void quandoExcluimosEntregadorValido() throws Exception {

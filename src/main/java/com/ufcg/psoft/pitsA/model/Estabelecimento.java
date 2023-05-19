@@ -37,5 +37,3 @@ public class Estabelecimento {
     @EqualsAndHashCode.Exclude
     private List<Sabor> cardapio = new ArrayList<>();
 }
-
-// TODO - refactoring criando um EstabelecimentoReadDTO

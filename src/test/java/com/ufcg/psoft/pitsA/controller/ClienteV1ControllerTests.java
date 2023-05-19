@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufcg.psoft.pitsA.dto.cliente.*;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
+import com.ufcg.psoft.pitsA.exception.ErrorMessage;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.Sabor;
@@ -272,6 +273,27 @@ public class ClienteV1ControllerTests {
                     () -> assertEquals(50.0, resultado.getPrecoGrande()),
                     () -> assertEquals(25.0, resultado.getPrecoMedio())
             );
+        }
+
+        @Test
+        @DisplayName("Quando buscamos um cardapio de um estabelecimento com um codigo de acesso invalido")
+        void quandoBuscamosCardapioCodigoInvalido() throws Exception {
+            Long clienteId = cliente.getId();
+            ClienteCardapioDTO clienteCardapioDTO = ClienteCardapioDTO.builder()
+                    .codigoAcesso("123123123")
+                    .estabelecimentoId(estabelecimento.getId())
+                    .build();
+
+            String responseJsonString = driver.perform(get(URI_CLIENTE + "/" + clienteId + "/cardapio")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(clienteCardapioDTO)))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            ErrorMessage resultado = objectMapper.readValue(responseJsonString, ErrorMessage.class);
+
+            assertEquals(resultado.getMessage(), "O codigo de acesso informado eh invalido");
         }
     }
 

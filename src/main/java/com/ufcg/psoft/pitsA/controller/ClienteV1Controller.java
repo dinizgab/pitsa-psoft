@@ -88,7 +88,6 @@ public class ClienteV1Controller {
                 .body(clienteListarCardapioService.listarCardapio(clienteId, clienteCardapioDTO));
     }
 
-    // TODO - Trocar esses bodies por Request Params
     @PatchMapping("/{id}/sabor")
     public ResponseEntity<?> demonstrarInteresseSabor(
             @PathVariable("id") Long clienteId,
