@@ -1,6 +1,6 @@
 package com.ufcg.psoft.pitsA.service.estabelecimento;
 
-import com.ufcg.psoft.pitsA.dto.EntregadorReadDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorReadDTO;
 import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoAprovaEntregadorDTO;
 import com.ufcg.psoft.pitsA.dto.estabelecimento.StatusAprovacao;
 import com.ufcg.psoft.pitsA.exception.entregador.EntregadorNaoEstaPendenteException;
@@ -12,8 +12,6 @@ import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class EstabelecimentoAprovaServiceImpl implements EstabelecimentoAprovaService{

@@ -3,14 +3,12 @@ package com.ufcg.psoft.pitsA.service.entregador;
 import java.util.Arrays;
 import java.util.List;
 
-import com.ufcg.psoft.pitsA.dto.EntregadorPostPutDTO;
-import com.ufcg.psoft.pitsA.dto.EntregadorReadDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorDeleteDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorPostPutDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorReadDTO;
 import com.ufcg.psoft.pitsA.model.Entregador;
+import com.ufcg.psoft.pitsA.model.TipoVeiculoEntregador;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
-import com.ufcg.psoft.pitsA.service.entregador.EntregadorAtualizarService;
-import com.ufcg.psoft.pitsA.service.entregador.EntregadorCriarService;
-import com.ufcg.psoft.pitsA.service.entregador.EntregadorListarService;
-import com.ufcg.psoft.pitsA.service.entregador.EntregadorRemoverService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,7 +36,7 @@ public class EntregadorServiceTest {
         entregador = EntregadorPostPutDTO.builder()
                         .nome("Gabriel Pombo Diniz")
                         .placaVeiculo("RTJ-1235")
-                        .tipoVeiculo("Carro")
+                        .tipoVeiculo(TipoVeiculoEntregador.CARRO)
                         .corVeiculo("Azul")
                         .codigoAcesso("123456")
                         .build();
@@ -57,7 +55,7 @@ public class EntregadorServiceTest {
         assertAll(
                 () -> assertEquals("Gabriel Pombo Diniz", resultado.getNome()),
                 () -> assertEquals("RTJ-1235", resultado.getPlacaVeiculo()),
-                () -> assertEquals("Carro", resultado.getTipoVeiculo()),
+                () -> assertEquals(TipoVeiculoEntregador.CARRO, resultado.getTipoVeiculo()),
                 () -> assertEquals("Azul", resultado.getCorVeiculo())
         );
     }
@@ -68,7 +66,7 @@ public class EntregadorServiceTest {
         Entregador entregador1 = Entregador.builder()
                 .nome("Cleber Junior")
                 .placaVeiculo("QJS-1235")
-                .tipoVeiculo("Moto")
+                .tipoVeiculo(TipoVeiculoEntregador.MOTO)
                 .corVeiculo("Preto")
                 .codigoAcesso("653423")
                 .build();
@@ -76,7 +74,7 @@ public class EntregadorServiceTest {
         Entregador entregador2 = Entregador.builder()
                 .nome("Cleber")
                 .placaVeiculo("JHG-9843")
-                .tipoVeiculo("Moto")
+                .tipoVeiculo(TipoVeiculoEntregador.MOTO)
                 .corVeiculo("Prata")
                 .codigoAcesso("943845")
                 .build();
@@ -94,7 +92,7 @@ public class EntregadorServiceTest {
                 Entregador.builder()
                         .nome("Cleber")
                         .placaVeiculo("JHG-9843")
-                        .tipoVeiculo("Moto")
+                        .tipoVeiculo(TipoVeiculoEntregador.MOTO)
                         .corVeiculo("Prata")
                         .codigoAcesso("943845")
                         .build()
@@ -105,7 +103,7 @@ public class EntregadorServiceTest {
         assertAll(
                 () -> assertEquals("Cleber", resultado.getNome()),
                 () -> assertEquals("JHG-9843", resultado.getPlacaVeiculo()),
-                () -> assertEquals("Moto", resultado.getTipoVeiculo()),
+                () -> assertEquals(TipoVeiculoEntregador.MOTO, resultado.getTipoVeiculo()),
                 () -> assertEquals("Prata", resultado.getCorVeiculo())
         );
     }
@@ -116,7 +114,7 @@ public class EntregadorServiceTest {
         Long entregadorId = entregadorRepository.save(Entregador.builder()
                 .nome("Cleber Junior")
                 .placaVeiculo("QJS-1235")
-                .tipoVeiculo("Moto")
+                .tipoVeiculo(TipoVeiculoEntregador.MOTO)
                 .corVeiculo("Preto")
                 .codigoAcesso("653423")
                 .build()
@@ -125,7 +123,7 @@ public class EntregadorServiceTest {
         EntregadorPostPutDTO entregadorAtualizado = EntregadorPostPutDTO.builder()
                     .nome("Juliano junior")
                     .placaVeiculo("ASD-1234")
-                    .tipoVeiculo("Carro")
+                    .tipoVeiculo(TipoVeiculoEntregador.CARRO)
                     .corVeiculo("Vermelho")
                     .codigoAcesso("653423")
                     .build();
@@ -135,7 +133,7 @@ public class EntregadorServiceTest {
         assertAll(
                 () -> assertEquals("Juliano junior", resultado.getNome()),
                 () -> assertEquals("ASD-1234", resultado.getPlacaVeiculo()),
-                () -> assertEquals("Carro", resultado.getTipoVeiculo()),
+                () -> assertEquals(TipoVeiculoEntregador.CARRO, resultado.getTipoVeiculo()),
                 () -> assertEquals("Vermelho", resultado.getCorVeiculo())
         );
     }
@@ -146,15 +144,19 @@ public class EntregadorServiceTest {
         Long entregadorId = entregadorRepository.save(Entregador.builder()
                 .nome("Cleber Junior")
                 .placaVeiculo("QJS-1235")
-                .tipoVeiculo("Moto")
+                .tipoVeiculo(TipoVeiculoEntregador.MOTO)
                 .corVeiculo("Preto")
                 .codigoAcesso("653423")
                 .build()
         ).getId();
+        EntregadorDeleteDTO deleteBody = EntregadorDeleteDTO.builder()
+                .codigoAcesso("653423")
+                .build();
+
 
         List<Entregador> resultBefore = entregadorRepository.findAll();
 
-        driverRemover.remover(entregadorId);
+        driverRemover.remover(entregadorId, deleteBody);
 
         List<Entregador> resultAfter = entregadorRepository.findAll();
 

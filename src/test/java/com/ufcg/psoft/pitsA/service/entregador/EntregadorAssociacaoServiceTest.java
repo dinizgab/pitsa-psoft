@@ -1,9 +1,10 @@
 package com.ufcg.psoft.pitsA.service.entregador;
 
-import com.ufcg.psoft.pitsA.dto.EntregadorPatchEstabelecimentoDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorPatchEstabelecimentoDTO;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.TipoVeiculoEntregador;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import jakarta.transaction.Transactional;
@@ -37,7 +38,7 @@ public class EntregadorAssociacaoServiceTest {
                 .codigoAcesso("123467")
                 .corVeiculo("Verde")
                 .placaVeiculo("FAS-5432")
-                .tipoVeiculo("Carro")
+                .tipoVeiculo(TipoVeiculoEntregador.CARRO)
                 .estabelecimentos(new HashSet<>())
                 .build()
         ).getId();

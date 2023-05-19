@@ -1,5 +1,6 @@
 package com.ufcg.psoft.pitsA.dto.sabor;
 
+import com.ufcg.psoft.pitsA.model.TipoSaborPizza;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ public class SaborPutDTO {
     private String nome;
 
     @NotBlank(message = "Tipo é obrigatório")
-    private boolean tipo;
+    private TipoSaborPizza tipo;
 
     @Positive(message = "Preço deve ser maior ou igual a zero")
     private Double precoMedio;

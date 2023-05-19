@@ -7,10 +7,10 @@ import com.ufcg.psoft.pitsA.exception.sabor.SaborEstaDisponivelException;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.Sabor;
+import com.ufcg.psoft.pitsA.model.TipoSaborPizza;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.pitsA.repository.SaborRepository;
-import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoPatchDispSaborService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,7 +60,7 @@ public class ClienteInteresseSaborServiceTest {
                         .nome("Calabresa")
                         .precoGrande(50.0)
                         .precoMedio(25.0)
-                        .tipo(true)
+                        .tipo(TipoSaborPizza.SALGADO)
                         .disponivel(false)
                         .estabelecimento(estabelecimento)
                         .build()
@@ -109,7 +109,7 @@ public class ClienteInteresseSaborServiceTest {
                         .nome("4 Queijos")
                         .precoGrande(50.0)
                         .precoMedio(25.0)
-                        .tipo(true)
+                        .tipo(TipoSaborPizza.SALGADO)
                         .disponivel(true)
                         .estabelecimento(estabelecimento)
                         .build()

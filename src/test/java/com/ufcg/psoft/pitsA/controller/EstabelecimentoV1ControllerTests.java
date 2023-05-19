@@ -2,14 +2,12 @@ package com.ufcg.psoft.pitsA.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ufcg.psoft.pitsA.dto.EntregadorReadDTO;
-import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoAprovaEntregadorDTO;
-import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoDeleteDTO;
-import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoPostDTO;
-import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoPutDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorReadDTO;
+import com.ufcg.psoft.pitsA.dto.estabelecimento.*;
 import com.ufcg.psoft.pitsA.exception.ErrorMessage;
 import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.TipoVeiculoEntregador;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import jakarta.transaction.Transactional;
@@ -21,7 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -223,7 +221,7 @@ public class EstabelecimentoV1ControllerTests {
                             .nome("Julio")
                             .codigoAcesso("777777")
                             .corVeiculo("Azul")
-                            .tipoVeiculo("Carro")
+                            .tipoVeiculo(TipoVeiculoEntregador.CARRO)
                             .placaVeiculo("AAA-1111")
                             .build()
             );
@@ -231,7 +229,7 @@ public class EstabelecimentoV1ControllerTests {
             estabelecimento = estabelecimentoRepository.save(
                     Estabelecimento.builder()
                             .codigoAcesso("111111")
-                            .entregadoresPendentes(new HashSet(Arrays.asList(entregador)))
+                            .entregadoresPendentes(new ArrayList<>(Arrays.asList(entregador)))
                             .build()
             );
 
@@ -251,7 +249,7 @@ public class EstabelecimentoV1ControllerTests {
         void quandoAprovamosUmEntregadorValido() throws Exception {
             EstabelecimentoAprovaEntregadorDTO aprovaBodyValido = EstabelecimentoAprovaEntregadorDTO.builder()
                     .codigoAcesso("111111")
-                    .aprovar(true)
+                    .aprovar(StatusAprovacao.APROVADO)
                     .entregadorId(entregadorId)
                     .build();
 
@@ -280,7 +278,7 @@ public class EstabelecimentoV1ControllerTests {
         void quandoAprovamosUmEntregadorCodigoInvalido() throws Exception {
             EstabelecimentoAprovaEntregadorDTO aprovaBodyInvalido = EstabelecimentoAprovaEntregadorDTO.builder()
                     .entregadorId(entregadorId)
-                    .aprovar(false)
+                    .aprovar(StatusAprovacao.REJEITADO)
                     .codigoAcesso("222222")
                     .build();
 
@@ -303,7 +301,7 @@ public class EstabelecimentoV1ControllerTests {
         void quandoRejeitamosUmEntregador() throws Exception {
             EstabelecimentoAprovaEntregadorDTO aprovaBodyValido = EstabelecimentoAprovaEntregadorDTO.builder()
                     .codigoAcesso("111111")
-                    .aprovar(false)
+                    .aprovar(StatusAprovacao.REJEITADO)
                     .entregadorId(entregadorId)
                     .build();
 
@@ -333,7 +331,7 @@ public class EstabelecimentoV1ControllerTests {
         void quandoAprovamosUmEntregadorNaoPendente() throws Exception {
             EstabelecimentoAprovaEntregadorDTO aprovaBodyInvalido = EstabelecimentoAprovaEntregadorDTO.builder()
                     .entregadorId(null)
-                    .aprovar(false)
+                    .aprovar(StatusAprovacao.REJEITADO)
                     .codigoAcesso("111111")
                     .build();
 

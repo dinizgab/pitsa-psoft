@@ -2,13 +2,14 @@ package com.ufcg.psoft.pitsA.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ufcg.psoft.pitsA.dto.EntregadorPatchEstabelecimentoDTO;
-import com.ufcg.psoft.pitsA.dto.EntregadorReadDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorDeleteDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorPatchEstabelecimentoDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorReadDTO;
 import com.ufcg.psoft.pitsA.exception.ErrorMessage;
-import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.model.Entregador;
-import com.ufcg.psoft.pitsA.dto.EntregadorPostPutDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorPostPutDTO;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.TipoVeiculoEntregador;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import jakarta.transaction.Transactional;
@@ -43,7 +44,7 @@ public class EntregadorV1ControllerTests {
         entregador = entregadorRepository.save(Entregador.builder()
                 .nome("Gabriel Pombo Diniz")
                 .placaVeiculo("RTJ-1235")
-                .tipoVeiculo("Carro")
+                .tipoVeiculo(TipoVeiculoEntregador.CARRO)
                 .corVeiculo("Azul")
                 .codigoAcesso("123456")
                 .build()
@@ -68,14 +69,14 @@ public class EntregadorV1ControllerTests {
             entregadorPostRequestDTO = EntregadorPostPutDTO.builder()
                     .nome("Cleber")
                     .placaVeiculo("JHG-9843")
-                    .tipoVeiculo("Moto")
+                    .tipoVeiculo(TipoVeiculoEntregador.MOTO)
                     .corVeiculo("Prata")
                     .codigoAcesso("943845")
                     .build();
             entregadorPutRequestDTO = EntregadorPostPutDTO.builder()
                     .nome("Junior 2")
                     .placaVeiculo("ASA-1235")
-                    .tipoVeiculo("Moto")
+                    .tipoVeiculo(TipoVeiculoEntregador.MOTO)
                     .corVeiculo("Azul")
                     .codigoAcesso("123456")
                     .build();
@@ -87,7 +88,7 @@ public class EntregadorV1ControllerTests {
             Entregador entregador1 = Entregador.builder()
                     .nome("Gabriel Pombo Diniz")
                     .placaVeiculo("RTJ-1235")
-                    .tipoVeiculo("Carro")
+                    .tipoVeiculo(TipoVeiculoEntregador.CARRO)
                     .corVeiculo("Azul")
                     .codigoAcesso("123456")
                     .build();
@@ -95,7 +96,7 @@ public class EntregadorV1ControllerTests {
             Entregador entregador2 = Entregador.builder()
                     .nome("Cleber Junior")
                     .placaVeiculo("QJS-1235")
-                    .tipoVeiculo("Moto")
+                    .tipoVeiculo(TipoVeiculoEntregador.MOTO)
                     .corVeiculo("Preto")
                     .codigoAcesso("653423")
                     .build();
@@ -191,7 +192,7 @@ public class EntregadorV1ControllerTests {
             EntregadorPostPutDTO entregadorCodigoAcessoInvalido = EntregadorPostPutDTO.builder()
                     .nome("Junior 2")
                     .placaVeiculo("ASA-1235")
-                    .tipoVeiculo("Moto")
+                    .tipoVeiculo(TipoVeiculoEntregador.MOTO)
                     .corVeiculo("Azul")
                     .codigoAcesso("654321")
                     .build();
@@ -209,14 +210,19 @@ public class EntregadorV1ControllerTests {
             );
         }
 
-        // TODO - Colocar a validacao do codigo de acesso do entregador
+        // TODO - Corrigir esse teste, colocando o do body
         @Test
         @DisplayName("Quando excluímos um entregador salvo com codigo de acesso valido")
         void quandoExcluimosEntregadorValido() throws Exception {
             Long entregadorId = entregador.getId();
+            EntregadorDeleteDTO deleteBody = EntregadorDeleteDTO.builder()
+                    .codigoAcesso(entregador.getCodigoAcesso())
+                    .build();
+
 
             String responseJsonString = driver.perform(delete(URI_ENTREGADORES + "/" + entregadorId)
-                            .contentType(MediaType.APPLICATION_JSON))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(deleteBody)))
                     .andExpect(status().isNoContent())
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();

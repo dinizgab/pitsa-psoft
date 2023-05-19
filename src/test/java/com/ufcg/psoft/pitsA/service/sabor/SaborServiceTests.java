@@ -5,6 +5,7 @@ import com.ufcg.psoft.pitsA.dto.sabor.SaborDeleteDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborPostDTO;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.Sabor;
+import com.ufcg.psoft.pitsA.model.TipoSaborPizza;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.pitsA.repository.SaborRepository;
 import jakarta.transaction.Transactional;
@@ -46,7 +47,7 @@ public class SaborServiceTests {
         sabor = saborRepository.save(
                 Sabor.builder()
                         .nome("Calabresa")
-                        .tipo(true)
+                        .tipo(TipoSaborPizza.SALGADO)
                         .precoGrande(44.0)
                         .precoMedio(22.0)
                         .build()
@@ -72,7 +73,7 @@ public class SaborServiceTests {
         SaborPostDTO postBody = SaborPostDTO.builder()
                 .codigoAcesso("123456")
                 .nome("4 queijos")
-                .tipo(true)
+                .tipo(TipoSaborPizza.SALGADO)
                 .precoGrande(44.0)
                 .precoMedio(22.0)
                 .build();
@@ -82,7 +83,7 @@ public class SaborServiceTests {
         assertAll(
                 () -> assertEquals(estabelecimento, resultado.getEstabelecimento()),
                 () -> assertEquals("4 queijos", resultado.getNome()),
-                () -> assertTrue(resultado.isTipo()),
+                () -> assertTrue(resultado.getTipo().isSalgado()),
                 () -> assertEquals(44.0, resultado.getPrecoGrande()),
                 () -> assertEquals(22.0, resultado.getPrecoMedio())
         );
@@ -97,7 +98,7 @@ public class SaborServiceTests {
                 () -> assertEquals("Calabresa", resultado.getNome()),
                 () -> assertEquals(44.0, resultado.getPrecoGrande()),
                 () -> assertEquals(22.0, resultado.getPrecoMedio()),
-                () -> assertTrue(resultado.isTipo()),
+                () -> assertTrue(resultado.getTipo().isSalgado()),
                 () -> assertNull(resultado.getEstabelecimento())
         );
     }
@@ -107,14 +108,14 @@ public class SaborServiceTests {
     void testeListaTodosSabores() {
             Sabor sabor1 = Sabor.builder()
                     .nome("Calabresa")
-                    .tipo(true)
+                    .tipo(TipoSaborPizza.SALGADO)
                     .precoGrande(44.0)
                     .precoMedio(22.0)
                     .build();
 
             Sabor sabor2 = Sabor.builder()
                     .nome("Frango")
-                    .tipo(true)
+                    .tipo(TipoSaborPizza.SALGADO)
                     .precoGrande(44.0)
                     .precoMedio(22.0)
                     .build();
@@ -132,7 +133,7 @@ public class SaborServiceTests {
                 .nome("Frango com bacon")
                 .precoGrande(20.0)
                 .precoMedio(10.0)
-                .tipo(true)
+                .tipo(TipoSaborPizza.SALGADO)
                 .codigoAcesso("123456")
                 .estabelecimentoId(estabelecimento.getId())
                 .build();
@@ -154,7 +155,7 @@ public class SaborServiceTests {
     void testeRemoveSabor() {
         saborRepository.save(Sabor.builder()
                 .nome("Calabresa")
-                .tipo(true)
+                .tipo(TipoSaborPizza.SALGADO)
                 .precoGrande(44.0)
                 .precoMedio(22.0)
                 .estabelecimento(estabelecimento)

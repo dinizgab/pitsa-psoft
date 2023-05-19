@@ -1,6 +1,6 @@
 package com.ufcg.psoft.pitsA.service.entregador;
 
-import com.ufcg.psoft.pitsA.dto.EntregadorReadDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorReadDTO;
 
 import java.util.List;
 
