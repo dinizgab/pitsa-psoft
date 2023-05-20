@@ -1,5 +1,6 @@
 package com.ufcg.psoft.pitsA.model.pedido;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ufcg.psoft.pitsA.dto.pedido.SaborPedidoDTO;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
@@ -30,6 +31,8 @@ public class Pedido {
     @Column(nullable = false)
     private PizzaPedidoTipo tipo;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     private Cliente cliente;
 
@@ -41,6 +44,7 @@ public class Pedido {
     @Transient
     private List<SaborPedidoDTO> sabores;
 
+    @JsonIgnore
     @Transient
     @Builder.Default
     private CalculadoraPedido calculadoraPedido = new CalculadoraPedidoImpl();
