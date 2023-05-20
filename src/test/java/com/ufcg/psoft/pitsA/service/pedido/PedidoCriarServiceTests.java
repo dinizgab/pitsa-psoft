@@ -2,6 +2,7 @@ package com.ufcg.psoft.pitsA.service.pedido;
 
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoPostDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.SaborPedidoDTO;
+import com.ufcg.psoft.pitsA.exception.pedido.TamanhoPedidoInvalidosException;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
@@ -153,21 +154,38 @@ public class PedidoCriarServiceTests {
                 () -> assertTrue(estabelecimento.getPedidos().contains(resultado))
         );
     }
+
+    @Test
+    @Transactional
+    @DisplayName("Quando criamos um novo pedido com tamanho e tipo invalido")
+    void testeNovoPedidoTamanhoInvalido() {
+        Long clienteId = cliente.getId();
+        PedidoPostDTO pedidoInvalido = PedidoPostDTO.builder()
+                .codigoAcesso(cliente.getCodigoAcesso())
+                .idEstabelecimento(estabelecimento.getId())
+                .endereco("")
+                .tamanho(PizzaPedidoTamanho.MEDIA)
+                .tipo(PizzaPedidoTipo.MEIA)
+                .build();
+
+        assertThrows(TamanhoPedidoInvalidosException.class, () -> driverCriar.criarPedido(clienteId, pedidoInvalido));
+    }
 }
 
 // Pedido
-// List<SaborPedido>, Endereco, Cliente, CalculaValor
+// List<SaborPedidoDTO>, Endereco, Cliente, CalculaValor, Tamanho (GRANDE ou MEDIA), Tipo (INTEIRA ou MEIA)
 
-// CalculaValor calcula o valor total do pedido
+// CalculaValor
+// Metodo que recebe a lista de sabores do pedido e retorna o calculo do valor total do pedido
 
-
-
-// SaborPedido
-// List<Sabor>, Tamanho, Valor
-
-// Valor sera calculado de acordo com a lista de pizzas
-// Sera uma Lista de Sabor, porque se o tamanho for grande ela pode ter mais de um sabor;
+// SaborPedidoDTO
+// Nome, PrecoGrande, PrecoMedia, Tipo (SALGADA ou DOCE)
 
 // TODO
-// Adicionar codigo de acesso do cliente no momento que o cliente for fazer um pedido ao estabelecimento
-// Se endereco principal nao for informado, o pedido deve ter o endereco que esta no cliente
+// Adicionar o calculo do valor total do pedido (com uma classe que calcula esse valor total)
+// Faz um algoritmo de somador total normal, depois verifica se eh meia, se sim divide por 2, senao retorna o valor total
+
+// TODO - Adicionar o resto das operacoes do CRUD, remover, atualizar e ler um pedido (So podem ser feitas pelo estabelecimento ou usuario com seus respectivos codigos de acesso)
+
+// TODO - Adicionar um service para adicionar um tipo de pagamento no pedido (Cliente informa o pedido, metodo de pagamento e codigo de acesso)
+// Metodos de pagamento = Cartao de credito, debito e pix

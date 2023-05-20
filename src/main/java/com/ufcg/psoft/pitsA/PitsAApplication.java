@@ -18,5 +18,5 @@ public class PitsAApplication {
 // TODO - Trocar os valores dos bodies que usam IDs como pesquisa por RequestParams
 
 // Fixes
-// TODO - Corrigir o erro nesses testes de listar Cliente -- Modelmapper nao consegue fazer o mapeamento
+// TODO - Corrigir o erro nesses testes de listar Entregador -- Modelmapper nao consegue fazer o mapeamento
 // TODO - Corrigir teste de atualizar um sabor, erro de troca de ID
