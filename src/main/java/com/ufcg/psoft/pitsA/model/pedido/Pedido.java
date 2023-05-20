@@ -30,9 +30,6 @@ public class Pedido {
     @Column(nullable = false)
     private PizzaPedidoTipo tipo;
 
-    @Transient
-    private List<SaborPedidoDTO> sabores;
-
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     private Cliente cliente;
 
@@ -40,4 +37,15 @@ public class Pedido {
     @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
     private Estabelecimento estabelecimentoPedido;
+
+    @Transient
+    private List<SaborPedidoDTO> sabores;
+
+    @Transient
+    @Builder.Default
+    private CalculadoraPedido calculadoraPedido = new CalculadoraPedidoImpl();
+
+    public double calculaValorTotal() {
+        return calculadoraPedido.calculaTotal(sabores, tipo, tamanho);
+    }
 }

@@ -57,7 +57,7 @@ public class PedidoCriarServiceTests {
         Sabor sabor1 = Sabor.builder()
                 .nome("Calabresa")
                 .tipo(TipoSabor.SALGADO)
-                .precoGrande(55.0)
+                .precoGrande(35.0)
                 .precoMedio(30.0)
                 .estabelecimento(estabelecimento)
                 .build();
@@ -110,7 +110,7 @@ public class PedidoCriarServiceTests {
                 .build();
 
         pedidoMeia.getSabores().add(modelMapper.map(sabor1, SaborPedidoDTO.class));
-        pedidoMeia.getSabores().add(modelMapper.map(sabor1, SaborPedidoDTO.class));
+        pedidoMeia.getSabores().add(modelMapper.map(sabor2, SaborPedidoDTO.class));
     }
 
     @AfterEach
@@ -133,7 +133,8 @@ public class PedidoCriarServiceTests {
                 () -> assertTrue(resultado.getTipo().isInteira()),
                 () -> assertEquals(1, resultado.getSabores().size()),
                 () -> assertTrue(cliente.getPedidos().contains(resultado)),
-                () -> assertTrue(estabelecimento.getPedidos().contains(resultado))
+                () -> assertTrue(estabelecimento.getPedidos().contains(resultado)),
+                () -> assertEquals(45.0, resultado.calculaValorTotal())
 
         );
     }
@@ -151,7 +152,8 @@ public class PedidoCriarServiceTests {
                 () -> assertTrue(resultado.getTipo().isMeia()),
                 () -> assertEquals(2, resultado.getSabores().size()),
                 () -> assertTrue(cliente.getPedidos().contains(resultado)),
-                () -> assertTrue(estabelecimento.getPedidos().contains(resultado))
+                () -> assertTrue(estabelecimento.getPedidos().contains(resultado)),
+                () -> assertEquals(45.0, resultado.calculaValorTotal())
         );
     }
 
@@ -189,3 +191,5 @@ public class PedidoCriarServiceTests {
 
 // TODO - Adicionar um service para adicionar um tipo de pagamento no pedido (Cliente informa o pedido, metodo de pagamento e codigo de acesso)
 // Metodos de pagamento = Cartao de credito, debito e pix
+
+// TODO - Trocar a lista de sabores do PedidoPostDTO por uma lista de Long e depois procurar as pizzas pelos IDs
