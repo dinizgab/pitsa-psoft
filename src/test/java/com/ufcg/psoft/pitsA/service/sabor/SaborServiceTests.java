@@ -5,8 +5,8 @@ import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborDeleteDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborPostDTO;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
-import com.ufcg.psoft.pitsA.model.Sabor;
-import com.ufcg.psoft.pitsA.model.TipoSaborPizza;
+import com.ufcg.psoft.pitsA.model.sabor.Sabor;
+import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.pitsA.repository.SaborRepository;
 import jakarta.transaction.Transactional;
@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,7 +50,7 @@ public class SaborServiceTests {
         sabor = saborRepository.save(
                 Sabor.builder()
                         .nome("Calabresa")
-                        .tipo(TipoSaborPizza.SALGADO)
+                        .tipo(TipoSabor.SALGADO)
                         .precoGrande(44.0)
                         .precoMedio(22.0)
                         .estabelecimento(estabelecimento)
@@ -60,7 +59,7 @@ public class SaborServiceTests {
 
         Sabor sabor2 = saborRepository.save(Sabor.builder()
                 .nome("Calabresa")
-                .tipo(TipoSaborPizza.SALGADO)
+                .tipo(TipoSabor.SALGADO)
                 .precoGrande(44.0)
                 .precoMedio(22.0)
                 .estabelecimento(estabelecimento)
@@ -84,7 +83,7 @@ public class SaborServiceTests {
         SaborPostDTO postBody = SaborPostDTO.builder()
                 .codigoAcesso("123456")
                 .nome("4 queijos")
-                .tipo(TipoSaborPizza.SALGADO)
+                .tipo(TipoSabor.SALGADO)
                 .precoGrande(44.0)
                 .precoMedio(22.0)
                 .build();
@@ -131,7 +130,7 @@ public class SaborServiceTests {
                 .nome("Frango com bacon")
                 .precoGrande(20.0)
                 .precoMedio(10.0)
-                .tipo(TipoSaborPizza.SALGADO)
+                .tipo(TipoSabor.SALGADO)
                 .codigoAcesso("123456")
                 .estabelecimentoId(estabelecimento.getId())
                 .build();

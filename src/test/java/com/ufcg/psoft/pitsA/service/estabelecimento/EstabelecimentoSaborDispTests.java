@@ -5,8 +5,8 @@ import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
-import com.ufcg.psoft.pitsA.model.Sabor;
-import com.ufcg.psoft.pitsA.model.TipoSaborPizza;
+import com.ufcg.psoft.pitsA.model.sabor.Sabor;
+import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.pitsA.repository.SaborRepository;
 import jakarta.transaction.Transactional;
@@ -47,7 +47,7 @@ public class EstabelecimentoSaborDispTests {
                         .precoGrande(50.0)
                         .precoMedio(25.0)
                         .estabelecimento(estabelecimento)
-                        .tipo(TipoSaborPizza.SALGADO)
+                        .tipo(TipoSabor.SALGADO)
                 .build()
         );
 
@@ -65,7 +65,7 @@ public class EstabelecimentoSaborDispTests {
                 .precoMedio(15.0)
                 .estabelecimento(estabelecimento)
                 .interesses(interessados)
-                .tipo(TipoSaborPizza.SALGADO)
+                .tipo(TipoSabor.SALGADO)
                 .disponivel(false)
                 .build()
         );

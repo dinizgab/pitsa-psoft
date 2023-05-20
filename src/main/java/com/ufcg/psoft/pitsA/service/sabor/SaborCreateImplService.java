@@ -2,7 +2,7 @@ package com.ufcg.psoft.pitsA.service.sabor;
 
 import com.ufcg.psoft.pitsA.dto.sabor.SaborPostDTO;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
-import com.ufcg.psoft.pitsA.model.Sabor;
+import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import com.ufcg.psoft.pitsA.repository.SaborRepository;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;

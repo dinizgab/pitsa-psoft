@@ -3,7 +3,7 @@ package com.ufcg.psoft.pitsA.dto.sabor;
 import com.ufcg.psoft.pitsA.dto.cliente.ClienteReadDTO;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 
-import com.ufcg.psoft.pitsA.model.TipoSaborPizza;
+import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +19,7 @@ public class SaborReadDTO {
 
     private String nome;
 
-    private TipoSaborPizza tipo;
+    private TipoSabor tipo;
 
     private boolean disponivel;
 

@@ -4,7 +4,7 @@ import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborPutDTO;
 import com.ufcg.psoft.pitsA.exception.sabor.SaborNaoExistenteException;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
-import com.ufcg.psoft.pitsA.model.Sabor;
+import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import com.ufcg.psoft.pitsA.repository.SaborRepository;
 import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoAtualizaSaborService;
@@ -12,8 +12,6 @@ import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoListarService
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class SaborUpdateImplService implements SaborUpdateService {

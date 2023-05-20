@@ -5,7 +5,7 @@ import com.ufcg.psoft.pitsA.dto.cliente.ClienteReadDTO;
 import com.ufcg.psoft.pitsA.exception.cliente.ClienteNaoExisteException;
 import com.ufcg.psoft.pitsA.exception.sabor.SaborEstaDisponivelException;
 import com.ufcg.psoft.pitsA.model.Cliente;
-import com.ufcg.psoft.pitsA.model.Sabor;
+import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
 import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoAtualizaSaborService;

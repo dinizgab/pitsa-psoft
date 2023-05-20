@@ -1,6 +1,6 @@
 package com.ufcg.psoft.pitsA.service.estabelecimento;
 
-import com.ufcg.psoft.pitsA.model.Sabor;
+import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 
 @FunctionalInterface
 public interface EstabelecimentoRemoveSaborService {

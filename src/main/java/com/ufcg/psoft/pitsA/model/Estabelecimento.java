@@ -1,6 +1,8 @@
 package com.ufcg.psoft.pitsA.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ufcg.psoft.pitsA.model.pedido.Pedido;
+import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,4 +38,8 @@ public class Estabelecimento {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<Sabor> cardapio = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "estabelecimentoPedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Pedido> pedidos = new ArrayList<>();
 }

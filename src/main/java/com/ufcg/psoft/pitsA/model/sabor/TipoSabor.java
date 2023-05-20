@@ -1,6 +1,6 @@
-package com.ufcg.psoft.pitsA.model;
+package com.ufcg.psoft.pitsA.model.sabor;
 
-public enum TipoSaborPizza {
+public enum TipoSabor {
     SALGADO,
     DOCE;
 

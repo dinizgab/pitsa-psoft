@@ -4,7 +4,7 @@ import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborDeleteDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborPostDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborPutDTO;
-import com.ufcg.psoft.pitsA.model.Sabor;
+import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import com.ufcg.psoft.pitsA.service.sabor.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

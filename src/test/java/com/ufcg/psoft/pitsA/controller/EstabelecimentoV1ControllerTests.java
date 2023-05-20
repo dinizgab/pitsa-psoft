@@ -7,6 +7,8 @@ import com.ufcg.psoft.pitsA.dto.estabelecimento.*;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.exception.ErrorMessage;
 import com.ufcg.psoft.pitsA.model.*;
+import com.ufcg.psoft.pitsA.model.sabor.Sabor;
+import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.pitsA.repository.SaborRepository;
@@ -364,7 +366,7 @@ public class EstabelecimentoV1ControllerTests {
         void setUp() {
             sabor = saborRepository.save(Sabor.builder()
                     .nome("Chocolate")
-                    .tipo(TipoSaborPizza.DOCE)
+                    .tipo(TipoSabor.DOCE)
                     .estabelecimento(estabelecimento)
                     .precoGrande(50.0)
                     .precoMedio(25.0)

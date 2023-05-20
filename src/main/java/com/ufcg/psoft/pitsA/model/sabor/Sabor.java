@@ -1,6 +1,9 @@
-package com.ufcg.psoft.pitsA.model;
+package com.ufcg.psoft.pitsA.model.sabor;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ufcg.psoft.pitsA.model.Cliente;
+import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,7 +25,7 @@ public class Sabor {
     private String nome;
 
     @Column(nullable = false)
-    private TipoSaborPizza tipo;
+    private TipoSabor tipo;
 
     @Column(nullable = false)
     private Double precoMedio;

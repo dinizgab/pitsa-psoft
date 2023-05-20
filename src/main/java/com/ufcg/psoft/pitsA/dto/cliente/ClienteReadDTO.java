@@ -1,6 +1,6 @@
 package com.ufcg.psoft.pitsA.dto.cliente;
 
-import com.ufcg.psoft.pitsA.model.Sabor;
+import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

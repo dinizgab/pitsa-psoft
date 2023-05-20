@@ -1,8 +1,9 @@
 package com.ufcg.psoft.pitsA.model;
 
+import com.ufcg.psoft.pitsA.model.pedido.Pedido;
+import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import jakarta.persistence.*;
 import lombok.*;
-import org.apache.commons.lang3.builder.ToStringExclude;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,4 +30,8 @@ public class Cliente {
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<Sabor> interessesSabores = new ArrayList<>();
+
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Pedido> pedidos = new ArrayList<>();
 }

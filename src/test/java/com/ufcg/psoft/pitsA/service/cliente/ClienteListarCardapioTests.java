@@ -5,8 +5,8 @@ import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
-import com.ufcg.psoft.pitsA.model.Sabor;
-import com.ufcg.psoft.pitsA.model.TipoSaborPizza;
+import com.ufcg.psoft.pitsA.model.sabor.Sabor;
+import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import jakarta.transaction.Transactional;
@@ -54,7 +54,7 @@ public class ClienteListarCardapioTests {
                         .precoGrande(55.0)
                         .precoMedio(27.5)
                         .nome("Calabresa")
-                        .tipo(TipoSaborPizza.SALGADO)
+                        .tipo(TipoSabor.SALGADO)
                         .disponivel(false)
                 .build()
         );
@@ -63,7 +63,7 @@ public class ClienteListarCardapioTests {
                         .precoGrande(50.0)
                         .precoMedio(25.0)
                         .nome("4 Queijos")
-                        .tipo(TipoSaborPizza.SALGADO)
+                        .tipo(TipoSabor.SALGADO)
                         .disponivel(true)
                 .build()
         );
@@ -73,7 +73,7 @@ public class ClienteListarCardapioTests {
                         .precoGrande(60.0)
                         .precoMedio(30.0)
                         .nome("Frango com bacon")
-                        .tipo(TipoSaborPizza.SALGADO)
+                        .tipo(TipoSabor.SALGADO)
                         .disponivel(false)
                 .build()
         );
