@@ -31,6 +31,9 @@ public class Pedido {
     @Column(nullable = false)
     private PizzaPedidoTipo tipo;
 
+    @Column
+    private TipoPagamento tipoPagamento;
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToOne(optional = false)

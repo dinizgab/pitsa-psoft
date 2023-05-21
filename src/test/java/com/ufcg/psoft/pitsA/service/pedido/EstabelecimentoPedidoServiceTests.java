@@ -1,7 +1,7 @@
 package com.ufcg.psoft.pitsA.service.pedido;
 
-import com.ufcg.psoft.pitsA.dto.pedido.PedidoListarDTO;
-import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadDTO;
+import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadBodyDTO;
+import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.SaborPedidoDTO;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
@@ -130,12 +130,12 @@ public class EstabelecimentoPedidoServiceTests {
     void testeListarTodosPedidosEstabelecimento() {
         Long estabelecimentoId = estabelecimento.getId();
 
-        PedidoListarDTO listarBody = PedidoListarDTO.builder()
+        PedidoReadBodyDTO listarBody = PedidoReadBodyDTO.builder()
                 .pedidoId(null)
                 .codigoAcesso("123456")
                 .build();
 
-        List<PedidoReadDTO> resultado = driverListar.listarPedidos(estabelecimentoId, listarBody);
+        List<PedidoReadResponseDTO> resultado = driverListar.listarPedidos(estabelecimentoId, listarBody);
         assertEquals(2, resultado.size());
     }
 
@@ -145,12 +145,12 @@ public class EstabelecimentoPedidoServiceTests {
     void testeListarPedidoIdEstabelecimento() {
         Long estabelecimentoId = estabelecimento.getId();
 
-        PedidoListarDTO listarBody = PedidoListarDTO.builder()
+        PedidoReadBodyDTO listarBody = PedidoReadBodyDTO.builder()
                 .pedidoId(pedidoId)
                 .codigoAcesso("123456")
                 .build();
 
-        PedidoReadDTO resultado = driverListar.listarPedidos(estabelecimentoId, listarBody).get(0);
+        PedidoReadResponseDTO resultado = driverListar.listarPedidos(estabelecimentoId, listarBody).get(0);
 
         assertAll(
                 () -> assertEquals("Rua 13 de maio, 123", resultado.getEndereco()),

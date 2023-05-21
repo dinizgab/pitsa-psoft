@@ -1,7 +1,7 @@
 package com.ufcg.psoft.pitsA.service.estabelecimento;
 
-import com.ufcg.psoft.pitsA.dto.pedido.PedidoListarDTO;
-import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadDTO;
+import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadBodyDTO;
+import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
 import com.ufcg.psoft.pitsA.exception.estabelecimento.EstabelecimentoNaoExisteException;
 import com.ufcg.psoft.pitsA.exception.pedido.PedidoNaoEncontradoException;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
@@ -24,7 +24,7 @@ public class EstabelecimentoListarPedidoServiceImpl implements EstabelecimentoLi
     @Autowired
     ModelMapper modelMapper;
 
-    public List<PedidoReadDTO> listarPedidos(Long estabelecimentoId, PedidoListarDTO listarPedidoDTO) {
+    public List<PedidoReadResponseDTO> listarPedidos(Long estabelecimentoId, PedidoReadBodyDTO listarPedidoDTO) {
         Long pedidoId = listarPedidoDTO.getPedidoId();
         String codigoAcesso = listarPedidoDTO.getCodigoAcesso();
 
@@ -35,7 +35,7 @@ public class EstabelecimentoListarPedidoServiceImpl implements EstabelecimentoLi
             return estabelecimento.getPedidos()
                     .stream()
                     .map(pedido -> {
-                        PedidoReadDTO parsedPedido = modelMapper.map(pedido, PedidoReadDTO.class);
+                        PedidoReadResponseDTO parsedPedido = modelMapper.map(pedido, PedidoReadResponseDTO.class);
                         parsedPedido.setValorTotal(pedido.calculaValorTotal());
 
                         return parsedPedido;
@@ -48,7 +48,7 @@ public class EstabelecimentoListarPedidoServiceImpl implements EstabelecimentoLi
                     .findFirst()
                     .orElseThrow(PedidoNaoEncontradoException::new);
 
-            PedidoReadDTO parsedPedido = modelMapper.map(resultado, PedidoReadDTO.class);
+            PedidoReadResponseDTO parsedPedido = modelMapper.map(resultado, PedidoReadResponseDTO.class);
             parsedPedido.setValorTotal(resultado.calculaValorTotal());
 
             return List.of(parsedPedido);

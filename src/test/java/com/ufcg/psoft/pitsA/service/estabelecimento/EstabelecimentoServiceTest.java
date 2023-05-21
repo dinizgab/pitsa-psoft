@@ -92,7 +92,6 @@ public class EstabelecimentoServiceTest {
     }
 
 
-    // TODO - Adicionar a validacao de codigo de acesso no momento que for atualizar um estabelecimento
     @Test
     @DisplayName("Quando atualizamos um estabelecimento codigo valido")
     void testeAtualizaEstabelecimentoValido() {
@@ -128,7 +127,6 @@ public class EstabelecimentoServiceTest {
         assertThrows(CodigoAcessoInvalidoException.class, () -> driverAtualizar.atualizar(estabelecimentoId, putBody));
     }
 
-    // TODO - Adicionar a validacao de codigo de acesso no momento que for remover um estabelecimento
     @Test
     @DisplayName("Quando removemos um estabelecimento")
     void testeRemoveEstabelecimento() {

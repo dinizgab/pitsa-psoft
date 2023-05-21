@@ -4,6 +4,7 @@ import com.ufcg.psoft.pitsA.dto.cliente.ClienteReadDTO;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTamanho;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTipo;
+import com.ufcg.psoft.pitsA.model.pedido.TipoPagamento;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,12 +16,20 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PedidoReadDTO {
+public class PedidoReadResponseDTO {
     private ClienteReadDTO cliente;
+
     private String endereco;
+
     private PizzaPedidoTamanho tamanho;
+
     private PizzaPedidoTipo tipo;
+
+    private TipoPagamento tipoPagamento;
+
     private Estabelecimento estabelecimento;
+
     private List<SaborPedidoDTO> sabores;
+
     private Double valorTotal;
 }

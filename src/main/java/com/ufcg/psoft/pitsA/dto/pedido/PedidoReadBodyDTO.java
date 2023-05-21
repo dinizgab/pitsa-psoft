@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PedidoListarDTO {
+public class PedidoReadBodyDTO {
     private Long pedidoId;
     private String codigoAcesso;
 }

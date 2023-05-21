@@ -4,6 +4,7 @@ import com.ufcg.psoft.pitsA.dto.pedido.*;
 import com.ufcg.psoft.pitsA.exception.pedido.TamanhoPedidoInvalidosException;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.pedido.TipoPagamento;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
@@ -238,11 +239,11 @@ public class ClientePedidoServiceTests {
         void testeListarPedidosCliente() {
             Long clienteId = cliente.getId();
 
-            PedidoListarDTO listarDTO = PedidoListarDTO.builder()
+            PedidoReadBodyDTO listarDTO = PedidoReadBodyDTO.builder()
                     .codigoAcesso(cliente.getCodigoAcesso())
                     .pedidoId(null)
                     .build();
-            List<PedidoReadDTO> resultado = driverListar.listarPedidos(clienteId, listarDTO);
+            List<PedidoReadResponseDTO> resultado = driverListar.listarPedidos(clienteId, listarDTO);
 
             assertEquals(2, resultado.size());
         }
@@ -253,11 +254,11 @@ public class ClientePedidoServiceTests {
         void testeListarPedidoClientePorId() {
             Long clienteId = cliente.getId();
 
-            PedidoListarDTO listarDTO = PedidoListarDTO.builder()
+            PedidoReadBodyDTO listarDTO = PedidoReadBodyDTO.builder()
                     .codigoAcesso(cliente.getCodigoAcesso())
                     .pedidoId(pedidoId)
                     .build();
-            PedidoReadDTO resultado = driverListar.listarPedidos(clienteId, listarDTO).get(0);
+            PedidoReadResponseDTO resultado = driverListar.listarPedidos(clienteId, listarDTO).get(0);
 
             assertAll(
                     () -> assertEquals(cliente.getNome(), resultado.getCliente().getNome()),
@@ -268,6 +269,49 @@ public class ClientePedidoServiceTests {
                     () -> assertEquals(45.0, resultado.getValorTotal())
             );
         }
+    }
+
+    @Nested
+    @DisplayName("Testes Adicionar um metodo de pagamento")
+    class AdicionarPagamentoTests {
+        @Autowired
+        ConfirmarPagamentoService driverConfirmar;
+        Pedido pedido;
+
+        @BeforeEach
+        void setUp() {
+            pedido = pedidoRepository.save(
+                    Pedido.builder()
+                            .endereco("Rua 13 de maio, 123")
+                            .tamanho(PizzaPedidoTamanho.MEDIA)
+                            .tipo(PizzaPedidoTipo.INTEIRA)
+                            .sabores(new ArrayList<>())
+                            .estabelecimentoPedido(estabelecimento)
+                            .cliente(cliente)
+                            .build());
+        }
+
+        @Test
+        @DisplayName("Teste quando adicionamos um pagamento com sucesso")
+        void adicionarPagamentoSucesso() {
+            Long pedidoId = pedido.getId();
+
+            ConfirmarPagamentoDTO confirmarBody = ConfirmarPagamentoDTO.builder()
+                    .clienteId(cliente.getId())
+                    .codigoAcesso(cliente.getCodigoAcesso())
+                    .tipoPagamento(TipoPagamento.DEBITO)
+                    .build();
+
+            PedidoReadResponseDTO resultado = driverConfirmar.confirmarPagamento(pedidoId, confirmarBody);
+            assertAll(
+                    () -> assertEquals(cliente.getNome(), resultado.getCliente().getNome()),
+                    () -> assertEquals(cliente.getEndereco(), resultado.getEndereco()),
+                    () -> assertTrue(resultado.getTamanho().isMedia()),
+                    () -> assertTrue(resultado.getTipo().isInteira()),
+                    () -> assertTrue(resultado.getTipoPagamento().isDebito())
+            );
+        }
+
     }
 
     @Nested
@@ -312,7 +356,7 @@ public class ClientePedidoServiceTests {
         @Test
         @Transactional
         @DisplayName("Quando removemos um pedido de um cliente")
-        void testeRemoverPedidossCliente() {
+        void testeRemoverPedidosCliente() {
             Long clienteId = cliente.getId();
             Long estabelecimentoId = estabelecimento.getId();
 
@@ -323,7 +367,7 @@ public class ClientePedidoServiceTests {
                     .build();
 
             assertEquals(2, cliente.getPedidos().size());
-            assertEquals(2,estabelecimento.getPedidos().size());
+            assertEquals(2, estabelecimento.getPedidos().size());
 
             driverRemover.removerPedido(clienteId, removerDTO);
 
@@ -345,7 +389,7 @@ public class ClientePedidoServiceTests {
 // TODO - Adicionar a possibilidade de fazer um pedido com varias pizzas
 // TODO - Trocar a lista de sabores do PedidoPostDTO por uma lista de Long e depois procurar as pizzas pelos IDs
 
-// TODO - Adicionar o resto das operacoes do CRUD, remover, atualizar e ler um pedido (So podem ser feitas pelo estabelecimento ou usuario com seus respectivos codigos de acesso)
+// TODO - Adicionar o resto das operacoes do CRUD, atualizar um pedido (So podem ser feitas pelo estabelecimento ou usuario com seus respectivos codigos de acesso)
 
 // TODO - Adicionar um service para adicionar um tipo de pagamento -- confirmar  o pagamento -- no pedido (Cliente informa o pedido, metodo de pagamento e codigo de acesso)
 // Metodos de pagamento = Cartao de credito, debito e pix
