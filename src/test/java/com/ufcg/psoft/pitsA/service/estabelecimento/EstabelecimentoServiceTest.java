@@ -85,8 +85,6 @@ public class EstabelecimentoServiceTest {
 
         List<Estabelecimento> resultado = driverListar.listar(estabelecimentoId);
 
-        System.out.println(resultado);
-        System.out.println(estabelecimentoId);
         assertAll(
                 () -> assertEquals(estabelecimentoId, resultado.get(0).getId()),
                 () -> assertEquals("456321", resultado.get(0).getCodigoAcesso())

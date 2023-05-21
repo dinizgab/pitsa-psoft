@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ClienteRemoverPedidoDTO {
     private Long pedidoId;
+    private Long estabelecimentoId;
     private String codigoAcesso;
-
 }

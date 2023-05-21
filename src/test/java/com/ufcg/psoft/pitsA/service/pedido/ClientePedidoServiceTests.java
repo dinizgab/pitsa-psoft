@@ -1,9 +1,6 @@
 package com.ufcg.psoft.pitsA.service.pedido;
 
-import com.ufcg.psoft.pitsA.dto.pedido.ClienteListarPedidoDTO;
-import com.ufcg.psoft.pitsA.dto.pedido.PedidoPostDTO;
-import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadDTO;
-import com.ufcg.psoft.pitsA.dto.pedido.SaborPedidoDTO;
+import com.ufcg.psoft.pitsA.dto.pedido.*;
 import com.ufcg.psoft.pitsA.exception.pedido.TamanhoPedidoInvalidosException;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
@@ -18,6 +15,7 @@ import com.ufcg.psoft.pitsA.repository.PedidoRepository;
 import com.ufcg.psoft.pitsA.repository.SaborRepository;
 import com.ufcg.psoft.pitsA.service.cliente.ClienteCriarPedidoService;
 import com.ufcg.psoft.pitsA.service.cliente.ClienteListarPedidoService;
+import com.ufcg.psoft.pitsA.service.cliente.ClienteRemoverPedidoService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotEmpty;
 import org.junit.jupiter.api.*;
@@ -116,9 +114,10 @@ public class ClientePedidoServiceTests {
 
     @AfterEach
     void tearDown() {
+        saborRepository.deleteAll();
         pedidoRepository.deleteAll();
         estabelecimentoRepository.deleteAll();
-        saborRepository.deleteAll();
+        clienteRepository.deleteAll();
     }
 
     @Nested
@@ -230,7 +229,6 @@ public class ClientePedidoServiceTests {
 
             cliente.getPedidos().add(pedido1);
             cliente.getPedidos().add(pedido2);
-            clienteRepository.save(cliente);
 
             pedidoId = pedido1.getId();
         }
@@ -269,7 +267,6 @@ public class ClientePedidoServiceTests {
                     () -> assertEquals(estabelecimento, resultado.getEstabelecimento()),
                     () -> assertTrue(resultado.getTamanho().isGrande()),
                     () -> assertEquals(45.0, resultado.getValorTotal())
-
             );
         }
     }
@@ -285,20 +282,60 @@ public class ClientePedidoServiceTests {
     class RemoverServiceTests {
         @Autowired
         ClienteRemoverPedidoService driverRemover;
+        Long pedidoId;
+
+        @BeforeEach
+        void setUp() {
+            Pedido pedido1 = pedidoRepository.save(Pedido.builder()
+                    .endereco("Rua 13 de maio, 123")
+                    .tamanho(PizzaPedidoTamanho.GRANDE)
+                    .tipo(PizzaPedidoTipo.MEIA)
+                    .sabores(new ArrayList<>())
+                    .estabelecimentoPedido(estabelecimento)
+                    .cliente(cliente)
+                    .build());
+
+            Pedido pedido2 = pedidoRepository.save(Pedido.builder()
+                    .endereco("")
+                    .tamanho(PizzaPedidoTamanho.MEDIA)
+                    .tipo(PizzaPedidoTipo.INTEIRA)
+                    .sabores(new ArrayList<>())
+                    .estabelecimentoPedido(estabelecimento)
+                    .cliente(cliente)
+                    .build());
+
+            cliente.getPedidos().add(pedido1);
+            cliente.getPedidos().add(pedido2);
+
+            estabelecimento.getPedidos().add(pedido1);
+            estabelecimento.getPedidos().add(pedido2);
+
+            clienteRepository.save(cliente);
+            estabelecimentoRepository.save(estabelecimento);
+
+            pedidoId = pedido1.getId();
+        }
 
         @Test
         @Transactional
-        @DisplayName("Quando listamos todos os pedidos de um cliente")
-        void testeListarPedidosCliente() {
+        @DisplayName("Quando removemos um pedido de um cliente")
+        void testeRemoverPedidossCliente() {
             Long clienteId = cliente.getId();
+            Long estabelecimentoId = estabelecimento.getId();
 
-            ClienteListarPedidoDTO listarDTO = ClienteListarPedidoDTO.builder()
+            ClienteRemoverPedidoDTO removerDTO = ClienteRemoverPedidoDTO.builder()
                     .codigoAcesso(cliente.getCodigoAcesso())
-                    .pedidoId(null)
+                    .estabelecimentoId(estabelecimentoId)
+                    .pedidoId(pedidoId)
                     .build();
-            List<PedidoReadDTO> resultado = driverListar.listarPedidos(clienteId, listarDTO);
 
-            assertEquals(2, resultado.size());
+            assertEquals(2, cliente.getPedidos().size());
+            assertEquals(2,estabelecimento.getPedidos().size());
+
+            driverRemover.removerPedido(clienteId, removerDTO);
+
+            assertEquals(1, cliente.getPedidos().size());
+            assertEquals(1, estabelecimento.getPedidos().size());
         }
     }
 }

@@ -25,21 +25,21 @@ public class Estabelecimento {
     @Column(nullable = false)
     private String codigoAcesso;
 
-    @ManyToMany(mappedBy = "estabelecimentos", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToMany(mappedBy = "estabelecimentos", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<Entregador> entregadoresPendentes = new ArrayList<>();
 
     @Builder.Default
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Entregador> entregadoresAprovados = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "estabelecimento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<Sabor> cardapio = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "estabelecimentoPedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "estabelecimentoPedido", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Pedido> pedidos = new ArrayList<>();
 }
