@@ -1,6 +1,9 @@
-package com.ufcg.psoft.pitsA.dto.pedido;
+package com.ufcg.psoft.pitsA.model.sabor;
 
+import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SaborPedidoDTO {
+public class SaborPedido {
     private String nome;
 
     private TipoSabor tipo;
@@ -18,4 +21,6 @@ public class SaborPedidoDTO {
     private double precoGrande;
 
     private double precoMedio;
+
+    private Pedido pedido;
 }

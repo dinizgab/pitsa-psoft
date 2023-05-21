@@ -2,7 +2,7 @@ package com.ufcg.psoft.pitsA.service.pedido;
 
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadBodyDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
-import com.ufcg.psoft.pitsA.dto.pedido.SaborPedidoDTO;
+import com.ufcg.psoft.pitsA.model.sabor.SaborPedido;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
@@ -103,9 +103,9 @@ public class EstabelecimentoPedidoServiceTests {
                 .build());
 
         pedidoId = pedido1.getId();
-        pedido1.getSabores().add(modelMapper.map(sabor1, SaborPedidoDTO.class));
-        pedido1.getSabores().add(modelMapper.map(sabor2, SaborPedidoDTO.class));
-        pedido2.getSabores().add(modelMapper.map(sabor2, SaborPedidoDTO.class));
+        pedido1.getSabores().add(modelMapper.map(sabor1, SaborPedido.class));
+        pedido1.getSabores().add(modelMapper.map(sabor2, SaborPedido.class));
+        pedido2.getSabores().add(modelMapper.map(sabor2, SaborPedido.class));
 
         estabelecimento.getPedidos().add(pedido1);
         estabelecimento.getPedidos().add(pedido2);

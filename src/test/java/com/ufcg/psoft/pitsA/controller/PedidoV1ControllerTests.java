@@ -3,7 +3,7 @@ package com.ufcg.psoft.pitsA.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoPostDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
-import com.ufcg.psoft.pitsA.dto.pedido.SaborPedidoDTO;
+import com.ufcg.psoft.pitsA.model.sabor.SaborPedido;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTamanho;
@@ -117,21 +117,21 @@ public class PedidoV1ControllerTests {
                     .build();
 
             // Adicionando os sabores nos pedidos
-            pedidoPostComEnderecoDTO.getSabores().add(SaborPedidoDTO.builder()
+            pedidoPostComEnderecoDTO.getSabores().add(SaborPedido.builder()
                             .nome("Calabresa")
                             .tipo(TipoSabor.SALGADO)
                             .precoMedio(30.0)
                             .precoGrande(50.0)
                     .build());
 
-            pedidoPostSemEnderecoDTO.getSabores().add(SaborPedidoDTO.builder()
+            pedidoPostSemEnderecoDTO.getSabores().add(SaborPedido.builder()
                             .nome("Calabresa")
                             .tipo(TipoSabor.SALGADO)
                             .precoMedio(30.0)
                             .precoGrande(50.0)
                     .build());
 
-            pedidoPostSemEnderecoDTO.getSabores().add(SaborPedidoDTO.builder()
+            pedidoPostSemEnderecoDTO.getSabores().add(SaborPedido.builder()
                             .nome("Chocolate")
                             .tipo(TipoSabor.DOCE)
                             .precoMedio(25.0)

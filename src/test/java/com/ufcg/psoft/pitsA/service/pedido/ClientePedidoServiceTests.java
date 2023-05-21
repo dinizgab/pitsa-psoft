@@ -6,6 +6,7 @@ import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.pedido.TipoPagamento;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
+import com.ufcg.psoft.pitsA.model.sabor.SaborPedido;
 import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTamanho;
@@ -98,7 +99,7 @@ public class ClientePedidoServiceTests {
                 .tamanho(PizzaPedidoTamanho.GRANDE)
                 .tipo(PizzaPedidoTipo.INTEIRA)
                 .build();
-        pedidoInteira.getSabores().add(modelMapper.map(sabor3, SaborPedidoDTO.class));
+        pedidoInteira.getSabores().add(modelMapper.map(sabor3, SaborPedido.class));
 
         pedidoMeia = PedidoPostDTO.builder()
                 .codigoAcesso(cliente.getCodigoAcesso())
@@ -108,8 +109,8 @@ public class ClientePedidoServiceTests {
                 .tipo(PizzaPedidoTipo.MEIA)
                 .build();
 
-        pedidoMeia.getSabores().add(modelMapper.map(sabor1, SaborPedidoDTO.class));
-        pedidoMeia.getSabores().add(modelMapper.map(sabor2, SaborPedidoDTO.class));
+        pedidoMeia.getSabores().add(modelMapper.map(sabor1, SaborPedido.class));
+        pedidoMeia.getSabores().add(modelMapper.map(sabor2, SaborPedido.class));
     }
 
     @AfterEach
@@ -219,9 +220,9 @@ public class ClientePedidoServiceTests {
                     .cliente(cliente)
                     .build());
 
-            pedido1.getSabores().add(modelMapper.map(sabor1, SaborPedidoDTO.class));
-            pedido1.getSabores().add(modelMapper.map(sabor2, SaborPedidoDTO.class));
-            pedido2.getSabores().add(modelMapper.map(sabor2, SaborPedidoDTO.class));
+            pedido1.getSabores().add(modelMapper.map(sabor1, SaborPedido.class));
+            pedido1.getSabores().add(modelMapper.map(sabor2, SaborPedido.class));
+            pedido2.getSabores().add(modelMapper.map(sabor2, SaborPedido.class));
 
             cliente.getPedidos().add(pedido1);
             cliente.getPedidos().add(pedido2);
@@ -373,15 +374,18 @@ public class ClientePedidoServiceTests {
 }
 
 // Pedido
-// List<SaborPedidoDTO>, Endereco, Cliente, CalculaValor, Tamanho (GRANDE ou MEDIA), Tipo (INTEIRA ou MEIA)
+// List<SaborPedido>, Endereco, Cliente, CalculaValor, Tamanho (GRANDE ou MEDIA), Tipo (INTEIRA ou MEIA)
 
 // CalculaValor
 // Metodo que recebe a lista de sabores do pedido e retorna o calculo do valor total do pedido
 
-// SaborPedidoDTO
+// SaborPedido
 // Nome, PrecoGrande, PrecoMedia, Tipo (SALGADA ou DOCE)
 
 // TODO - Adicionar a possibilidade de fazer um pedido com varias pizzas
+
+// TODO - Criar uma nova relacao entre pedido e uma classe de sabor pedido pra deixar dentro do pedido
+
 // TODO - Trocar a lista de sabores do PedidoPostDTO por uma lista de Long e depois procurar as pizzas pelos IDs
 
 // TODO - Adicionar o resto das operacoes do CRUD, atualizar um pedido (So podem ser feitas pelo estabelecimento ou usuario com seus respectivos codigos de acesso)

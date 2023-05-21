@@ -1,10 +1,9 @@
 package com.ufcg.psoft.pitsA.model.pedido;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ufcg.psoft.pitsA.dto.pedido.SaborPedidoDTO;
+import com.ufcg.psoft.pitsA.model.sabor.SaborPedido;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
-import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import jakarta.persistence.*;
 import lombok.*;
 import org.apache.commons.lang3.builder.ToStringExclude;
@@ -45,7 +44,7 @@ public class Pedido {
     private Estabelecimento estabelecimentoPedido;
 
     @Transient
-    private List<SaborPedidoDTO> sabores;
+    private List<SaborPedido> sabores;
 
     @JsonIgnore
     @Transient

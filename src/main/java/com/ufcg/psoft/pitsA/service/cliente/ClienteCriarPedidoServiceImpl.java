@@ -3,7 +3,7 @@ package com.ufcg.psoft.pitsA.service.cliente;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoPostDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoValidaDTO;
-import com.ufcg.psoft.pitsA.dto.pedido.SaborPedidoDTO;
+import com.ufcg.psoft.pitsA.model.sabor.SaborPedido;
 import com.ufcg.psoft.pitsA.exception.cliente.ClienteNaoExisteException;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
@@ -47,7 +47,7 @@ public class ClienteCriarPedidoServiceImpl implements ClienteCriarPedidoService 
         String endereco = postBody.getEndereco();
         PizzaPedidoTipo tipoPedido = postBody.getTipo();
         PizzaPedidoTamanho tamanho = postBody.getTamanho();
-        List<SaborPedidoDTO> sabores = postBody.getSabores();
+        List<SaborPedido> sabores = postBody.getSabores();
 
         Cliente cliente = clienteRepository.findById(id).orElseThrow(ClienteNaoExisteException::new);
 
