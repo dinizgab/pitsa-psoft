@@ -25,8 +25,8 @@ public class EstabelecimentoPatchDispSaborServiceImpl implements Estabelecimento
     @Override
     public SaborReadDTO alteraDisponibilidade(Long estabelecimentoId, EstabelecimentoPatchDispDTO estabelecimentoPatchDispDTO) {
         Long saborId = estabelecimentoPatchDispDTO.getSaborId();
-        Estabelecimento estabelecimento = estabelecimentoRepository.findById(estabelecimentoId).orElseThrow(EstabelecimentoNaoExisteException::new);
 
+        Estabelecimento estabelecimento = estabelecimentoRepository.findById(estabelecimentoId).orElseThrow(EstabelecimentoNaoExisteException::new);
         autenticador.autenticar(estabelecimento.getCodigoAcesso(), estabelecimentoPatchDispDTO.getCodigoAcesso());
 
         return modelMapper.map(saborPatchDisponibilidade.alteraDisponibilidade(saborId), SaborReadDTO.class);

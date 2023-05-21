@@ -17,7 +17,6 @@ import com.ufcg.psoft.pitsA.service.cliente.ClienteCriarPedidoService;
 import com.ufcg.psoft.pitsA.service.cliente.ClienteListarPedidoService;
 import com.ufcg.psoft.pitsA.service.cliente.ClienteRemoverPedidoService;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.NotEmpty;
 import org.junit.jupiter.api.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@DisplayName("Testes para os services de pedido")
+@DisplayName("Testes para os services de pedido com cliente")
 public class ClientePedidoServiceTests {
     @Autowired
     PedidoRepository pedidoRepository;
@@ -239,7 +238,7 @@ public class ClientePedidoServiceTests {
         void testeListarPedidosCliente() {
             Long clienteId = cliente.getId();
 
-            ClienteListarPedidoDTO listarDTO = ClienteListarPedidoDTO.builder()
+            PedidoListarDTO listarDTO = PedidoListarDTO.builder()
                     .codigoAcesso(cliente.getCodigoAcesso())
                     .pedidoId(null)
                     .build();
@@ -254,7 +253,7 @@ public class ClientePedidoServiceTests {
         void testeListarPedidoClientePorId() {
             Long clienteId = cliente.getId();
 
-            ClienteListarPedidoDTO listarDTO = ClienteListarPedidoDTO.builder()
+            PedidoListarDTO listarDTO = PedidoListarDTO.builder()
                     .codigoAcesso(cliente.getCodigoAcesso())
                     .pedidoId(pedidoId)
                     .build();
@@ -269,12 +268,6 @@ public class ClientePedidoServiceTests {
                     () -> assertEquals(45.0, resultado.getValorTotal())
             );
         }
-    }
-
-    @Nested
-    @DisplayName("Testes do service de atualizar o pedido")
-    class AtualizarServiceTests {
-
     }
 
     @Nested
@@ -350,10 +343,10 @@ public class ClientePedidoServiceTests {
 // Nome, PrecoGrande, PrecoMedia, Tipo (SALGADA ou DOCE)
 
 // TODO - Adicionar a possibilidade de fazer um pedido com varias pizzas
+// TODO - Trocar a lista de sabores do PedidoPostDTO por uma lista de Long e depois procurar as pizzas pelos IDs
 
 // TODO - Adicionar o resto das operacoes do CRUD, remover, atualizar e ler um pedido (So podem ser feitas pelo estabelecimento ou usuario com seus respectivos codigos de acesso)
 
 // TODO - Adicionar um service para adicionar um tipo de pagamento -- confirmar  o pagamento -- no pedido (Cliente informa o pedido, metodo de pagamento e codigo de acesso)
 // Metodos de pagamento = Cartao de credito, debito e pix
 
-// TODO - Trocar a lista de sabores do PedidoPostDTO por uma lista de Long e depois procurar as pizzas pelos IDs
