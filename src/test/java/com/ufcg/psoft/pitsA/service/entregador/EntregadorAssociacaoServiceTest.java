@@ -17,7 +17,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.HashSet;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @DisplayName("Testes para associacao do entregador a um estabelecimento")

@@ -2,7 +2,6 @@ package com.ufcg.psoft.pitsA.dto.pedido;
 
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTamanho;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTipo;
-import com.ufcg.psoft.pitsA.model.sabor.SaborPedido;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -34,5 +33,5 @@ public class PedidoPostDTO {
 
     @Builder.Default
     @NotEmpty(message = "Escolha pelo menos um sabor")
-    private List<SaborPedido> sabores = new ArrayList<>();
+    private List<Long> saboresId = new ArrayList<>();
 }

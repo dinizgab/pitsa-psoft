@@ -1,17 +1,20 @@
 package com.ufcg.psoft.pitsA.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.ReferenceType;
+import com.ufcg.psoft.pitsA.dto.pedido.ClienteRemoverPedidoDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoPostDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
-import com.ufcg.psoft.pitsA.model.sabor.SaborPedido;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTamanho;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTipo;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
+import com.ufcg.psoft.pitsA.repository.PedidoRepository;
 import com.ufcg.psoft.pitsA.repository.SaborRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +23,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -42,6 +46,7 @@ public class PedidoV1ControllerTests {
     SaborRepository saborRepository;
     Estabelecimento estabelecimento;
     Cliente cliente;
+    Sabor sabor;
     ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
@@ -52,7 +57,7 @@ public class PedidoV1ControllerTests {
                         .build()
         );
 
-        Sabor sabor1 = Sabor.builder()
+        sabor = Sabor.builder()
                 .nome("Calabresa")
                 .tipo(TipoSabor.SALGADO)
                 .precoGrande(35.0)
@@ -76,7 +81,7 @@ public class PedidoV1ControllerTests {
                 .estabelecimento(estabelecimento)
                 .build();
 
-        saborRepository.saveAll(Arrays.asList(sabor1, sabor2, sabor3));
+        saborRepository.saveAll(Arrays.asList(sabor, sabor2, sabor3));
 
         cliente = clienteRepository.save(
                 Cliente.builder()
@@ -97,9 +102,21 @@ public class PedidoV1ControllerTests {
     class ClientePedidosEndpointsTests {
         PedidoPostDTO pedidoPostComEnderecoDTO;
         PedidoPostDTO pedidoPostSemEnderecoDTO;
+        @Autowired
+        PedidoRepository pedidoRepository;
+        Pedido pedido;
 
         @BeforeEach
         void setUp() {
+            pedido = Pedido.builder()
+                    .estabelecimentoPedido(estabelecimento)
+                    .cliente(cliente)
+                    .endereco("")
+                    .sabores(new ArrayList<>())
+                    .tipo(PizzaPedidoTipo.INTEIRA)
+                    .tamanho(PizzaPedidoTamanho.GRANDE)
+                    .build();
+
             pedidoPostComEnderecoDTO = PedidoPostDTO.builder()
                             .codigoAcesso(cliente.getCodigoAcesso())
                             .idEstabelecimento(estabelecimento.getId())
@@ -117,26 +134,12 @@ public class PedidoV1ControllerTests {
                     .build();
 
             // Adicionando os sabores nos pedidos
-            pedidoPostComEnderecoDTO.getSabores().add(SaborPedido.builder()
-                            .nome("Calabresa")
-                            .tipo(TipoSabor.SALGADO)
-                            .precoMedio(30.0)
-                            .precoGrande(50.0)
-                    .build());
+            pedidoPostComEnderecoDTO.getSaboresId().add(1L);
+            pedidoPostSemEnderecoDTO.getSaboresId().add(2L);
+            pedidoPostSemEnderecoDTO.getSaboresId().add(3L);
 
-            pedidoPostSemEnderecoDTO.getSabores().add(SaborPedido.builder()
-                            .nome("Calabresa")
-                            .tipo(TipoSabor.SALGADO)
-                            .precoMedio(30.0)
-                            .precoGrande(50.0)
-                    .build());
-
-            pedidoPostSemEnderecoDTO.getSabores().add(SaborPedido.builder()
-                            .nome("Chocolate")
-                            .tipo(TipoSabor.DOCE)
-                            .precoMedio(25.0)
-                            .precoGrande(60.0)
-                    .build());
+            pedido.getSabores().add(sabor);
+            pedido = pedidoRepository.save(pedido);
         }
 
         @Test
@@ -158,6 +161,47 @@ public class PedidoV1ControllerTests {
                     () -> assertTrue(resultado.getTipo().isInteira()),
                     () -> assertEquals(valorTotal, resultado.getValorTotal())
             );
+        }
+
+        @Test
+        @DisplayName("Quando criamos um novo pedido sem endereco")
+        void quandoCriarUmPedidoSemEndereco() throws Exception {
+            Double valorTotal = 50.0;
+            String responseJsonString = driver.perform(post(URI_CLIENTES + "/cliente/" + cliente.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(pedidoPostSemEnderecoDTO)))
+                    .andExpect(status().isCreated())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            PedidoReadResponseDTO resultado = objectMapper.readValue(responseJsonString, PedidoReadResponseDTO.class);
+
+            assertAll(
+                    () -> assertEquals(cliente.getEndereco(), resultado.getEndereco()),
+                    () -> assertTrue(resultado.getTamanho().isGrande()),
+                    () -> assertTrue(resultado.getTipo().isMeia()),
+                    () -> assertEquals(valorTotal, resultado.getValorTotal())
+            );
+        }
+
+        @Test
+        @DisplayName("Quando removemos um pedido existente")
+        void quandoRemoverPedidoExistente() throws Exception {
+            Long clienteId = cliente.getId();
+            ClienteRemoverPedidoDTO pedidoRemoverBody = ClienteRemoverPedidoDTO.builder()
+                    .pedidoId(pedido.getId())
+                    .estabelecimentoId(estabelecimento.getId())
+                    .codigoAcesso(cliente.getCodigoAcesso())
+                    .build();
+
+            String responseJsonString = driver.perform(delete(URI_CLIENTES + "/cliente/" + clienteId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(pedidoRemoverBody)))
+                    .andExpect(status().isNoContent())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            assertTrue(responseJsonString.isEmpty());
         }
     }
 }

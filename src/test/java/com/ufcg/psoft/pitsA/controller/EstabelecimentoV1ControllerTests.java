@@ -6,7 +6,9 @@ import com.ufcg.psoft.pitsA.dto.entregador.EntregadorReadDTO;
 import com.ufcg.psoft.pitsA.dto.estabelecimento.*;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.exception.ErrorMessage;
-import com.ufcg.psoft.pitsA.model.*;
+import com.ufcg.psoft.pitsA.model.Entregador;
+import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.TipoVeiculoEntregador;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
@@ -20,14 +22,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -113,8 +114,7 @@ public class EstabelecimentoV1ControllerTests {
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();
 
-            List<Estabelecimento> listaResultados = objectMapper.readValue(responseJsonString, new TypeReference<>() {
-            });
+            List<Estabelecimento> listaResultados = objectMapper.readValue(responseJsonString, new TypeReference<>() {});
             Estabelecimento resultado = listaResultados.stream().findFirst().orElse(Estabelecimento.builder().build());
 
             assertAll(

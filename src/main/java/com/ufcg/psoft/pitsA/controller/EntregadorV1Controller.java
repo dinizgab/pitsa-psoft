@@ -1,12 +1,11 @@
 package com.ufcg.psoft.pitsA.controller;
 
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorDeleteDTO;
 import com.ufcg.psoft.pitsA.dto.entregador.EntregadorPatchEstabelecimentoDTO;
 import com.ufcg.psoft.pitsA.dto.entregador.EntregadorPostPutDTO;
-import com.ufcg.psoft.pitsA.dto.entregador.EntregadorDeleteDTO;
 import com.ufcg.psoft.pitsA.exception.ErrorMessage;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.service.entregador.*;
-
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

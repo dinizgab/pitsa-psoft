@@ -4,13 +4,12 @@ import com.ufcg.psoft.pitsA.dto.pedido.*;
 import com.ufcg.psoft.pitsA.exception.pedido.TamanhoPedidoInvalidosException;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
-import com.ufcg.psoft.pitsA.model.pedido.TipoPagamento;
-import com.ufcg.psoft.pitsA.model.sabor.Sabor;
-import com.ufcg.psoft.pitsA.model.sabor.SaborPedido;
-import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTamanho;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTipo;
+import com.ufcg.psoft.pitsA.model.pedido.TipoPagamento;
+import com.ufcg.psoft.pitsA.model.sabor.Sabor;
+import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.pitsA.repository.PedidoRepository;
@@ -90,6 +89,7 @@ public class ClientePedidoServiceTests {
         estabelecimento.getCardapio().add(sabor2);
         estabelecimento.getCardapio().add(sabor3);
         estabelecimentoRepository.save(estabelecimento);
+
         saborRepository.saveAll(Arrays.asList(sabor1, sabor2, sabor3));
 
         pedidoInteira = PedidoPostDTO.builder()
@@ -99,7 +99,7 @@ public class ClientePedidoServiceTests {
                 .tamanho(PizzaPedidoTamanho.GRANDE)
                 .tipo(PizzaPedidoTipo.INTEIRA)
                 .build();
-        pedidoInteira.getSabores().add(modelMapper.map(sabor3, SaborPedido.class));
+        pedidoInteira.getSaboresId().add(3L);
 
         pedidoMeia = PedidoPostDTO.builder()
                 .codigoAcesso(cliente.getCodigoAcesso())
@@ -109,16 +109,14 @@ public class ClientePedidoServiceTests {
                 .tipo(PizzaPedidoTipo.MEIA)
                 .build();
 
-        pedidoMeia.getSabores().add(modelMapper.map(sabor1, SaborPedido.class));
-        pedidoMeia.getSabores().add(modelMapper.map(sabor2, SaborPedido.class));
+        pedidoMeia.getSaboresId().add(1L);
+        pedidoMeia.getSaboresId().add(2L);
     }
 
     @AfterEach
     void tearDown() {
-        saborRepository.deleteAll();
-        pedidoRepository.deleteAll();
-        estabelecimentoRepository.deleteAll();
         clienteRepository.deleteAll();
+        estabelecimentoRepository.deleteAll();
     }
 
     @Nested
@@ -220,9 +218,9 @@ public class ClientePedidoServiceTests {
                     .cliente(cliente)
                     .build());
 
-            pedido1.getSabores().add(modelMapper.map(sabor1, SaborPedido.class));
-            pedido1.getSabores().add(modelMapper.map(sabor2, SaborPedido.class));
-            pedido2.getSabores().add(modelMapper.map(sabor2, SaborPedido.class));
+            pedido1.getSabores().add(sabor1);
+            pedido1.getSabores().add(sabor2);
+            pedido2.getSabores().add(sabor2);
 
             cliente.getPedidos().add(pedido1);
             cliente.getPedidos().add(pedido2);
@@ -288,6 +286,7 @@ public class ClientePedidoServiceTests {
         }
 
         @Test
+        @Transactional
         @DisplayName("Teste quando adicionamos um pagamento com sucesso")
         void adicionarPagamentoSucesso() {
             Long pedidoId = pedido.getId();
@@ -383,9 +382,5 @@ public class ClientePedidoServiceTests {
 // Nome, PrecoGrande, PrecoMedia, Tipo (SALGADA ou DOCE)
 
 // TODO - Adicionar a possibilidade de fazer um pedido com varias pizzas
-
-// TODO - Criar uma nova relacao entre pedido e uma classe de sabor pedido pra deixar dentro do pedido
-
-// TODO - Trocar a lista de sabores do PedidoPostDTO por uma lista de Long e depois procurar as pizzas pelos IDs
 
 // TODO - Adicionar o resto das operacoes do CRUD, atualizar um pedido (So podem ser feitas pelo estabelecimento ou usuario com seus respectivos codigos de acesso)

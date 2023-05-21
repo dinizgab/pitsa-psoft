@@ -1,7 +1,6 @@
 package com.ufcg.psoft.pitsA.service.pedido;
 
 import com.ufcg.psoft.pitsA.dto.pedido.ConfirmarPagamentoDTO;
-import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadBodyDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
 import com.ufcg.psoft.pitsA.exception.cliente.ClienteNaoExisteException;
 import com.ufcg.psoft.pitsA.model.Cliente;

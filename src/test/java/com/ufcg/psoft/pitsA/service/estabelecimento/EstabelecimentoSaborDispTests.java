@@ -7,6 +7,7 @@ import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
+import com.ufcg.psoft.pitsA.repository.ClienteRepository;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.pitsA.repository.SaborRepository;
 import jakarta.transaction.Transactional;
@@ -31,9 +32,12 @@ public class EstabelecimentoSaborDispTests {
     EstabelecimentoRepository estabelecimentoRepository;
     @Autowired
     SaborRepository saborRepository;
+    @Autowired
+    ClienteRepository clienteRepository;
     Estabelecimento estabelecimento;
     Sabor saborDisponivel;
     Sabor saborIndisponivel;
+    Cliente cliente;
 
     @BeforeEach
     @Transactional
@@ -51,14 +55,15 @@ public class EstabelecimentoSaborDispTests {
                 .build()
         );
 
-
-        List<Cliente> interessados = new ArrayList<>();
-        interessados.add(Cliente.builder()
+        cliente = Cliente.builder()
                 .nome("Gabriel")
                 .endereco("5432 Costa Sousa, 342")
                 .codigoAcesso("123456")
-                .build()
-        );
+                .build();
+
+        List<Cliente> interessados = new ArrayList<>();
+        interessados.add(cliente);
+
         saborIndisponivel = saborRepository.save(Sabor.builder()
                 .nome("Carne de sol")
                 .precoGrande(30.0)
@@ -76,10 +81,12 @@ public class EstabelecimentoSaborDispTests {
 
         estabelecimento.setCardapio(cardapio);
         estabelecimento = estabelecimentoRepository.save(estabelecimento);
+        cliente = clienteRepository.save(cliente);
     }
 
     @AfterEach
     void tearDown() {
+        clienteRepository.deleteAll();
         estabelecimentoRepository.deleteAll();
         saborRepository.deleteAll();
     }

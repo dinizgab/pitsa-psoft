@@ -1,12 +1,11 @@
 package com.ufcg.psoft.pitsA.model.pedido;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ufcg.psoft.pitsA.model.sabor.SaborPedido;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import jakarta.persistence.*;
 import lombok.*;
-import org.apache.commons.lang3.builder.ToStringExclude;
 
 import java.util.List;
 
@@ -43,8 +42,10 @@ public class Pedido {
     @ManyToOne(optional = false)
     private Estabelecimento estabelecimentoPedido;
 
-    @Transient
-    private List<SaborPedido> sabores;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany()
+    private List<Sabor> sabores;
 
     @JsonIgnore
     @Transient

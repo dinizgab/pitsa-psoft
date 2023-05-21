@@ -1,7 +1,7 @@
 package com.ufcg.psoft.pitsA.service.sabor;
 
-import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborPutDTO;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.exception.sabor.SaborNaoExistenteException;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;

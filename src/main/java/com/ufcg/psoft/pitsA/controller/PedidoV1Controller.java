@@ -1,11 +1,13 @@
 package com.ufcg.psoft.pitsA.controller;
 
+import com.ufcg.psoft.pitsA.dto.pedido.ClienteRemoverPedidoDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoPostDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadBodyDTO;
 import com.ufcg.psoft.pitsA.exception.ErrorMessage;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.service.cliente.ClienteCriarPedidoService;
 import com.ufcg.psoft.pitsA.service.cliente.ClienteListarPedidoService;
+import com.ufcg.psoft.pitsA.service.cliente.ClienteRemoverPedidoService;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoListarPedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 public class PedidoV1Controller {
     @Autowired
     ClienteListarPedidoService clienteListarPedidoService;
+    @Autowired
+    ClienteRemoverPedidoService clienteRemoverPedidoService;
     @Autowired
     EstabelecimentoListarPedidoService estabelecimentoListarPedidoService;
     @Autowired
@@ -44,6 +48,18 @@ public class PedidoV1Controller {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(clienteCriarPedidoService.criarPedido(id, postBody));
+    }
+
+    @DeleteMapping("/cliente/{id}")
+    public ResponseEntity<?> removerUmPedido (
+            @PathVariable("id") Long id,
+            @RequestBody ClienteRemoverPedidoDTO removeBody
+    ) {
+        clienteRemoverPedidoService.removerPedido(id, removeBody);
+
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body("");
     }
 
     @GetMapping("/estabelecimento/{id}")

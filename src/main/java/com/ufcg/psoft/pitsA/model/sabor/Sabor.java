@@ -3,7 +3,6 @@ package com.ufcg.psoft.pitsA.model.sabor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
-import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import jakarta.persistence.*;
 import lombok.*;
 

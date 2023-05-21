@@ -22,7 +22,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @DisplayName("Testes do service do cliente demonstrar interesse a um sabor")
@@ -74,7 +75,7 @@ public class ClienteInteresseSaborServiceTest {
     @AfterEach
     void tearDown() {
         clienteRepository.deleteAll();
-        saborRepository.deleteAll();
+        estabelecimentoRepository.deleteAll();
     }
 
     @Test

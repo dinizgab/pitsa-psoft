@@ -4,7 +4,7 @@ import com.ufcg.psoft.pitsA.dto.cliente.ClienteReadDTO;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTamanho;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTipo;
 import com.ufcg.psoft.pitsA.model.pedido.TipoPagamento;
-import com.ufcg.psoft.pitsA.model.sabor.SaborPedido;
+import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +27,7 @@ public class PedidoReadResponseDTO {
 
     private TipoPagamento tipoPagamento;
 
-    private List<SaborPedido> sabores;
+    private List<Sabor> sabores;
 
     private Double valorTotal;
 }

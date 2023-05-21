@@ -1,19 +1,23 @@
 package com.ufcg.psoft.pitsA.service.entregador;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.ufcg.psoft.pitsA.dto.entregador.EntregadorDeleteDTO;
 import com.ufcg.psoft.pitsA.dto.entregador.EntregadorPostPutDTO;
 import com.ufcg.psoft.pitsA.dto.entregador.EntregadorReadDTO;
 import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.model.TipoVeiculoEntregador;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @DisplayName("Testes do service de Entregadores")

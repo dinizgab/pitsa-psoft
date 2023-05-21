@@ -1,6 +1,5 @@
 package com.ufcg.psoft.pitsA.exception.estabelecimento;
 
-import com.ufcg.psoft.pitsA.PitsAApplication;
 import com.ufcg.psoft.pitsA.exception.PitsAException;
 
 public class SaborNaoPertenceCardapio extends PitsAException {

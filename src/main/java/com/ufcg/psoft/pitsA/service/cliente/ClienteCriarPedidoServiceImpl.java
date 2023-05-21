@@ -3,23 +3,24 @@ package com.ufcg.psoft.pitsA.service.cliente;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoPostDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoValidaDTO;
-import com.ufcg.psoft.pitsA.model.sabor.SaborPedido;
 import com.ufcg.psoft.pitsA.exception.cliente.ClienteNaoExisteException;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTamanho;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTipo;
+import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
 import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoAdicionaPedidoService;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoListarService;
 import com.ufcg.psoft.pitsA.service.pedido.PedidoCriarService;
 import com.ufcg.psoft.pitsA.service.pedido.ValidaPedidoService;
+import com.ufcg.psoft.pitsA.service.sabor.SaborListarMultiploService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import java.util.List;
 
@@ -36,28 +37,31 @@ public class ClienteCriarPedidoServiceImpl implements ClienteCriarPedidoService 
     @Autowired
     ValidaPedidoService validaPedidoService;
     @Autowired
+    SaborListarMultiploService saborListarMultiploService;
+    @Autowired
     AutenticaCodigoAcessoService autenticador;
     @Autowired
     ModelMapper modelMapper;
 
     @Override
+    @Transactional
     public PedidoReadResponseDTO criarPedido(Long id, PedidoPostDTO postBody) {
         Long estabelecimentoId = postBody.getIdEstabelecimento();
         String codigoAcesso = postBody.getCodigoAcesso();
         String endereco = postBody.getEndereco();
         PizzaPedidoTipo tipoPedido = postBody.getTipo();
         PizzaPedidoTamanho tamanho = postBody.getTamanho();
-        List<SaborPedido> sabores = postBody.getSabores();
+        List<Long> saboresId = postBody.getSaboresId();
 
         Cliente cliente = clienteRepository.findById(id).orElseThrow(ClienteNaoExisteException::new);
+        autenticador.autenticar(cliente.getCodigoAcesso(), codigoAcesso);
 
+        List<Sabor> sabores = saborListarMultiploService.listarMultiplos(saboresId);
         PedidoValidaDTO validaDTO = PedidoValidaDTO.builder()
                         .tipoPedido(tipoPedido)
                         .tamanho(tamanho)
                         .quantidadeSabores(sabores.size())
                         .build();
-
-        autenticador.autenticar(cliente.getCodigoAcesso(), codigoAcesso);
         validaPedidoService.validaPedido(validaDTO);
 
         Estabelecimento estabelecimento = estabelecimentoListarService.listar(estabelecimentoId).get(0);
@@ -81,6 +85,11 @@ public class ClienteCriarPedidoServiceImpl implements ClienteCriarPedidoService 
         clienteRepository.save(cliente);
 
         estabelecimentoAdicionaPedidoService.adicionaPedido(estabelecimento, pedidoSalvo);
-        return modelMapper.map(pedidoSalvo, PedidoReadResponseDTO.class);
+
+        Double valorTotal = pedidoSalvo.calculaValorTotal();
+        PedidoReadResponseDTO parsedPedido = modelMapper.map(pedidoSalvo, PedidoReadResponseDTO.class);
+        parsedPedido.setValorTotal(valorTotal);
+
+        return parsedPedido;
     }
 }

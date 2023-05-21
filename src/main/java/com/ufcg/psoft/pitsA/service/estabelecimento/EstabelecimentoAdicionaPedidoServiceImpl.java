@@ -5,7 +5,6 @@ import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.tags.EscapeBodyTag;
 
 @Service
 public class EstabelecimentoAdicionaPedidoServiceImpl implements EstabelecimentoAdicionaPedidoService {
