@@ -6,6 +6,7 @@ import com.ufcg.psoft.pitsA.dto.cliente.ClienteReadDTO;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -59,7 +60,7 @@ public class ClienteServiceTests {
     }
 
     @Test
-    @DisplayName("Quando lista todos os entregadores cadastrados")
+    @DisplayName("Quando lista todos os clientes cadastrados")
     void testeListaTodosClientes() {
         Cliente cliente1 = Cliente.builder()
                 .nome("Junior Junior")
@@ -80,7 +81,8 @@ public class ClienteServiceTests {
     }
 
     @Test
-    @DisplayName("Quando lista um entregador pelo seu ID")
+    @Transactional
+    @DisplayName("Quando lista um cliente pelo seu ID")
     void testeListaClientePorId() {
         Long clienteId = clienteRepository.save(
                 Cliente.builder()
@@ -99,6 +101,7 @@ public class ClienteServiceTests {
     }
 
     @Test
+    @Transactional
     @DisplayName("Quando atualizar um Cliente cadastrado com codigo de acesso valido")
     void testeAtualizarClienteCodigoValido() {
         Long clienteId = clienteRepository.save(Cliente.builder()

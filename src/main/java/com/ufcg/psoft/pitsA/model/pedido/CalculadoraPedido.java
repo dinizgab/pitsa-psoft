@@ -6,5 +6,5 @@ import java.util.List;
 
 @FunctionalInterface
 public interface CalculadoraPedido {
-    double calculaTotal(List<Sabor> saboresPedido, PizzaPedidoTipo tipoPedido, PizzaPedidoTamanho tamanho);
+    double calculaTotal(List<Sabor> saboresPedido, PizzaPedidoTipo tipoPedido, PizzaPedidoTamanho tamanho, TipoPagamento tipoPagamento);
 }

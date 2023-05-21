@@ -84,8 +84,8 @@ public class ClienteListarCardapioTests {
 
     @AfterEach
     void tearDown() {
-        estabelecimentoRepository.deleteAll();
         clienteRepository.deleteAll();
+        estabelecimentoRepository.deleteAll();
     }
 
     @Test

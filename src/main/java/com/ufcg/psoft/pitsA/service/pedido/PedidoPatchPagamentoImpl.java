@@ -21,7 +21,10 @@ public class PedidoPatchPagamentoImpl implements PedidoPatchPagamento {
         Pedido pedido = pedidoRepository.findById(pedidoId).orElseThrow(PedidoNaoEncontradoException::new);
 
         pedido.setTipoPagamento(tipoPagamento);
-        System.out.println(pedido);
-        return modelMapper.map(pedidoRepository.save(pedido), PedidoReadResponseDTO.class);
+
+        PedidoReadResponseDTO pedidoAlterado = modelMapper.map(pedidoRepository.save(pedido), PedidoReadResponseDTO.class);
+        pedidoAlterado.setValorTotal(pedido.calculaValorTotal());
+
+        return pedidoAlterado;
     }
 }

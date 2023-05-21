@@ -88,7 +88,6 @@ public class EstabelecimentoSaborDispTests {
     void tearDown() {
         clienteRepository.deleteAll();
         estabelecimentoRepository.deleteAll();
-        saborRepository.deleteAll();
     }
 
     @Test

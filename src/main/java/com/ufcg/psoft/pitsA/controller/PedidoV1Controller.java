@@ -1,6 +1,7 @@
 package com.ufcg.psoft.pitsA.controller;
 
 import com.ufcg.psoft.pitsA.dto.pedido.ClienteRemoverPedidoDTO;
+import com.ufcg.psoft.pitsA.dto.pedido.ConfirmarPagamentoDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoPostDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadBodyDTO;
 import com.ufcg.psoft.pitsA.exception.ErrorMessage;
@@ -9,6 +10,7 @@ import com.ufcg.psoft.pitsA.service.cliente.ClienteCriarPedidoService;
 import com.ufcg.psoft.pitsA.service.cliente.ClienteListarPedidoService;
 import com.ufcg.psoft.pitsA.service.cliente.ClienteRemoverPedidoService;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoListarPedidoService;
+import com.ufcg.psoft.pitsA.service.pedido.ConfirmarPagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,7 +30,19 @@ public class PedidoV1Controller {
     @Autowired
     EstabelecimentoListarPedidoService estabelecimentoListarPedidoService;
     @Autowired
+    ConfirmarPagamentoService confirmarPagamentoService;
+    @Autowired
     ClienteCriarPedidoService clienteCriarPedidoService;
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> confirmarPagamento (
+            @PathVariable Long id,
+            @RequestBody ConfirmarPagamentoDTO confirmarPagamentoDTO
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(confirmarPagamentoService.confirmarPagamento(id, confirmarPagamentoDTO));
+    }
 
     @GetMapping("/cliente/{id}")
     public ResponseEntity<?> listarPedidosCliente (

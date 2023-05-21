@@ -40,8 +40,6 @@ public class ClientePedidoServiceTests {
     EstabelecimentoRepository estabelecimentoRepository;
     @Autowired
     ClienteRepository clienteRepository;
-    @Autowired
-    ModelMapper modelMapper;
     Cliente cliente;
     Estabelecimento estabelecimento;
     PedidoPostDTO pedidoInteira;
@@ -274,22 +272,34 @@ public class ClientePedidoServiceTests {
 
         @BeforeEach
         void setUp() {
-            pedido = pedidoRepository.save(
-                    Pedido.builder()
+            pedido = Pedido.builder()
                             .endereco("Rua 13 de maio, 123")
                             .tamanho(PizzaPedidoTamanho.MEDIA)
                             .tipo(PizzaPedidoTipo.INTEIRA)
                             .sabores(new ArrayList<>())
                             .estabelecimentoPedido(estabelecimento)
                             .cliente(cliente)
-                            .build());
+                            .build();
+
+            Sabor sabor1 = Sabor.builder()
+                    .nome("Calabresa")
+                    .tipo(TipoSabor.SALGADO)
+                    .precoGrande(60.0)
+                    .precoMedio(40.0)
+                    .estabelecimento(estabelecimento)
+                    .build();
+
+            saborRepository.save(sabor1);
+            pedido.getSabores().add(sabor1);
+            pedidoRepository.save(pedido);
         }
 
         @Test
         @Transactional
-        @DisplayName("Teste quando adicionamos um pagamento com sucesso")
-        void adicionarPagamentoSucesso() {
+        @DisplayName("Teste quando adicionamos um pagamento com sucesso (Debito)")
+        void adicionarPagamentoDebito() {
             Long pedidoId = pedido.getId();
+            Double valorFinal = 39.0;
 
             ConfirmarPagamentoDTO confirmarBody = ConfirmarPagamentoDTO.builder()
                     .clienteId(cliente.getId())
@@ -301,12 +311,60 @@ public class ClientePedidoServiceTests {
             assertAll(
                     () -> assertEquals(cliente.getNome(), resultado.getCliente().getNome()),
                     () -> assertEquals(cliente.getEndereco(), resultado.getEndereco()),
+                    () -> assertEquals(valorFinal, resultado.getValorTotal()),
                     () -> assertTrue(resultado.getTamanho().isMedia()),
                     () -> assertTrue(resultado.getTipo().isInteira()),
                     () -> assertTrue(resultado.getTipoPagamento().isDebito())
             );
         }
 
+        @Test
+        @Transactional
+        @DisplayName("Teste quando adicionamos um pagamento com sucesso (Pix)")
+        void adicionaPagamentoPix() {
+            Long pedidoId = pedido.getId();
+            Double valorFinal = 38.0;
+
+            ConfirmarPagamentoDTO confirmarBody = ConfirmarPagamentoDTO.builder()
+                    .clienteId(cliente.getId())
+                    .codigoAcesso(cliente.getCodigoAcesso())
+                    .tipoPagamento(TipoPagamento.PIX)
+                    .build();
+
+            PedidoReadResponseDTO resultado = driverConfirmar.confirmarPagamento(pedidoId, confirmarBody);
+            assertAll(
+                    () -> assertEquals(cliente.getNome(), resultado.getCliente().getNome()),
+                    () -> assertEquals(cliente.getEndereco(), resultado.getEndereco()),
+                    () -> assertEquals(valorFinal, resultado.getValorTotal()),
+                    () -> assertTrue(resultado.getTamanho().isMedia()),
+                    () -> assertTrue(resultado.getTipo().isInteira()),
+                    () -> assertTrue(resultado.getTipoPagamento().isPix())
+            );
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("Teste quando adicionamos um pagamento com sucesso (Credito)")
+        void adicionaPagamentoCredito() {
+            Long pedidoId = pedido.getId();
+            Double valorFinal = 40.0;
+
+            ConfirmarPagamentoDTO confirmarBody = ConfirmarPagamentoDTO.builder()
+                    .clienteId(cliente.getId())
+                    .codigoAcesso(cliente.getCodigoAcesso())
+                    .tipoPagamento(TipoPagamento.CREDITO)
+                    .build();
+
+            PedidoReadResponseDTO resultado = driverConfirmar.confirmarPagamento(pedidoId, confirmarBody);
+            assertAll(
+                    () -> assertEquals(cliente.getNome(), resultado.getCliente().getNome()),
+                    () -> assertEquals(cliente.getEndereco(), resultado.getEndereco()),
+                    () -> assertEquals(valorFinal, resultado.getValorTotal()),
+                    () -> assertTrue(resultado.getTamanho().isMedia()),
+                    () -> assertTrue(resultado.getTipo().isInteira()),
+                    () -> assertTrue(resultado.getTipoPagamento().isCredito())
+            );
+        }
     }
 
     @Nested

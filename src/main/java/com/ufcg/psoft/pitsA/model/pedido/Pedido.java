@@ -53,6 +53,6 @@ public class Pedido {
     private CalculadoraPedido calculadoraPedido = new CalculadoraPedidoImpl();
 
     public double calculaValorTotal() {
-        return calculadoraPedido.calculaTotal(sabores, tipo, tamanho);
+        return calculadoraPedido.calculaTotal(sabores, tipo, tamanho, tipoPagamento);
     }
 }
