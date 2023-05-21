@@ -178,7 +178,6 @@ public class PedidoV1ControllerTests {
         @Test
         @DisplayName("Quando listamos todos os pedidos de um cliente")
         void quandoListarTodosPedidos() throws Exception {
-
             pedidoRepository.save(Pedido.builder()
                     .estabelecimentoPedido(estabelecimento)
                     .cliente(cliente)
@@ -190,7 +189,7 @@ public class PedidoV1ControllerTests {
             );
 
             PedidoReadBodyDTO readBody = PedidoReadBodyDTO.builder()
-                    .pedidoId(pedido.getId())
+                    .pedidoId(null)
                     .codigoAcesso(cliente.getCodigoAcesso())
                     .build();
 
@@ -318,7 +317,7 @@ public class PedidoV1ControllerTests {
             pedido = Pedido.builder()
                     .estabelecimentoPedido(estabelecimento)
                     .cliente(cliente)
-                    .endereco("")
+                    .endereco("Ruas avela, 1234")
                     .sabores(new ArrayList<>())
                     .tipo(PizzaPedidoTipo.INTEIRA)
                     .tamanho(PizzaPedidoTamanho.GRANDE)
@@ -328,16 +327,17 @@ public class PedidoV1ControllerTests {
             pedido = pedidoRepository.save(pedido);
         }
 
-        // TODO - Finalizar esse teste
         @Test
         @DisplayName("Quando listamos os pedidos de um estabelecimento")
         void quandoListarPedidosEstabelecimento() throws Exception {
+            Double valorTotal = 35.0;
+
             PedidoReadBodyDTO readBody = PedidoReadBodyDTO.builder()
                     .pedidoId(pedido.getId())
-                    .codigoAcesso(cliente.getCodigoAcesso())
+                    .codigoAcesso(estabelecimento.getCodigoAcesso())
                     .build();
 
-            String responseJsonString = driver.perform(get(URI_CLIENTES + "/estabelecimento/" + cliente.getId())
+            String responseJsonString = driver.perform(get(URI_CLIENTES + "/estabelecimento/" + estabelecimento.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(readBody)))
                     .andExpect(status().isOk())
@@ -346,6 +346,14 @@ public class PedidoV1ControllerTests {
 
             List<PedidoReadResponseDTO> resultadoList = objectMapper.readValue(responseJsonString, new TypeReference<>() {});
             PedidoReadResponseDTO resultado = resultadoList.get(0);
+
+            assertAll(
+                    () -> assertEquals("Ruas avela, 1234", resultado.getEndereco()),
+                    () -> assertTrue(resultado.getTamanho().isGrande()),
+                    () -> assertTrue(resultado.getTipo().isInteira()),
+                    () -> assertEquals(1, resultado.getSabores().size()),
+                    () -> assertEquals(valorTotal, resultado.getValorTotal())
+            );
         }
     }
 }
