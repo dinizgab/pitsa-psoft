@@ -2,7 +2,7 @@ package com.ufcg.psoft.pitsA.service.estabelecimento;
 
 import com.ufcg.psoft.pitsA.dto.entregador.EntregadorReadDTO;
 import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoAprovaEntregadorDTO;
-import com.ufcg.psoft.pitsA.dto.estabelecimento.StatusAprovacao;
+import com.ufcg.psoft.pitsA.dto.estabelecimento.StatusAprovacaoEntregador;
 import com.ufcg.psoft.pitsA.exception.entregador.EntregadorNaoEstaPendenteException;
 import com.ufcg.psoft.pitsA.exception.estabelecimento.EstabelecimentoNaoExisteException;
 import com.ufcg.psoft.pitsA.model.Entregador;
@@ -25,7 +25,7 @@ public class EstabelecimentoAprovaServiceImpl implements EstabelecimentoAprovaSe
     public EntregadorReadDTO aprova(Long estabelecimentoId, EstabelecimentoAprovaEntregadorDTO estabelecimentoDTO) {
         Long entregadorId = estabelecimentoDTO.getEntregadorId();
         String codigoAcesso = estabelecimentoDTO.getCodigoAcesso();
-        StatusAprovacao aprovacao = estabelecimentoDTO.getAprovar();
+        StatusAprovacaoEntregador aprovacao = estabelecimentoDTO.getAprovar();
 
         Estabelecimento estabelecimento = estabelecimentoRepository.findById(estabelecimentoId).orElseThrow(EstabelecimentoNaoExisteException::new);
         autenticaCodigoAcessoService.autenticar(estabelecimento.getCodigoAcesso(), codigoAcesso);

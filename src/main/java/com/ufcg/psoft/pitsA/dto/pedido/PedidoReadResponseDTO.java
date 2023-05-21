@@ -1,8 +1,6 @@
 package com.ufcg.psoft.pitsA.dto.pedido;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ufcg.psoft.pitsA.dto.cliente.ClienteReadDTO;
-import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTamanho;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTipo;
 import com.ufcg.psoft.pitsA.model.pedido.TipoPagamento;

@@ -1,6 +1,6 @@
 package com.ufcg.psoft.pitsA.dto.estabelecimento;
 
-public enum StatusAprovacao {
+public enum StatusAprovacaoEntregador {
     APROVADO,
     REJEITADO;
 

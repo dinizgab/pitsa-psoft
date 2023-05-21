@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -232,7 +233,7 @@ public class EstabelecimentoV1ControllerTests {
             estabelecimento = estabelecimentoRepository.save(
                     Estabelecimento.builder()
                             .codigoAcesso("111111")
-                            .entregadoresPendentes(new ArrayList<>(Arrays.asList(entregador)))
+                            .entregadoresPendentes(new ArrayList<>(Collections.singletonList(entregador)))
                             .build()
             );
 
@@ -252,7 +253,7 @@ public class EstabelecimentoV1ControllerTests {
         void quandoAprovamosUmEntregadorValido() throws Exception {
             EstabelecimentoAprovaEntregadorDTO aprovaBodyValido = EstabelecimentoAprovaEntregadorDTO.builder()
                     .codigoAcesso("111111")
-                    .aprovar(StatusAprovacao.APROVADO)
+                    .aprovar(StatusAprovacaoEntregador.APROVADO)
                     .entregadorId(entregadorId)
                     .build();
 
@@ -282,7 +283,7 @@ public class EstabelecimentoV1ControllerTests {
         void quandoAprovamosUmEntregadorCodigoInvalido() throws Exception {
             EstabelecimentoAprovaEntregadorDTO aprovaBodyInvalido = EstabelecimentoAprovaEntregadorDTO.builder()
                     .entregadorId(entregadorId)
-                    .aprovar(StatusAprovacao.REJEITADO)
+                    .aprovar(StatusAprovacaoEntregador.REJEITADO)
                     .codigoAcesso("222222")
                     .build();
 
@@ -305,7 +306,7 @@ public class EstabelecimentoV1ControllerTests {
         void quandoRejeitamosUmEntregador() throws Exception {
             EstabelecimentoAprovaEntregadorDTO aprovaBodyValido = EstabelecimentoAprovaEntregadorDTO.builder()
                     .codigoAcesso("111111")
-                    .aprovar(StatusAprovacao.REJEITADO)
+                    .aprovar(StatusAprovacaoEntregador.REJEITADO)
                     .entregadorId(entregadorId)
                     .build();
 
@@ -335,7 +336,7 @@ public class EstabelecimentoV1ControllerTests {
         void quandoAprovamosUmEntregadorNaoPendente() throws Exception {
             EstabelecimentoAprovaEntregadorDTO aprovaBodyInvalido = EstabelecimentoAprovaEntregadorDTO.builder()
                     .entregadorId(null)
-                    .aprovar(StatusAprovacao.REJEITADO)
+                    .aprovar(StatusAprovacaoEntregador.REJEITADO)
                     .codigoAcesso("111111")
                     .build();
 

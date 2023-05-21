@@ -108,13 +108,6 @@ public class PedidoV1ControllerTests {
                             .endereco("Rua das Laranjeiras, 213")
                     .build();
 
-            pedidoPostComEnderecoDTO.getSabores().add(SaborPedidoDTO.builder()
-                            .nome("Calabresa")
-                            .tipo(TipoSabor.SALGADO)
-                            .precoMedio(30.0)
-                            .precoGrande(50.0)
-                    .build());
-
             pedidoPostSemEnderecoDTO = PedidoPostDTO.builder()
                     .codigoAcesso(cliente.getCodigoAcesso())
                             .idEstabelecimento(estabelecimento.getId())
@@ -122,6 +115,14 @@ public class PedidoV1ControllerTests {
                             .tamanho(PizzaPedidoTamanho.GRANDE)
                             .endereco("")
                     .build();
+
+            // Adicionando os sabores nos pedidos
+            pedidoPostComEnderecoDTO.getSabores().add(SaborPedidoDTO.builder()
+                            .nome("Calabresa")
+                            .tipo(TipoSabor.SALGADO)
+                            .precoMedio(30.0)
+                            .precoGrande(50.0)
+                    .build());
 
             pedidoPostSemEnderecoDTO.getSabores().add(SaborPedidoDTO.builder()
                             .nome("Calabresa")

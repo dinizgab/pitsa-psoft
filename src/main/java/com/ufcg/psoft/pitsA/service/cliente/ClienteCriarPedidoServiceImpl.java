@@ -5,14 +5,12 @@ import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoValidaDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.SaborPedidoDTO;
 import com.ufcg.psoft.pitsA.exception.cliente.ClienteNaoExisteException;
-import com.ufcg.psoft.pitsA.exception.estabelecimento.EstabelecimentoNaoExisteException;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTamanho;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTipo;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
-import com.ufcg.psoft.pitsA.repository.PedidoRepository;
 import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoAdicionaPedidoService;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoListarService;
@@ -21,7 +19,7 @@ import com.ufcg.psoft.pitsA.service.pedido.ValidaPedidoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
+
 
 import java.util.List;
 

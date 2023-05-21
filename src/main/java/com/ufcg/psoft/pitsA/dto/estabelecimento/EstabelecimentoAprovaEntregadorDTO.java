@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class EstabelecimentoAprovaEntregadorDTO {
     private Long entregadorId;
     private String codigoAcesso;
-    private StatusAprovacao aprovar;
+    private StatusAprovacaoEntregador aprovar;
 }

@@ -3,7 +3,7 @@ package com.ufcg.psoft.pitsA.service.estabelecimento;
 import com.ufcg.psoft.pitsA.dto.entregador.EntregadorPatchEstabelecimentoDTO;
 import com.ufcg.psoft.pitsA.dto.entregador.EntregadorReadDTO;
 import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoAprovaEntregadorDTO;
-import com.ufcg.psoft.pitsA.dto.estabelecimento.StatusAprovacao;
+import com.ufcg.psoft.pitsA.dto.estabelecimento.StatusAprovacaoEntregador;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.exception.entregador.EntregadorNaoEstaPendenteException;
 import com.ufcg.psoft.pitsA.model.Entregador;
@@ -83,7 +83,7 @@ public class EstabelecimentoAprovaServiceTest {
         EstabelecimentoAprovaEntregadorDTO estabelecimentoDTO = EstabelecimentoAprovaEntregadorDTO.builder()
                 .entregadorId(entregadorId)
                 .codigoAcesso("111111")
-                .aprovar(StatusAprovacao.APROVADO)
+                .aprovar(StatusAprovacaoEntregador.APROVADO)
                 .build();
 
         EntregadorReadDTO resultado = driver.aprova(estabelecimentoId, estabelecimentoDTO);
@@ -107,7 +107,7 @@ public class EstabelecimentoAprovaServiceTest {
         EstabelecimentoAprovaEntregadorDTO estabelecimentoDTO = EstabelecimentoAprovaEntregadorDTO.builder()
                 .entregadorId(entregadorId)
                 .codigoAcesso("111111")
-                .aprovar(StatusAprovacao.REJEITADO)
+                .aprovar(StatusAprovacaoEntregador.REJEITADO)
                 .build();
 
         EntregadorReadDTO resultado = driver.aprova(estabelecimentoId, estabelecimentoDTO);
@@ -132,7 +132,7 @@ public class EstabelecimentoAprovaServiceTest {
 
         EstabelecimentoAprovaEntregadorDTO estabelecimentoDTO = EstabelecimentoAprovaEntregadorDTO.builder()
                 .entregadorId(entregadorId)
-                .aprovar(StatusAprovacao.APROVADO)
+                .aprovar(StatusAprovacaoEntregador.APROVADO)
                 .codigoAcesso("222222")
                 .build();
 
@@ -145,7 +145,7 @@ public class EstabelecimentoAprovaServiceTest {
     void testaEntregadorNaoPresente() {
         EstabelecimentoAprovaEntregadorDTO estabelecimentoDTO = EstabelecimentoAprovaEntregadorDTO.builder()
                 .entregadorId(null)
-                .aprovar(StatusAprovacao.APROVADO)
+                .aprovar(StatusAprovacaoEntregador.APROVADO)
                 .codigoAcesso("111111")
                 .build();
 
