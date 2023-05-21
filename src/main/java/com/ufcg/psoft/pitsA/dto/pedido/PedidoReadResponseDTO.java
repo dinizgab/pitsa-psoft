@@ -1,5 +1,6 @@
 package com.ufcg.psoft.pitsA.dto.pedido;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ufcg.psoft.pitsA.dto.cliente.ClienteReadDTO;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTamanho;
@@ -26,8 +27,6 @@ public class PedidoReadResponseDTO {
     private PizzaPedidoTipo tipo;
 
     private TipoPagamento tipoPagamento;
-
-    private Estabelecimento estabelecimento;
 
     private List<SaborPedidoDTO> sabores;
 

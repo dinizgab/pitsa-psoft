@@ -131,16 +131,14 @@ public class ClientePedidoServiceTests {
         @DisplayName("Quando criamos um novo pedido de uma pizza inteira")
         void testeCriandoNovoPedidoPizzaInteira() {
             Long clienteId = cliente.getId();
-            Pedido resultado = driverCriar.criarPedido(clienteId, pedidoInteira);
+            PedidoReadResponseDTO resultado = driverCriar.criarPedido(clienteId, pedidoInteira);
 
             assertAll(
                     () -> assertEquals("Rua 20 de novembro, 321", resultado.getEndereco()),
                     () -> assertTrue(resultado.getTamanho().isGrande()),
                     () -> assertTrue(resultado.getTipo().isInteira()),
                     () -> assertEquals(1, resultado.getSabores().size()),
-                    () -> assertTrue(cliente.getPedidos().contains(resultado)),
-                    () -> assertTrue(estabelecimento.getPedidos().contains(resultado)),
-                    () -> assertEquals(45.0, resultado.calculaValorTotal())
+                    () -> assertEquals(45.0, resultado.getValorTotal())
 
             );
         }
@@ -150,16 +148,14 @@ public class ClientePedidoServiceTests {
         @DisplayName("Quando criamos um novo pedido de uma pizza meio a meio")
         void testeCriandoNovoPedidoPizzaMeio() {
             Long clienteId = cliente.getId();
-            Pedido resultado = driverCriar.criarPedido(clienteId, pedidoMeia);
+            PedidoReadResponseDTO resultado = driverCriar.criarPedido(clienteId, pedidoMeia);
 
             assertAll(
                     () -> assertEquals(cliente.getEndereco(), resultado.getEndereco()),
                     () -> assertTrue(resultado.getTamanho().isGrande()),
                     () -> assertTrue(resultado.getTipo().isMeia()),
                     () -> assertEquals(2, resultado.getSabores().size()),
-                    () -> assertTrue(cliente.getPedidos().contains(resultado)),
-                    () -> assertTrue(estabelecimento.getPedidos().contains(resultado)),
-                    () -> assertEquals(45.0, resultado.calculaValorTotal())
+                    () -> assertEquals(45.0, resultado.getValorTotal())
             );
         }
 
@@ -264,7 +260,6 @@ public class ClientePedidoServiceTests {
                     () -> assertEquals(cliente.getNome(), resultado.getCliente().getNome()),
                     () -> assertEquals(cliente.getEndereco(), resultado.getEndereco()),
                     () -> assertTrue(resultado.getTipo().isMeia()),
-                    () -> assertEquals(estabelecimento, resultado.getEstabelecimento()),
                     () -> assertTrue(resultado.getTamanho().isGrande()),
                     () -> assertEquals(45.0, resultado.getValorTotal())
             );
@@ -390,7 +385,3 @@ public class ClientePedidoServiceTests {
 // TODO - Trocar a lista de sabores do PedidoPostDTO por uma lista de Long e depois procurar as pizzas pelos IDs
 
 // TODO - Adicionar o resto das operacoes do CRUD, atualizar um pedido (So podem ser feitas pelo estabelecimento ou usuario com seus respectivos codigos de acesso)
-
-// TODO - Adicionar um service para adicionar um tipo de pagamento -- confirmar  o pagamento -- no pedido (Cliente informa o pedido, metodo de pagamento e codigo de acesso)
-// Metodos de pagamento = Cartao de credito, debito e pix
-

@@ -1,6 +1,7 @@
 package com.ufcg.psoft.pitsA.service.cliente;
 
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoPostDTO;
+import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoValidaDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.SaborPedidoDTO;
 import com.ufcg.psoft.pitsA.exception.cliente.ClienteNaoExisteException;
@@ -17,8 +18,10 @@ import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoAdicionaPedid
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoListarService;
 import com.ufcg.psoft.pitsA.service.pedido.PedidoCriarService;
 import com.ufcg.psoft.pitsA.service.pedido.ValidaPedidoService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.List;
 
@@ -36,9 +39,11 @@ public class ClienteCriarPedidoServiceImpl implements ClienteCriarPedidoService 
     ValidaPedidoService validaPedidoService;
     @Autowired
     AutenticaCodigoAcessoService autenticador;
+    @Autowired
+    ModelMapper modelMapper;
 
     @Override
-    public Pedido criarPedido(Long id, PedidoPostDTO postBody) {
+    public PedidoReadResponseDTO criarPedido(Long id, PedidoPostDTO postBody) {
         Long estabelecimentoId = postBody.getIdEstabelecimento();
         String codigoAcesso = postBody.getCodigoAcesso();
         String endereco = postBody.getEndereco();
@@ -78,6 +83,6 @@ public class ClienteCriarPedidoServiceImpl implements ClienteCriarPedidoService 
         clienteRepository.save(cliente);
 
         estabelecimentoAdicionaPedidoService.adicionaPedido(estabelecimento, pedidoSalvo);
-        return pedidoSalvo;
+        return modelMapper.map(pedidoSalvo, PedidoReadResponseDTO.class);
     }
 }

@@ -99,7 +99,6 @@ public class EstabelecimentoV1ControllerTests {
             assertAll(
                     () -> assertEquals(3, resultado.size())
             );
-
         }
 
         @Test

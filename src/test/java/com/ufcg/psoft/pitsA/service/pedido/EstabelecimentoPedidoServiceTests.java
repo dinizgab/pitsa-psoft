@@ -156,8 +156,7 @@ public class EstabelecimentoPedidoServiceTests {
                 () -> assertEquals("Rua 13 de maio, 123", resultado.getEndereco()),
                 () -> assertTrue(resultado.getTipo().isMeia()),
                 () -> assertTrue(resultado.getTamanho().isGrande()),
-                () -> assertEquals(45.0, resultado.getValorTotal()),
-                () -> assertEquals(estabelecimento, resultado.getEstabelecimento())
+                () -> assertEquals(45.0, resultado.getValorTotal())
         );
     }
 }
