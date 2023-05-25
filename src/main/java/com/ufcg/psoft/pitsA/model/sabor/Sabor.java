@@ -7,7 +7,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -40,9 +42,24 @@ public class Sabor {
     @ManyToOne(fetch = FetchType.LAZY)
     Estabelecimento estabelecimento;
 
-    @ManyToMany(mappedBy = "interessesSabores", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @ToString.Exclude
+    // TODO - Arrumar um jeito de salvar a interface Interessado
+    @OneToMany
     @Builder.Default
-    @JsonIgnore
-    private List<Cliente> interesses = new ArrayList<>();
+    private Set<Cliente> interessados = new HashSet<>();
+
+    public void adicionaInteressado(Cliente interessado) {
+        interessados.add(interessado);
+    }
+
+    public void removeInteressado(Cliente interessado) {
+        interessados.remove(interessado);
+    }
+
+    public void notifica() {
+        this.interessados.forEach(interessado -> interessado.recebeNotificacao());
+    }
+
+    public void alteraDisponibilidade() {
+        this.disponivel = !this.disponivel;
+    }
 }

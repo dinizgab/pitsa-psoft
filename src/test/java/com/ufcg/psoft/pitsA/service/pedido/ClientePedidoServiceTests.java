@@ -19,7 +19,6 @@ import com.ufcg.psoft.pitsA.service.cliente.ClienteListarPedidoService;
 import com.ufcg.psoft.pitsA.service.cliente.ClienteRemoverPedidoService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

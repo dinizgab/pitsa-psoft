@@ -74,8 +74,8 @@ public class ClienteInteresseSaborServiceTest {
 
     @AfterEach
     void tearDown() {
-        clienteRepository.deleteAll();
         estabelecimentoRepository.deleteAll();
+        clienteRepository.deleteAll();
     }
 
     @Test
@@ -93,7 +93,7 @@ public class ClienteInteresseSaborServiceTest {
 
         ClienteReadDTO resultado = driver.demonstraInteresse(clienteId, clienteInteresseDTO);
 
-        assertTrue(resultado.getInteressesSabores().contains(sabor));
+        assertTrue(sabor.getInteressados().contains(cliente));
     }
 
     @Test

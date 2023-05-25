@@ -19,15 +19,9 @@ public class SaborPatchDisponibilidadeImpl implements SaborPatchDisponibilidade 
     public SaborReadDTO alteraDisponibilidade(Long saborId) {
         Sabor sabor = saborRepository.findById(saborId).orElseThrow(SaborNaoExistenteException::new);
 
-        sabor.setDisponivel(!sabor.isDisponivel());
+        sabor.alteraDisponibilidade();
         if (sabor.isDisponivel()) {
-            sabor.getInteresses()
-                    .forEach(cliente -> {
-                        System.out.println("\nO sabor que voce demonstrou interesse esta disponivel novamente:");
-                        System.out.println(cliente);
-                        System.out.println();
-                    });
-            sabor.getInteresses().clear();
+            sabor.notifica();
         }
 
         return modelMapper.map(saborRepository.save(sabor), SaborReadDTO.class);

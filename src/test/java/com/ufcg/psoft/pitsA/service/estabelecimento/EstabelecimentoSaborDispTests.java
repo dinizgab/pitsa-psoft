@@ -5,6 +5,7 @@ import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.sabor.Interessado;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
@@ -19,7 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -61,7 +64,7 @@ public class EstabelecimentoSaborDispTests {
                 .codigoAcesso("123456")
                 .build();
 
-        List<Cliente> interessados = new ArrayList<>();
+        Set<Cliente> interessados = new HashSet<>();
         interessados.add(cliente);
 
         saborIndisponivel = saborRepository.save(Sabor.builder()
@@ -69,7 +72,7 @@ public class EstabelecimentoSaborDispTests {
                 .precoGrande(30.0)
                 .precoMedio(15.0)
                 .estabelecimento(estabelecimento)
-                .interesses(interessados)
+                .interessados(interessados)
                 .tipo(TipoSabor.SALGADO)
                 .disponivel(false)
                 .build()
