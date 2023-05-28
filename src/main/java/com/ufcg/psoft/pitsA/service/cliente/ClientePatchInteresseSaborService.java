@@ -1,9 +1,9 @@
 package com.ufcg.psoft.pitsA.service.cliente;
 
 import com.ufcg.psoft.pitsA.dto.cliente.ClienteInteresseDTO;
-import com.ufcg.psoft.pitsA.dto.cliente.ClienteReadDTO;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 
 @FunctionalInterface
 public interface ClientePatchInteresseSaborService {
-    ClienteReadDTO demonstraInteresse(Long clienteId, ClienteInteresseDTO clienteInteresseDTO);
+    SaborReadDTO demonstraInteresse(Long clienteId, ClienteInteresseDTO clienteInteresseDTO);
 }

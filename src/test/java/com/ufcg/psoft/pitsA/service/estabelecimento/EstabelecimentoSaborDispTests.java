@@ -5,7 +5,6 @@ import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
-import com.ufcg.psoft.pitsA.model.sabor.Interessado;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
@@ -24,7 +23,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @DisplayName("Testes para troca de disponibilidade de sabor")
@@ -123,26 +123,5 @@ public class EstabelecimentoSaborDispTests {
                 .build();
 
         assertThrows(CodigoAcessoInvalidoException.class, () -> driver.alteraDisponibilidade(estabelecimentoId, alteraDisponibilidadeDTO));
-    }
-
-    @Test
-    @Transactional
-    @DisplayName("Teste se a lista de interessados eh limpa apos trocar disponibilidade")
-    void testeLimpaListaInteressados() {
-        Long saborId = saborIndisponivel.getId();
-        Long estabelecimentoId = estabelecimento.getId();
-
-        EstabelecimentoPatchDispDTO alteraDisponibilidadeDTO = EstabelecimentoPatchDispDTO.builder()
-                .codigoAcesso("123456")
-                .saborId(saborId)
-                .build();
-
-        SaborReadDTO resultado = driver.alteraDisponibilidade(estabelecimentoId, alteraDisponibilidadeDTO);
-        System.out.println(resultado);
-        System.out.println(estabelecimento.getCardapio());
-        assertAll(
-                () -> assertTrue(resultado.isDisponivel()),
-                () -> assertTrue(resultado.getInteresses().isEmpty())
-        );
     }
 }

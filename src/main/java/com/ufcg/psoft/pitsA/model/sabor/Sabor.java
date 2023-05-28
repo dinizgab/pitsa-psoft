@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -55,8 +56,9 @@ public class Sabor {
         interessados.remove(interessado);
     }
 
+
     public void notifica() {
-        this.interessados.forEach(interessado -> interessado.recebeNotificacao());
+        this.interessados.forEach(Cliente::recebeNotificacao);
     }
 
     public void alteraDisponibilidade() {

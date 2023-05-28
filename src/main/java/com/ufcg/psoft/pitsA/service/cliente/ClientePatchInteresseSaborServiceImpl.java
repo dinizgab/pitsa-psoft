@@ -1,7 +1,7 @@
 package com.ufcg.psoft.pitsA.service.cliente;
 
 import com.ufcg.psoft.pitsA.dto.cliente.ClienteInteresseDTO;
-import com.ufcg.psoft.pitsA.dto.cliente.ClienteReadDTO;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.exception.cliente.ClienteNaoExisteException;
 import com.ufcg.psoft.pitsA.exception.sabor.SaborEstaDisponivelException;
 import com.ufcg.psoft.pitsA.model.Cliente;
@@ -29,7 +29,7 @@ public class ClientePatchInteresseSaborServiceImpl implements ClientePatchIntere
     ModelMapper modelMapper;
 
     @Override
-    public ClienteReadDTO demonstraInteresse(Long clienteId, ClienteInteresseDTO clienteInteresseDTO) {
+    public SaborReadDTO demonstraInteresse(Long clienteId, ClienteInteresseDTO clienteInteresseDTO) {
         Long saborId = clienteInteresseDTO.getSaborId();
         Long estabelecimentoId = clienteInteresseDTO.getEstabelecimentoId();
 
@@ -42,6 +42,6 @@ public class ClientePatchInteresseSaborServiceImpl implements ClientePatchIntere
         sabor.adicionaInteressado(cliente);
         estabelecimentoAtualizaSaborService.atualizaSabor(estabelecimentoId, sabor);
 
-        return modelMapper.map(clienteRepository.save(cliente), ClienteReadDTO.class);
+        return modelMapper.map(sabor, SaborReadDTO.class);
     }
 }

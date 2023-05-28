@@ -2,6 +2,7 @@ package com.ufcg.psoft.pitsA.service.cliente;
 
 import com.ufcg.psoft.pitsA.dto.cliente.ClienteInteresseDTO;
 import com.ufcg.psoft.pitsA.dto.cliente.ClienteReadDTO;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.exception.sabor.SaborEstaDisponivelException;
 import com.ufcg.psoft.pitsA.model.Cliente;
@@ -22,8 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @DisplayName("Testes do service do cliente demonstrar interesse a um sabor")
@@ -91,9 +91,13 @@ public class ClienteInteresseSaborServiceTest {
                 .estabelecimentoId(estabelecimentoId)
                 .build();
 
-        ClienteReadDTO resultado = driver.demonstraInteresse(clienteId, clienteInteresseDTO);
+        SaborReadDTO resultado = driver.demonstraInteresse(clienteId, clienteInteresseDTO);
 
-        assertTrue(sabor.getInteressados().contains(cliente));
+        ClienteReadDTO resultadoCliente = resultado.getInteressados().get(0);
+        assertAll(
+                () -> assertEquals(resultadoCliente.getEndereco(), cliente.getEndereco()),
+                () -> assertEquals(resultadoCliente.getNome(), cliente.getNome())
+        );
     }
 
     @Test

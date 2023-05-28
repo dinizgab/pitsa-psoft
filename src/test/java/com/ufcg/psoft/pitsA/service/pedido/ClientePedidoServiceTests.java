@@ -39,6 +39,8 @@ public class ClientePedidoServiceTests {
     EstabelecimentoRepository estabelecimentoRepository;
     @Autowired
     ClienteRepository clienteRepository;
+    @Autowired
+    ClienteCriarPedidoService driverCriar;
     Cliente cliente;
     Estabelecimento estabelecimento;
     PedidoPostDTO pedidoInteira;
@@ -116,11 +118,7 @@ public class ClientePedidoServiceTests {
         estabelecimentoRepository.deleteAll();
     }
 
-    @Nested
-    @DisplayName("Testes do service de criacao de pedidos")
-    class CriarServiceTests {
-        @Autowired
-        ClienteCriarPedidoService driverCriar;
+
 
         @Test
         @Transactional
@@ -170,7 +168,6 @@ public class ClientePedidoServiceTests {
 
             assertThrows(TamanhoPedidoInvalidosException.class, () -> driverCriar.criarPedido(clienteId, pedidoInvalido));
         }
-    }
 
     @Nested
     @DisplayName("Testes do service listar pedidos")

@@ -28,5 +28,5 @@ public class SaborReadDTO {
 
     private Estabelecimento estabelecimento;
 
-    private List<ClienteReadDTO> interesses;
+    private List<ClienteReadDTO> interessados;
 }

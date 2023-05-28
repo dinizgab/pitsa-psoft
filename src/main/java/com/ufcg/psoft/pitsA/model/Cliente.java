@@ -2,7 +2,6 @@ package com.ufcg.psoft.pitsA.model;
 
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.model.sabor.Interessado;
-import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

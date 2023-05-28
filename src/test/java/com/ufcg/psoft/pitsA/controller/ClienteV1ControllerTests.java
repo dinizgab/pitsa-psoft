@@ -382,15 +382,13 @@ public class ClienteV1ControllerTests {
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();
 
-            ClienteReadDTO resultado = objectMapper.readValue(responseJsonString,ClienteReadDTO.class);
-            Sabor resultadoInteresse = resultado.getInteressesSabores().get(0);
+            SaborReadDTO resultado = objectMapper.readValue(responseJsonString,SaborReadDTO.class);
 
             assertAll(
-                    () -> assertEquals(cliente.getNome(), resultado.getNome()),
-                    () -> assertEquals(cliente.getEndereco(), resultado.getEndereco()),
-                    () -> assertEquals(sabor.getNome(), resultadoInteresse.getNome()),
-                    () -> assertEquals(sabor.getPrecoMedio(), resultadoInteresse.getPrecoMedio()),
-                    () -> assertEquals(sabor.getPrecoGrande(), resultadoInteresse.getPrecoGrande())
+                    () -> assertEquals(sabor.getNome(), resultado.getNome()),
+                    () -> assertEquals(sabor.getTipo(), resultado.getTipo()),
+                    () -> assertEquals(sabor.getPrecoMedio(), resultado.getPrecoMedio()),
+                    () -> assertEquals(sabor.getPrecoGrande(), resultado.getPrecoGrande())
             );
         }
     }
