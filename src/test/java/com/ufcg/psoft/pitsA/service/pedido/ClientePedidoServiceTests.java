@@ -504,6 +504,5 @@ public class ClientePedidoServiceTests {
 // SaborPedido
 // Nome, PrecoGrande, PrecoMedia, Tipo (SALGADA ou DOCE)
 
-// TODO - Adicionar a possibilidade de fazer um pedido com varias pizzas
+// TODO - Adicionar a possibilidade de fazer um pedido com varias pizzas -- Padrao Composite
 
-// TODO - Adicionar o resto das operacoes do CRUD, atualizar um pedido (So podem ser feitas pelo estabelecimento ou usuario com seus respectivos codigos de acesso)

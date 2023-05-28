@@ -382,7 +382,7 @@ public class ClienteV1ControllerTests {
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();
 
-            SaborReadDTO resultado = objectMapper.readValue(responseJsonString,SaborReadDTO.class);
+            SaborReadDTO resultado = objectMapper.readValue(responseJsonString, SaborReadDTO.class);
 
             assertAll(
                     () -> assertEquals(sabor.getNome(), resultado.getNome()),

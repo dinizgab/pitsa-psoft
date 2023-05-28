@@ -43,22 +43,21 @@ public class Sabor {
     @ManyToOne(fetch = FetchType.LAZY)
     Estabelecimento estabelecimento;
 
-    // TODO - Arrumar um jeito de salvar a interface Interessado
-    @OneToMany
+    @OneToMany(targetEntity = Cliente.class)
     @Builder.Default
-    private Set<Cliente> interessados = new HashSet<>();
+    private Set<Interessado> interessados = new HashSet<>();
 
-    public void adicionaInteressado(Cliente interessado) {
+    public void adicionaInteressado(Interessado interessado) {
         interessados.add(interessado);
     }
 
-    public void removeInteressado(Cliente interessado) {
+    public void removeInteressado(Interessado interessado) {
         interessados.remove(interessado);
     }
 
 
     public void notifica() {
-        this.interessados.forEach(Cliente::recebeNotificacao);
+        this.interessados.forEach(Interessado::recebeNotificacao);
     }
 
     public void alteraDisponibilidade() {
