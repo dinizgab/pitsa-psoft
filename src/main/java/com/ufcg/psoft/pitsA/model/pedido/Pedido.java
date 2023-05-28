@@ -42,8 +42,6 @@ public class Pedido {
     @ManyToOne(optional = false)
     private Estabelecimento estabelecimentoPedido;
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @OneToMany()
     private List<Sabor> sabores;
 

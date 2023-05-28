@@ -1,6 +1,7 @@
 package com.ufcg.psoft.pitsA.service.pedido;
 
 import com.ufcg.psoft.pitsA.dto.pedido.*;
+import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.exception.pedido.TamanhoPedidoInvalidosException;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
@@ -14,9 +15,7 @@ import com.ufcg.psoft.pitsA.repository.ClienteRepository;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.pitsA.repository.PedidoRepository;
 import com.ufcg.psoft.pitsA.repository.SaborRepository;
-import com.ufcg.psoft.pitsA.service.cliente.ClienteCriarPedidoService;
-import com.ufcg.psoft.pitsA.service.cliente.ClienteListarPedidoService;
-import com.ufcg.psoft.pitsA.service.cliente.ClienteRemoverPedidoService;
+import com.ufcg.psoft.pitsA.service.cliente.*;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +38,6 @@ public class ClientePedidoServiceTests {
     EstabelecimentoRepository estabelecimentoRepository;
     @Autowired
     ClienteRepository clienteRepository;
-    @Autowired
-    ClienteCriarPedidoService driverCriar;
     Cliente cliente;
     Estabelecimento estabelecimento;
     PedidoPostDTO pedidoInteira;
@@ -119,55 +116,59 @@ public class ClientePedidoServiceTests {
     }
 
 
-
+    @Nested
+    @DisplayName("Testes dos services de Criar pedidos")
+    class CriarServiceTests {
+        @Autowired
+        ClienteCriarPedidoService driverCriar;
         @Test
         @Transactional
         @DisplayName("Quando criamos um novo pedido de uma pizza inteira")
-        void testeCriandoNovoPedidoPizzaInteira() {
-            Long clienteId = cliente.getId();
-            PedidoReadResponseDTO resultado = driverCriar.criarPedido(clienteId, pedidoInteira);
+        void testeCriandoNovoPedidoPizzaInteira () {
+        Long clienteId = cliente.getId();
+        PedidoReadResponseDTO resultado = driverCriar.criarPedido(clienteId, pedidoInteira);
 
-            assertAll(
-                    () -> assertEquals("Rua 20 de novembro, 321", resultado.getEndereco()),
-                    () -> assertTrue(resultado.getTamanho().isGrande()),
-                    () -> assertTrue(resultado.getTipo().isInteira()),
-                    () -> assertEquals(1, resultado.getSabores().size()),
-                    () -> assertEquals(45.0, resultado.getValorTotal())
-
-            );
-        }
+        assertAll(
+                () -> assertEquals("Rua 20 de novembro, 321", resultado.getEndereco()),
+                () -> assertTrue(resultado.getTamanho().isGrande()),
+                () -> assertTrue(resultado.getTipo().isInteira()),
+                () -> assertEquals(1, resultado.getSabores().size()),
+                () -> assertEquals(45.0, resultado.getValorTotal())
+        );
+    }
 
         @Test
         @Transactional
         @DisplayName("Quando criamos um novo pedido de uma pizza meio a meio")
-        void testeCriandoNovoPedidoPizzaMeio() {
-            Long clienteId = cliente.getId();
-            PedidoReadResponseDTO resultado = driverCriar.criarPedido(clienteId, pedidoMeia);
+        void testeCriandoNovoPedidoPizzaMeio () {
+        Long clienteId = cliente.getId();
+        PedidoReadResponseDTO resultado = driverCriar.criarPedido(clienteId, pedidoMeia);
 
-            assertAll(
-                    () -> assertEquals(cliente.getEndereco(), resultado.getEndereco()),
-                    () -> assertTrue(resultado.getTamanho().isGrande()),
-                    () -> assertTrue(resultado.getTipo().isMeia()),
-                    () -> assertEquals(2, resultado.getSabores().size()),
-                    () -> assertEquals(45.0, resultado.getValorTotal())
-            );
-        }
+        assertAll(
+                () -> assertEquals(cliente.getEndereco(), resultado.getEndereco()),
+                () -> assertTrue(resultado.getTamanho().isGrande()),
+                () -> assertTrue(resultado.getTipo().isMeia()),
+                () -> assertEquals(2, resultado.getSabores().size()),
+                () -> assertEquals(45.0, resultado.getValorTotal())
+        );
+    }
 
         @Test
         @Transactional
         @DisplayName("Quando criamos um novo pedido com tamanho e tipo invalido")
-        void testeNovoPedidoTamanhoInvalido() {
-            Long clienteId = cliente.getId();
-            PedidoPostDTO pedidoInvalido = PedidoPostDTO.builder()
-                    .codigoAcesso(cliente.getCodigoAcesso())
-                    .idEstabelecimento(estabelecimento.getId())
-                    .endereco("")
-                    .tamanho(PizzaPedidoTamanho.MEDIA)
-                    .tipo(PizzaPedidoTipo.MEIA)
-                    .build();
+        void testeNovoPedidoTamanhoInvalido () {
+        Long clienteId = cliente.getId();
+        PedidoPostDTO pedidoInvalido = PedidoPostDTO.builder()
+                .codigoAcesso(cliente.getCodigoAcesso())
+                .idEstabelecimento(estabelecimento.getId())
+                .endereco("")
+                .tamanho(PizzaPedidoTamanho.MEDIA)
+                .tipo(PizzaPedidoTipo.MEIA)
+                .build();
 
-            assertThrows(TamanhoPedidoInvalidosException.class, () -> driverCriar.criarPedido(clienteId, pedidoInvalido));
-        }
+        assertThrows(TamanhoPedidoInvalidosException.class, () -> driverCriar.criarPedido(clienteId, pedidoInvalido));
+    }
+    }
 
     @Nested
     @DisplayName("Testes do service listar pedidos")
@@ -422,6 +423,74 @@ public class ClientePedidoServiceTests {
 
             assertEquals(1, cliente.getPedidos().size());
             assertEquals(1, estabelecimento.getPedidos().size());
+        }
+    }
+
+    @Nested
+    @DisplayName("Testes do service de atualizar o pedido")
+    class AtualizarServiceTests {
+        @Autowired
+        ClienteAtualizarPedidoService driverAtualizar;
+        Pedido pedido;
+
+        @BeforeEach
+        void setUp() {
+            pedido = pedidoRepository.save(
+                    Pedido.builder()
+                            .endereco(cliente.getEndereco())
+                            .cliente(cliente)
+                            .estabelecimentoPedido(estabelecimento)
+                            .tamanho(PizzaPedidoTamanho.GRANDE)
+                            .tipo(PizzaPedidoTipo.MEIA)
+                            .sabores(new ArrayList<>())
+                            .build()
+            );
+
+            cliente.getPedidos().add(pedido);
+            clienteRepository.save(cliente);
+        }
+
+        @AfterEach
+        void tearDown() {
+            pedidoRepository.deleteAll();
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("Quando atualizamos um pedido com sucesso")
+        void testeAtualizandoUmPedido() {
+            PedidoPutDTO putDTO = PedidoPutDTO.builder()
+                    .pedidoId(pedido.getId())
+                    .endereco("ENDERECO DE TESTE")
+                    .tamanho(PizzaPedidoTamanho.MEDIA)
+                    .tipo(PizzaPedidoTipo.INTEIRA)
+                    .codigoAcesso(cliente.getCodigoAcesso())
+                    .build();
+
+            PedidoReadResponseDTO resultado = driverAtualizar.atualizarPedido(cliente.getId(), putDTO);
+
+            assertAll(
+                    () -> assertEquals(cliente.getEndereco(), resultado.getCliente().getEndereco()),
+                    () -> assertEquals(cliente.getNome(), resultado.getCliente().getNome()),
+                    () -> assertEquals(putDTO.getEndereco(), resultado.getEndereco()),
+                    () -> assertTrue(resultado.getTamanho().isMedia()),
+                    () -> assertTrue(resultado.getTipo().isInteira())
+            );
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("Quando atualizamos um pedido com codigo invalido")
+        void testeAtualizandoUmPedidoCodigoInvalido() {
+            PedidoPutDTO putDTO = PedidoPutDTO.builder()
+                    .pedidoId(pedido.getId())
+                    .endereco("ENDERECO DE TESTE")
+                    .tamanho(PizzaPedidoTamanho.MEDIA)
+                    .tipo(PizzaPedidoTipo.INTEIRA)
+                    .codigoAcesso("111111")
+                    .build();
+
+            assertThrows(CodigoAcessoInvalidoException.class, () -> driverAtualizar.atualizarPedido(cliente.getId(), putDTO));
         }
     }
 }

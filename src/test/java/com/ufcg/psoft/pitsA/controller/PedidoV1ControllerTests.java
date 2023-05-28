@@ -100,7 +100,7 @@ public class PedidoV1ControllerTests {
     @Nested
     @DisplayName("Testes dos endpoints de cliente com pedidos")
     class ClientePedidosEndpointsTests {
-        public final String URI_CLIENTES = "/v1/pedidos";
+        public final String URI_PEDIDOS = "/v1/pedidos";
         PedidoPostDTO pedidoPostComEnderecoDTO;
         PedidoPostDTO pedidoPostSemEnderecoDTO;
         @Autowired
@@ -157,7 +157,7 @@ public class PedidoV1ControllerTests {
                             .codigoAcesso(cliente.getCodigoAcesso())
                     .build();
 
-            String responseJsonString = driver.perform(get(URI_CLIENTES + "/cliente/" + cliente.getId())
+            String responseJsonString = driver.perform(get(URI_PEDIDOS + "/cliente/" + cliente.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(readBody)))
                     .andExpect(status().isOk())
@@ -193,7 +193,7 @@ public class PedidoV1ControllerTests {
                     .codigoAcesso(cliente.getCodigoAcesso())
                     .build();
 
-            String responseJsonString = driver.perform(get(URI_CLIENTES + "/cliente/" + cliente.getId())
+            String responseJsonString = driver.perform(get(URI_PEDIDOS + "/cliente/" + cliente.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(readBody)))
                     .andExpect(status().isOk())
@@ -208,7 +208,7 @@ public class PedidoV1ControllerTests {
         @DisplayName("Quando criamos um novo pedido com endereco")
         void quandoCriarUmPedidoEndereco() throws Exception {
             Double valorTotal = 50.0;
-            String responseJsonString = driver.perform(post(URI_CLIENTES + "/cliente/" + cliente.getId())
+            String responseJsonString = driver.perform(post(URI_PEDIDOS + "/cliente/" + cliente.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(pedidoPostComEnderecoDTO)))
                     .andExpect(status().isCreated())
@@ -229,7 +229,7 @@ public class PedidoV1ControllerTests {
         @DisplayName("Quando criamos um novo pedido sem endereco")
         void quandoCriarUmPedidoSemEndereco() throws Exception {
             Double valorTotal = 50.0;
-            String responseJsonString = driver.perform(post(URI_CLIENTES + "/cliente/" + cliente.getId())
+            String responseJsonString = driver.perform(post(URI_PEDIDOS + "/cliente/" + cliente.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(pedidoPostSemEnderecoDTO)))
                     .andExpect(status().isCreated())
@@ -256,7 +256,7 @@ public class PedidoV1ControllerTests {
                     .codigoAcesso(cliente.getCodigoAcesso())
                     .build();
 
-            String responseJsonString = driver.perform(delete(URI_CLIENTES + "/cliente/" + clienteId)
+            String responseJsonString = driver.perform(delete(URI_PEDIDOS + "/cliente/" + clienteId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(pedidoRemoverBody)))
                     .andExpect(status().isNoContent())
@@ -286,7 +286,7 @@ public class PedidoV1ControllerTests {
                             .build()
             );
 
-            String responseJsonString = driver.perform(patch(URI_CLIENTES + "/" + pedido.getId())
+            String responseJsonString = driver.perform(patch(URI_PEDIDOS + "/" + pedido.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(confirmarPagamentoDTO)))
                     .andExpect(status().isOk())
@@ -302,12 +302,42 @@ public class PedidoV1ControllerTests {
             );
 
         }
+
+        @Test
+        @DisplayName("Quando um cliente atualiza um pedido")
+        void quandoClienteAtualizaPedido() throws Exception {
+
+            PedidoPutDTO putPedidoDTO = PedidoPutDTO.builder()
+                    .pedidoId(pedido.getId())
+                    .endereco("ENDERECO DE TESTE")
+                    .tamanho(PizzaPedidoTamanho.MEDIA)
+                    .tipo(PizzaPedidoTipo.INTEIRA)
+                    .codigoAcesso(cliente.getCodigoAcesso())
+                    .build();
+
+            String responseJsonString = driver.perform(put(URI_PEDIDOS + "/cliente/" + cliente.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(putPedidoDTO)))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            PedidoReadResponseDTO resultado = objectMapper.readValue(responseJsonString, PedidoReadResponseDTO.class);
+
+            assertAll(
+                    () -> assertEquals(cliente.getEndereco(), resultado.getCliente().getEndereco()),
+                    () -> assertEquals(cliente.getNome(), resultado.getCliente().getNome()),
+                    () -> assertEquals(putPedidoDTO.getEndereco(), resultado.getEndereco()),
+                    () -> assertTrue(resultado.getTamanho().isMedia()),
+                    () -> assertTrue(resultado.getTipo().isInteira())
+            );
+        }
     }
 
     @Nested
     @DisplayName("Testes dos endpoints de estabelecimento com pedidos")
     class EstabelecimentoPedidosEndpointsTests {
-        public final String URI_CLIENTES = "/v1/pedidos";
+        public final String URI_PEDIDOS = "/v1/pedidos";
         @Autowired
         PedidoRepository pedidoRepository;
         Pedido pedido;
@@ -337,7 +367,7 @@ public class PedidoV1ControllerTests {
                     .codigoAcesso(estabelecimento.getCodigoAcesso())
                     .build();
 
-            String responseJsonString = driver.perform(get(URI_CLIENTES + "/estabelecimento/" + estabelecimento.getId())
+            String responseJsonString = driver.perform(get(URI_PEDIDOS + "/estabelecimento/" + estabelecimento.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(readBody)))
                     .andExpect(status().isOk())
