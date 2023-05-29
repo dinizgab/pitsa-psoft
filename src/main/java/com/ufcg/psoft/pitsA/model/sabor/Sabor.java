@@ -55,7 +55,6 @@ public class Sabor {
         interessados.remove(interessado);
     }
 
-
     public void notifica() {
         this.interessados.forEach(Interessado::recebeNotificacao);
     }

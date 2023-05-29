@@ -14,7 +14,8 @@ public class CalculadoraPedidoImpl implements CalculadoraPedido {
             else total += sabor.getPrecoGrande();
         }
 
-        if (pedidoTipo.isMeia()) total = total / 2;
+        total = total * pedidoTipo.getFatorTipo();
+        // TODO - Refatorar isso, arrumar um jeitod e tirar esse If;
         if (tipoPagamento != null) total = total - (total * tipoPagamento.getFatorDesconto());
 
         return total;

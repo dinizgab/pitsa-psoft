@@ -503,6 +503,3 @@ public class ClientePedidoServiceTests {
 
 // SaborPedido
 // Nome, PrecoGrande, PrecoMedia, Tipo (SALGADA ou DOCE)
-
-// TODO - Adicionar a possibilidade de fazer um pedido com varias pizzas -- Padrao Composite
-
