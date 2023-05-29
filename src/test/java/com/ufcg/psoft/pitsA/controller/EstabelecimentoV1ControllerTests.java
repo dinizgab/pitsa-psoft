@@ -2,16 +2,18 @@ package com.ufcg.psoft.pitsA.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ufcg.psoft.pitsA.dto.*;
-import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoAprovaEntregadorDTO;
-import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoDeleteDTO;
-import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoPostDTO;
-import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoPutDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorReadDTO;
+import com.ufcg.psoft.pitsA.dto.estabelecimento.*;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.exception.ErrorMessage;
 import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.TipoVeiculoEntregador;
+import com.ufcg.psoft.pitsA.model.sabor.Sabor;
+import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
+import com.ufcg.psoft.pitsA.repository.SaborRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +22,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -76,8 +78,8 @@ public class EstabelecimentoV1ControllerTests {
         }
 
         @Test
-        @DisplayName("Quando buscamos por todos os entregadores salvos")
-        void quandoBuscamosPorTodosEntregadorSalvos() throws Exception {
+        @DisplayName("Quando buscamos por todos os estabelecimentos salvos")
+        void quandoBuscamosPorTodosEstabelecimentosSalvos() throws Exception {
             Estabelecimento estabelecimento1 = Estabelecimento.builder()
                     .codigoAcesso("444444")
                     .build();
@@ -93,17 +95,17 @@ public class EstabelecimentoV1ControllerTests {
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();
 
-            List<Estabelecimento> resultado = objectMapper.readValue(responseJsonString, new TypeReference<>(){});
+            List<Estabelecimento> resultado = objectMapper.readValue(responseJsonString, new TypeReference<>() {
+            });
 
             assertAll(
                     () -> assertEquals(3, resultado.size())
             );
-
         }
 
         @Test
-        @DisplayName("Quando buscamos um entregador salvo pelo id")
-        void quandoBuscamosPorUmEntregadorSalvo() throws Exception {
+        @DisplayName("Quando buscamos um estabelecimento salvo pelo id")
+        void quandoBuscamosPorUmEstabelecimentoSalvo() throws Exception {
             Long estabelecimentoId = estabelecimento.getId();
 
             String responseJsonString = driver.perform(get(URI_ESTABELECIMENTO + "/" + estabelecimentoId)
@@ -112,7 +114,7 @@ public class EstabelecimentoV1ControllerTests {
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();
 
-            List<Estabelecimento> listaResultados = objectMapper.readValue(responseJsonString, new TypeReference<>(){});
+            List<Estabelecimento> listaResultados = objectMapper.readValue(responseJsonString, new TypeReference<>() {});
             Estabelecimento resultado = listaResultados.stream().findFirst().orElse(Estabelecimento.builder().build());
 
             assertAll(
@@ -122,7 +124,7 @@ public class EstabelecimentoV1ControllerTests {
         }
 
         @Test
-        @DisplayName("Quando criamos um novo entregador")
+        @DisplayName("Quando criamos um novo estabelecimento")
         void quandoCriarEntregadorValido() throws Exception {
             String responseJsonString = driver.perform(post(URI_ESTABELECIMENTO)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -159,7 +161,7 @@ public class EstabelecimentoV1ControllerTests {
 
             assertAll(
                     () -> assertEquals(estabelecimentoId, resultado.getId().longValue()),
-                    () -> assertEquals("123456" ,resultado.getCodigoAcesso())
+                    () -> assertEquals("123456", resultado.getCodigoAcesso())
             );
         }
 
@@ -206,7 +208,7 @@ public class EstabelecimentoV1ControllerTests {
     }
 
     @Nested
-    @DisplayName("Testes de endpoints basicos de entregadores")
+    @DisplayName("Testes de endpoints basicos de estabelecimentos")
     class EstabelecimentoAprovacaoTeste {
         final String URI_ESTABELECIMENTO = "/v1/estabelecimento";
         @Autowired
@@ -223,7 +225,7 @@ public class EstabelecimentoV1ControllerTests {
                             .nome("Julio")
                             .codigoAcesso("777777")
                             .corVeiculo("Azul")
-                            .tipoVeiculo("Carro")
+                            .tipoVeiculo(TipoVeiculoEntregador.CARRO)
                             .placaVeiculo("AAA-1111")
                             .build()
             );
@@ -231,7 +233,7 @@ public class EstabelecimentoV1ControllerTests {
             estabelecimento = estabelecimentoRepository.save(
                     Estabelecimento.builder()
                             .codigoAcesso("111111")
-                            .entregadoresPendentes(new HashSet(Arrays.asList(entregador)))
+                            .entregadoresPendentes(new ArrayList<>(Collections.singletonList(entregador)))
                             .build()
             );
 
@@ -251,7 +253,7 @@ public class EstabelecimentoV1ControllerTests {
         void quandoAprovamosUmEntregadorValido() throws Exception {
             EstabelecimentoAprovaEntregadorDTO aprovaBodyValido = EstabelecimentoAprovaEntregadorDTO.builder()
                     .codigoAcesso("111111")
-                    .aprovar(true)
+                    .aprovar(StatusAprovacaoEntregador.APROVADO)
                     .entregadorId(entregadorId)
                     .build();
 
@@ -266,6 +268,7 @@ public class EstabelecimentoV1ControllerTests {
 
             assertAll(
                     () -> assertTrue(estabelecimento.getEntregadoresAprovados().contains(entregador)),
+                    () -> assertFalse(estabelecimento.getEntregadoresPendentes().contains(entregador)),
                     () -> assertEquals(0, estabelecimento.getEntregadoresPendentes().size()),
                     () -> assertEquals(entregador.getNome(), resultado.getNome()),
                     () -> assertEquals(entregador.getPlacaVeiculo(), resultado.getPlacaVeiculo()),
@@ -280,7 +283,7 @@ public class EstabelecimentoV1ControllerTests {
         void quandoAprovamosUmEntregadorCodigoInvalido() throws Exception {
             EstabelecimentoAprovaEntregadorDTO aprovaBodyInvalido = EstabelecimentoAprovaEntregadorDTO.builder()
                     .entregadorId(entregadorId)
-                    .aprovar(false)
+                    .aprovar(StatusAprovacaoEntregador.REJEITADO)
                     .codigoAcesso("222222")
                     .build();
 
@@ -303,7 +306,7 @@ public class EstabelecimentoV1ControllerTests {
         void quandoRejeitamosUmEntregador() throws Exception {
             EstabelecimentoAprovaEntregadorDTO aprovaBodyValido = EstabelecimentoAprovaEntregadorDTO.builder()
                     .codigoAcesso("111111")
-                    .aprovar(false)
+                    .aprovar(StatusAprovacaoEntregador.REJEITADO)
                     .entregadorId(entregadorId)
                     .build();
 
@@ -333,7 +336,7 @@ public class EstabelecimentoV1ControllerTests {
         void quandoAprovamosUmEntregadorNaoPendente() throws Exception {
             EstabelecimentoAprovaEntregadorDTO aprovaBodyInvalido = EstabelecimentoAprovaEntregadorDTO.builder()
                     .entregadorId(null)
-                    .aprovar(false)
+                    .aprovar(StatusAprovacaoEntregador.REJEITADO)
                     .codigoAcesso("111111")
                     .build();
 
@@ -348,6 +351,78 @@ public class EstabelecimentoV1ControllerTests {
             assertAll(
                     () -> assertEquals("O Entregador consultado nao esta na lista de pendencia desse estabelecimento!", resultado.getMessage())
             );
+        }
+    }
+
+    @Nested
+    @DisplayName("Testes de endpoints de modificar disponibilidade de sabor")
+    class EstabelecimentoSaborDisponibilidadeTeste {
+        final String URI_ESTABELECIMENTO = "/v1/estabelecimento";
+        @Autowired
+        SaborRepository saborRepository;
+        Sabor sabor;
+
+        @BeforeEach
+        void setUp() {
+            sabor = saborRepository.save(Sabor.builder()
+                    .nome("Chocolate")
+                    .tipo(TipoSabor.DOCE)
+                    .estabelecimento(estabelecimento)
+                    .precoGrande(50.0)
+                    .precoMedio(25.0)
+                    .build());
+
+            estabelecimento.getCardapio().add(sabor);
+
+            estabelecimento = estabelecimentoRepository.save(estabelecimento);
+        }
+
+        @Test
+        @DisplayName("Quando alteramos a disponibilidade com sucesso")
+        void testeAlteraDisponibilidadeSucesso() throws Exception {
+            Long estabelecimentoId = estabelecimento.getId();
+            EstabelecimentoPatchDispDTO patchBody = EstabelecimentoPatchDispDTO.builder()
+                    .codigoAcesso(estabelecimento.getCodigoAcesso())
+                    .saborId(sabor.getId())
+                    .build();
+
+            String responseJsonString = driver.perform(patch(URI_ESTABELECIMENTO + "/" + estabelecimentoId + "/sabor")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(patchBody)))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            SaborReadDTO resultado = objectMapper.readValue(responseJsonString, SaborReadDTO.class);
+
+
+            assertAll(
+                    () -> assertEquals(sabor.getNome(), resultado.getNome()),
+                    () -> assertFalse(resultado.isDisponivel()),
+                    () -> assertEquals(sabor.getPrecoGrande(), resultado.getPrecoGrande()),
+                    () -> assertEquals(sabor.getPrecoMedio(), resultado.getPrecoMedio())
+            );
+        }
+
+        @Test
+        @DisplayName("Quando o codigo de acesso e invalido")
+        void testeQuandoCodigoAcessoInvalido() throws Exception {
+            Long estabelecimentoId = estabelecimento.getId();
+            EstabelecimentoPatchDispDTO patchBody = EstabelecimentoPatchDispDTO.builder()
+                    .codigoAcesso("abcabcabc")
+                    .saborId(sabor.getId())
+                    .build();
+
+            String responseJsonString = driver.perform(patch(URI_ESTABELECIMENTO + "/" + estabelecimentoId + "/sabor")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(patchBody)))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            ErrorMessage resultado = objectMapper.readValue(responseJsonString, ErrorMessage.class);
+
+            assertEquals(resultado.getMessage(), "O codigo de acesso informado eh invalido");
         }
     }
 }

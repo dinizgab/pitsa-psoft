@@ -1,7 +1,6 @@
 package com.ufcg.psoft.pitsA.service.entregador;
 
-import com.ufcg.psoft.pitsA.dto.EntregadorPatchEstabelecimentoDTO;
-import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoPatchEntregadorDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorPatchEstabelecimentoDTO;
 import com.ufcg.psoft.pitsA.exception.entregador.EntregadorNaoExisteException;
 import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
@@ -22,12 +21,9 @@ public class EntregadorPatchEstabelecimentoServiceImpl implements EntregadorPatc
     @Autowired
     EstabelecimentoPatchEntregador estabelecimentoPatchEntregador;
     @Autowired
-    AutenticaCodigoAcessoService autenticaEmpregadoService;
+    AutenticaCodigoAcessoService autenticador;
     @Autowired
     ModelMapper modelMapper;
-
-    // TODO - Lista de entregadores pendentes em estabelecimento, e quando aprovar eles, tira da lista de pendentes e adiciona na lista de aprovados
-    // Quando for fazer uma operaçao sob um entregador de um estabelecimento, verifica se ele ta na lista de aprovados
 
     @Override
     public Entregador alteraParcialmente(Long entregadorId, EntregadorPatchEstabelecimentoDTO entregadorDTO) {
@@ -35,18 +31,12 @@ public class EntregadorPatchEstabelecimentoServiceImpl implements EntregadorPatc
         Long estabelecimentoId = entregadorDTO.getEstabelecimentoId();
 
         Entregador entregador = entregadorRepository.findById(entregadorId).orElseThrow(EntregadorNaoExisteException::new);
-        autenticaEmpregadoService.autenticar(entregador.getCodigoAcesso(), codigoAcesso);
+        autenticador.autenticar(entregador.getCodigoAcesso(), codigoAcesso);
 
         Estabelecimento estabelecimento = estabelecimentoListarService.listar(estabelecimentoId).get(0);
-
         entregador.getEstabelecimentos().add(estabelecimento);
-        estabelecimento.getEntregadoresPendentes().add(entregador);
 
-        EstabelecimentoPatchEntregadorDTO estabelecimentoEntregadorDTO = EstabelecimentoPatchEntregadorDTO.builder()
-                .entregadores(estabelecimento.getEntregadoresPendentes())
-                .build();
-
-        estabelecimentoPatchEntregador.alteraParcialmente(estabelecimentoId, estabelecimentoEntregadorDTO);
+        estabelecimentoPatchEntregador.alteraParcialmente(estabelecimentoId, entregador);
 
         return entregador;
     }

@@ -7,14 +7,17 @@ import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
-
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @DisplayName("Testes para o service de Estabelecimento")
@@ -85,8 +88,6 @@ public class EstabelecimentoServiceTest {
 
         List<Estabelecimento> resultado = driverListar.listar(estabelecimentoId);
 
-        System.out.println(resultado);
-        System.out.println(estabelecimentoId);
         assertAll(
                 () -> assertEquals(estabelecimentoId, resultado.get(0).getId()),
                 () -> assertEquals("456321", resultado.get(0).getCodigoAcesso())
@@ -94,7 +95,6 @@ public class EstabelecimentoServiceTest {
     }
 
 
-    // TODO - Adicionar a validacao de codigo de acesso no momento que for atualizar um estabelecimento
     @Test
     @DisplayName("Quando atualizamos um estabelecimento codigo valido")
     void testeAtualizaEstabelecimentoValido() {
@@ -130,7 +130,6 @@ public class EstabelecimentoServiceTest {
         assertThrows(CodigoAcessoInvalidoException.class, () -> driverAtualizar.atualizar(estabelecimentoId, putBody));
     }
 
-    // TODO - Adicionar a validacao de codigo de acesso no momento que for remover um estabelecimento
     @Test
     @DisplayName("Quando removemos um estabelecimento")
     void testeRemoveEstabelecimento() {

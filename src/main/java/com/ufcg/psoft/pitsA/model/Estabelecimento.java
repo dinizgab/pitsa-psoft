@@ -1,12 +1,13 @@
 package com.ufcg.psoft.pitsA.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ufcg.psoft.pitsA.model.pedido.Pedido;
+import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -24,19 +25,21 @@ public class Estabelecimento {
     @Column(nullable = false)
     private String codigoAcesso;
 
-    @ManyToMany(mappedBy = "estabelecimentos", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "estabelecimentos", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
-    private Set<Entregador> entregadoresPendentes = new HashSet<>();
+    private List<Entregador> entregadoresPendentes = new ArrayList<>();
 
     @Builder.Default
-    @ManyToMany(mappedBy = "estabelecimentos", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Set<Entregador> entregadoresAprovados = new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Entregador> entregadoresAprovados = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Sabor> cardapio = new HashSet<>();
+    @OneToMany(mappedBy = "estabelecimento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<Sabor> cardapio = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "estabelecimentoPedido", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Pedido> pedidos = new ArrayList<>();
 }

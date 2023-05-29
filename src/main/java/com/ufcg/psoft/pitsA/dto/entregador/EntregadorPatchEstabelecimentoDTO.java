@@ -1,4 +1,4 @@
-package com.ufcg.psoft.pitsA.dto;
+package com.ufcg.psoft.pitsA.dto.entregador;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -30,7 +30,7 @@ public class Entregador {
 
     @JsonProperty("codigoDeBarras")
     @Column(nullable = false)
-    private String tipoVeiculo;
+    private TipoVeiculoEntregador tipoVeiculo;
 
     @JsonProperty("fabricante")
     @Column(nullable = false)
@@ -42,7 +42,6 @@ public class Entregador {
 
     @JsonIgnore
     @Builder.Default
-    @JsonProperty("estabelecimento")
     @ManyToMany(fetch = FetchType.LAZY)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

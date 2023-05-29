@@ -1,13 +1,11 @@
 package com.ufcg.psoft.pitsA.controller;
 
-import com.ufcg.psoft.pitsA.dto.EntregadorPatchEstabelecimentoDTO;
-import com.ufcg.psoft.pitsA.dto.EntregadorPostPutDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorDeleteDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorPatchEstabelecimentoDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorPostPutDTO;
 import com.ufcg.psoft.pitsA.exception.ErrorMessage;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.service.entregador.*;
-
-import com.ufcg.psoft.pitsA.service.entregador.*;
-
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -68,16 +66,17 @@ public class EntregadorV1Controller {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> excluirEntregador(
-            @PathVariable Long id
-    ) {
-        entregadorExcluirService.remover(id);
+            @PathVariable Long id,
+            @RequestBody @Valid EntregadorDeleteDTO deleteBody
+            ) {
+        entregadorExcluirService.remover(id, deleteBody);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .body("");
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> atualizarEntregador(
+    public ResponseEntity<?> adicionarEstabelecimento(
             @PathVariable Long id,
             @RequestBody @Valid EntregadorPatchEstabelecimentoDTO entregadorPatchEstabelecimentoDTO) {
         return ResponseEntity

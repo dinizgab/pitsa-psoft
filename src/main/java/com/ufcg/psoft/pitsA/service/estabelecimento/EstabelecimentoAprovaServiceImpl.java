@@ -1,7 +1,8 @@
 package com.ufcg.psoft.pitsA.service.estabelecimento;
 
-import com.ufcg.psoft.pitsA.dto.EntregadorReadDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorReadDTO;
 import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoAprovaEntregadorDTO;
+import com.ufcg.psoft.pitsA.dto.estabelecimento.StatusAprovacaoEntregador;
 import com.ufcg.psoft.pitsA.exception.entregador.EntregadorNaoEstaPendenteException;
 import com.ufcg.psoft.pitsA.exception.estabelecimento.EstabelecimentoNaoExisteException;
 import com.ufcg.psoft.pitsA.model.Entregador;
@@ -11,8 +12,6 @@ import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class EstabelecimentoAprovaServiceImpl implements EstabelecimentoAprovaService{
@@ -26,30 +25,25 @@ public class EstabelecimentoAprovaServiceImpl implements EstabelecimentoAprovaSe
     public EntregadorReadDTO aprova(Long estabelecimentoId, EstabelecimentoAprovaEntregadorDTO estabelecimentoDTO) {
         Long entregadorId = estabelecimentoDTO.getEntregadorId();
         String codigoAcesso = estabelecimentoDTO.getCodigoAcesso();
+        StatusAprovacaoEntregador aprovacao = estabelecimentoDTO.getAprovar();
 
         Estabelecimento estabelecimento = estabelecimentoRepository.findById(estabelecimentoId).orElseThrow(EstabelecimentoNaoExisteException::new);
         autenticaCodigoAcessoService.autenticar(estabelecimento.getCodigoAcesso(), codigoAcesso);
 
-
-        Optional<Entregador> entregadorAprovado = estabelecimento.getEntregadoresPendentes()
+        Entregador entregador = estabelecimento.getEntregadoresPendentes()
                 .stream()
-                .filter(entregador -> entregador.getId().equals(entregadorId))
-                .findFirst();
+                .filter(e -> e.getId().equals(entregadorId))
+                .findFirst()
+                .orElseThrow(EntregadorNaoEstaPendenteException::new);
 
-        if (entregadorAprovado.isEmpty()) throw new EntregadorNaoEstaPendenteException();
-
-        Entregador entregadorPresente = entregadorAprovado.get();
-
-        // TODO - Trocar a operacao por um enum
-        if (estabelecimentoDTO.isAprovar()) {
-            estabelecimento.getEntregadoresPendentes().remove(entregadorPresente);
-            estabelecimento.getEntregadoresAprovados().add(entregadorPresente);
-        } else {
-            estabelecimento.getEntregadoresPendentes().remove(entregadorPresente);
+        if (aprovacao.isAprovado()) {
+            estabelecimento.getEntregadoresAprovados().add(entregador);
         }
+
+        estabelecimento.getEntregadoresPendentes().removeIf(e -> e.getId().equals(entregadorId));
 
         estabelecimentoRepository.save(estabelecimento);
 
-        return modelMapper.map(entregadorAprovado, EntregadorReadDTO.class);
+        return modelMapper.map(entregador, EntregadorReadDTO.class);
     }
 }

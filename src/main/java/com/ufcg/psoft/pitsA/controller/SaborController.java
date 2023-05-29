@@ -1,7 +1,14 @@
 package com.ufcg.psoft.pitsA.controller;
 
-import com.ufcg.psoft.pitsA.dto.sabor.SaborDTO;
-import com.ufcg.psoft.pitsA.service.sabor.*;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborDeleteDTO;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborPostDTO;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborPutDTO;
+import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
+import com.ufcg.psoft.pitsA.model.sabor.Sabor;
+import com.ufcg.psoft.pitsA.service.sabor.SaborCreateService;
+import com.ufcg.psoft.pitsA.service.sabor.SaborListarService;
+import com.ufcg.psoft.pitsA.service.sabor.SaborRemoverService;
+import com.ufcg.psoft.pitsA.service.sabor.SaborUpdateService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,60 +22,58 @@ import java.util.List;
 public class SaborController {
 
     @Autowired
-    private SaborCreateService saborCreateService;
+    SaborCreateService saborCreateService;
 
     @Autowired
-    private SaborFindByIdService saborFindByIdService;
+    SaborListarService saborListarService;
 
     @Autowired
-    private SaborFindByName saborFindByName;
+    SaborUpdateService saborUpdateService;
 
     @Autowired
-    private SaborUpDateService saborUpdateService;
+    SaborRemoverService saborRemoverService;
 
-    @Autowired
-    private SaborRemoverService saborRemoverService;
-
-    @Autowired
-    private SaborFindAllService saborFindAllService;
-
-    @PostMapping()
-    public ResponseEntity<SaborDTO> create(@RequestBody @Valid SaborDTO saborDTO){
+    @PostMapping("/{id}")
+    public ResponseEntity<SaborReadDTO> create(
+            @PathVariable Long id,
+            @RequestBody @Valid SaborPostDTO saborDTO
+    ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(saborCreateService.create(saborDTO));
+                .body(saborCreateService.create(id, saborDTO));
 
+    }
+
+    @GetMapping
+    public ResponseEntity<?> findAll() {
+        List<Sabor> sabores = saborListarService.listar(null);
+        return ResponseEntity.ok(sabores);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id){
+    public ResponseEntity<?> findById(
+            @PathVariable Long id
+    ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(saborFindByIdService.findById(id));
-    }
-
-    @GetMapping("/{name}")
-    public ResponseEntity<SaborDTO> getSaborByName(@PathVariable String name) {
-        SaborDTO saborDTO = saborFindByName.findByName(name);
-        return ResponseEntity.ok().body(saborDTO);
+                .body(saborListarService.listar(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SaborDTO> update
-            (@PathVariable Long id, @RequestBody SaborDTO saborDTO) {
-        SaborDTO updatedSabor = saborUpdateService.update(saborDTO);
+    public ResponseEntity<SaborReadDTO> update(
+            @PathVariable Long id,
+            @RequestBody SaborPutDTO saborDTO
+    ) {
+        SaborReadDTO updatedSabor = saborUpdateService.update(id, saborDTO);
         return ResponseEntity.ok(updatedSabor);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> remover(@PathVariable Long id) {
-        saborRemoverService.remover(id);
+    public ResponseEntity<Void> remover(
+            @PathVariable Long id,
+            @RequestBody@Valid SaborDeleteDTO saborDTO
+    ) {
+        saborRemoverService.remover(id, saborDTO);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping
-    public ResponseEntity<List<SaborDTO>> findAll() {
-        List<SaborDTO> saboresDTO = saborFindAllService.findAll();
-        return ResponseEntity.ok(saboresDTO);
     }
 }
