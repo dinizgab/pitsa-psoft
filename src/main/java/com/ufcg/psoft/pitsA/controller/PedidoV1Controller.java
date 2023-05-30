@@ -3,11 +3,10 @@ package com.ufcg.psoft.pitsA.controller;
 import com.ufcg.psoft.pitsA.dto.pedido.*;
 import com.ufcg.psoft.pitsA.exception.ErrorMessage;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
-import com.ufcg.psoft.pitsA.service.cliente.ClienteAtualizarPedidoService;
-import com.ufcg.psoft.pitsA.service.cliente.ClienteCriarPedidoService;
-import com.ufcg.psoft.pitsA.service.cliente.ClienteListarPedidoService;
-import com.ufcg.psoft.pitsA.service.cliente.ClienteRemoverPedidoService;
+import com.ufcg.psoft.pitsA.service.cliente.*;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoListarPedidoService;
+import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoPatchPedidoEntregadorService;
+import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoPatchPedidoEstadoService;
 import com.ufcg.psoft.pitsA.service.pedido.ConfirmarPagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,15 +23,21 @@ public class PedidoV1Controller {
     @Autowired
     ClienteListarPedidoService clienteListarPedidoService;
     @Autowired
+    ClienteConfirmarEntregaPedidoService clienteConfirmarEntregaPedidoService;
+    @Autowired
     ClienteAtualizarPedidoService clienteAtualizarPedidoService;
     @Autowired
     ClienteRemoverPedidoService clienteRemoverPedidoService;
     @Autowired
-    EstabelecimentoListarPedidoService estabelecimentoListarPedidoService;
-    @Autowired
     ConfirmarPagamentoService confirmarPagamentoService;
     @Autowired
     ClienteCriarPedidoService clienteCriarPedidoService;
+    @Autowired
+    EstabelecimentoListarPedidoService estabelecimentoListarPedidoService;
+    @Autowired
+    EstabelecimentoPatchPedidoEntregadorService estabelecimentoPatchPedidoEntregadorService;
+    @Autowired
+    EstabelecimentoPatchPedidoEstadoService estabelecimentoPatchPedidoEstadoService;
 
     @PatchMapping("/{id}")
     public ResponseEntity<?> confirmarPagamento (
@@ -74,6 +79,16 @@ public class PedidoV1Controller {
                 .body(clienteAtualizarPedidoService.atualizarPedido(id, putBody));
     }
 
+    @PatchMapping("/cliente/{id}")
+    public ResponseEntity<?> confirmarEntregaPedido (
+            @PathVariable("id") Long id,
+            @RequestBody PedidoConfirmaEntregaDTO patchBody
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(clienteConfirmarEntregaPedidoService.confirmarEntrega(id, patchBody));
+    }
+
     @DeleteMapping("/cliente/{id}")
     public ResponseEntity<?> removerUmPedido (
             @PathVariable("id") Long id,
@@ -94,6 +109,26 @@ public class PedidoV1Controller {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(estabelecimentoListarPedidoService.listarPedidos(id, readBody));
+    }
+
+    @PatchMapping("/estabelecimento/{id}")
+    public ResponseEntity<?> alterarEstadoPedido (
+            @PathVariable("id") Long id,
+            @RequestBody PedidoReadBodyDTO readBodyDTO
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(estabelecimentoPatchPedidoEstadoService.alterarEstadoPedido(id, readBodyDTO));
+    }
+
+    @PatchMapping("/estabelecimento/entregador/{id}")
+    public ResponseEntity<?> alterarEntregadorPedido (
+            @PathVariable("id") Long id,
+            @RequestBody PedidoPatchEntregadorDTO patchEntregadorBody
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(estabelecimentoPatchPedidoEntregadorService.alterarEntregador(id, patchEntregadorBody));
     }
 
     @ExceptionHandler(CodigoAcessoInvalidoException.class)

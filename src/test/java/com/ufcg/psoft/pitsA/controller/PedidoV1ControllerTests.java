@@ -4,17 +4,17 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ufcg.psoft.pitsA.dto.pedido.*;
 import com.ufcg.psoft.pitsA.model.Cliente;
+import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.TipoVeiculoEntregador;
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTamanho;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTipo;
 import com.ufcg.psoft.pitsA.model.pedido.TipoPagamento;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
-import com.ufcg.psoft.pitsA.repository.ClienteRepository;
-import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
-import com.ufcg.psoft.pitsA.repository.PedidoRepository;
-import com.ufcg.psoft.pitsA.repository.SaborRepository;
+import com.ufcg.psoft.pitsA.repository.*;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -93,7 +94,6 @@ public class PedidoV1ControllerTests {
 
     @AfterEach
     void tearDown() {
-        clienteRepository.deleteAll();
         estabelecimentoRepository.deleteAll();
     }
 
@@ -171,6 +171,7 @@ public class PedidoV1ControllerTests {
                     () -> assertEquals(pedido.getEndereco(), resultado.getEndereco()),
                     () -> assertTrue(resultado.getTamanho().isGrande()),
                     () -> assertTrue(resultado.getTipo().isInteira()),
+                    () -> assertTrue(resultado.getEstado().isRecebido()),
                     () -> assertEquals(valorTotal, resultado.getValorTotal())
             );
         }
@@ -221,6 +222,7 @@ public class PedidoV1ControllerTests {
                     () -> assertEquals(pedidoPostComEnderecoDTO.getEndereco(), resultado.getEndereco()),
                     () -> assertTrue(resultado.getTamanho().isGrande()),
                     () -> assertTrue(resultado.getTipo().isInteira()),
+                    () -> assertTrue(resultado.getEstado().isRecebido()),
                     () -> assertEquals(valorTotal, resultado.getValorTotal())
             );
         }
@@ -242,6 +244,7 @@ public class PedidoV1ControllerTests {
                     () -> assertEquals(cliente.getEndereco(), resultado.getEndereco()),
                     () -> assertTrue(resultado.getTamanho().isGrande()),
                     () -> assertTrue(resultado.getTipo().isMeia()),
+                    () -> assertTrue(resultado.getEstado().isRecebido()),
                     () -> assertEquals(valorTotal, resultado.getValorTotal())
             );
         }
@@ -298,9 +301,9 @@ public class PedidoV1ControllerTests {
                     () -> assertTrue(resultado.getTipoPagamento().isCredito()),
                     () -> assertEquals(cliente.getEndereco(), resultado.getEndereco()),
                     () -> assertTrue(resultado.getTipo().isInteira()),
+                    () -> assertTrue(resultado.getEstado().isPreparo()),
                     () -> assertTrue(resultado.getTamanho().isGrande())
             );
-
         }
 
         @Test
@@ -332,15 +335,45 @@ public class PedidoV1ControllerTests {
                     () -> assertTrue(resultado.getTipo().isInteira())
             );
         }
+
+        @Test
+        @DisplayName("Quando um cliente confirma entrega de um pedido")
+        void quandoClienteConfirmaEntregaPedido() throws Exception {
+            PedidoConfirmaEntregaDTO patchBody = PedidoConfirmaEntregaDTO.builder()
+                    .codigoAcesso(cliente.getCodigoAcesso())
+                    .pedidoId(pedido.getId())
+                    .build();
+
+            String responseJsonString = driver.perform(patch(URI_PEDIDOS + "/cliente/" + cliente.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(patchBody)))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            PedidoReadResponseDTO resultado = objectMapper.readValue(responseJsonString, PedidoReadResponseDTO.class);
+
+            assertAll(
+                    () -> assertEquals(cliente.getEndereco(), resultado.getCliente().getEndereco()),
+                    () -> assertEquals(cliente.getNome(), resultado.getCliente().getNome()),
+                    () -> assertTrue(resultado.getTamanho().isGrande()),
+                    () -> assertTrue(resultado.getTipo().isInteira()),
+                    () -> assertTrue(resultado.getEstado().isEntregue())
+            );
+        }
     }
 
     @Nested
+    @Transactional
     @DisplayName("Testes dos endpoints de estabelecimento com pedidos")
     class EstabelecimentoPedidosEndpointsTests {
         public final String URI_PEDIDOS = "/v1/pedidos";
         @Autowired
         PedidoRepository pedidoRepository;
+        @Autowired
+        EntregadorRepository entregadorRepository;
         Pedido pedido;
+        Entregador entregador;
 
         @BeforeEach
         void setUp() {
@@ -353,8 +386,23 @@ public class PedidoV1ControllerTests {
                     .tamanho(PizzaPedidoTamanho.GRANDE)
                     .build();
 
+            entregador = Entregador.builder()
+                    .estabelecimentos(new HashSet<>())
+                    .tipoVeiculo(TipoVeiculoEntregador.MOTO)
+                    .corVeiculo("Azul")
+                    .placaVeiculo("123-123")
+                    .build();
+
             pedido.getSabores().add(sabor);
+            pedido.setEstabelecimentoPedido(estabelecimento);
             pedido = pedidoRepository.save(pedido);
+
+            entregador.getEstabelecimentos().add(estabelecimento);
+            entregador = entregadorRepository.save(entregador);
+
+            estabelecimento.getPedidos().add(pedido);
+            estabelecimento.getEntregadoresAprovados().add(entregador);
+            estabelecimento = estabelecimentoRepository.save(estabelecimento);
         }
 
         @Test
@@ -383,6 +431,62 @@ public class PedidoV1ControllerTests {
                     () -> assertTrue(resultado.getTipo().isInteira()),
                     () -> assertEquals(1, resultado.getSabores().size()),
                     () -> assertEquals(valorTotal, resultado.getValorTotal())
+            );
+        }
+
+        @Test
+        @DisplayName("Quando o estabelecimento altera estado do pedido")
+        void quandoEstabelecimentoAlterarEstadoPedido() throws Exception {
+            PedidoReadBodyDTO readBody = PedidoReadBodyDTO.builder()
+                    .pedidoId(pedido.getId())
+                    .codigoAcesso(estabelecimento.getCodigoAcesso())
+                    .build();
+
+            String responseJsonString = driver.perform(patch(URI_PEDIDOS + "/estabelecimento/" + estabelecimento.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(readBody)))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            PedidoReadResponseDTO resultado = objectMapper.readValue(responseJsonString, PedidoReadResponseDTO.class);
+
+            assertAll(
+                    () -> assertEquals("Ruas avela, 1234", resultado.getEndereco()),
+                    () -> assertTrue(resultado.getTamanho().isGrande()),
+                    () -> assertTrue(resultado.getTipo().isInteira()),
+                    () -> assertTrue(resultado.getEstado().isPronto()),
+                    () -> assertEquals(1, resultado.getSabores().size())
+            );
+        }
+
+        @Test
+        @DisplayName("Quando o estabelecimento atribui pedido a um entregador")
+        void quandoEstabelecimentoAtribuiPedidoAoEntregador() throws Exception {
+            Long entregadorId = entregador.getId();
+            Long pedidoId = pedido.getId();
+
+            PedidoPatchEntregadorDTO readBody = PedidoPatchEntregadorDTO.builder()
+                    .entregadorId(entregadorId)
+                    .pedidoId(pedidoId)
+                    .codigoAcesso(estabelecimento.getCodigoAcesso())
+                    .build();
+
+            String responseJsonString = driver.perform(patch(URI_PEDIDOS + "/estabelecimento/entregador/" + estabelecimento.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(readBody)))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            PedidoReadResponseDTO resultado = objectMapper.readValue(responseJsonString, PedidoReadResponseDTO.class);
+
+            assertAll(
+                    () -> assertEquals("Ruas avela, 1234", resultado.getEndereco()),
+                    () -> assertTrue(resultado.getTamanho().isGrande()),
+                    () -> assertTrue(resultado.getTipo().isInteira()),
+                    () -> assertTrue(resultado.getEstado().isRota()),
+                    () -> assertEquals(1, resultado.getSabores().size())
             );
         }
     }
