@@ -2,6 +2,7 @@ package com.ufcg.psoft.pitsA.model.pedido;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ufcg.psoft.pitsA.model.Cliente;
+import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import jakarta.persistence.*;
@@ -44,6 +45,9 @@ public class Pedido {
 
     @OneToMany()
     private List<Sabor> sabores;
+
+    @ManyToOne(optional = true)
+    private Entregador entregador;
 
     @Column
     @Builder.Default

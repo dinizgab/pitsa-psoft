@@ -1,32 +1,32 @@
 package com.ufcg.psoft.pitsA.service.pedido;
 
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorReadDTO;
+import com.ufcg.psoft.pitsA.dto.pedido.PedidoPatchEntregadorDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadBodyDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
 import com.ufcg.psoft.pitsA.model.Cliente;
+import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.TipoVeiculoEntregador;
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTamanho;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTipo;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
-import com.ufcg.psoft.pitsA.repository.ClienteRepository;
-import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
-import com.ufcg.psoft.pitsA.repository.PedidoRepository;
-import com.ufcg.psoft.pitsA.repository.SaborRepository;
+import com.ufcg.psoft.pitsA.repository.*;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoListarPedidoService;
+import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoPatchPedidoEntregadorService;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoPatchPedidoEstadoService;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoPatchPedidoEstadoServiceImpl;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -182,4 +182,58 @@ public class EstabelecimentoPedidoServiceTests {
                 () -> assertTrue(resultado.getEstado().isPronto())
         );
     }
+
+    @Nested
+    @DisplayName("Testes de atribuicao de entregador ao pedido")
+    class TestesAtribuiEntregadorPedido {
+        @Autowired
+        EstabelecimentoPatchPedidoEntregadorService driverPatchEntregador;
+        @Autowired
+        EntregadorRepository entregadorRepository;
+        Entregador entregador;
+
+        @BeforeEach
+        void setUp() {
+            entregador = Entregador.builder()
+                            .codigoAcesso("123456")
+                            .corVeiculo("Azul")
+                            .placaVeiculo("ABC-1235")
+                            .tipoVeiculo(TipoVeiculoEntregador.CARRO)
+                            .estabelecimentos(new HashSet<>())
+                            .build();
+
+            entregador.getEstabelecimentos().add(estabelecimento);
+            estabelecimento.getEntregadoresAprovados().add(entregador);
+
+            entregador = entregadorRepository.save(entregador);
+            estabelecimentoRepository.save(estabelecimento);
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("Teste de atribuir um entregador a um pedido")
+        void testeAtribuiEntregadorPedido() {
+            Long estabelecimentoId = estabelecimento.getId();
+            Long entregadorId = entregador.getId();
+
+            PedidoPatchEntregadorDTO patchBody = PedidoPatchEntregadorDTO.builder()
+                    .pedidoId(pedidoId)
+                    .entregadorId(entregadorId)
+                    .codigoAcesso("123456")
+                    .build();
+
+            PedidoReadResponseDTO resultado = driverPatchEntregador.alterarEntregador(estabelecimentoId, patchBody);
+            EntregadorReadDTO entregadorResultado = modelMapper.map(entregador, EntregadorReadDTO.class);
+
+            assertAll(
+                    () -> assertEquals("Rua 13 de maio, 123", resultado.getEndereco()),
+                    () -> assertTrue(resultado.getTipo().isMeia()),
+                    () -> assertTrue(resultado.getTamanho().isGrande()),
+                    () -> assertEquals(resultado.getEntregador(), entregadorResultado),
+                    () -> assertTrue(resultado.getEstado().isRota())
+            );
+        }
+    }
+
+
 }

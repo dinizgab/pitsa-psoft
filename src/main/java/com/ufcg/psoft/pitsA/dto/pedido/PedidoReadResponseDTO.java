@@ -1,6 +1,7 @@
 package com.ufcg.psoft.pitsA.dto.pedido;
 
 import com.ufcg.psoft.pitsA.dto.cliente.ClienteReadDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorReadDTO;
 import com.ufcg.psoft.pitsA.model.pedido.EstadoPedido;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTamanho;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTipo;
@@ -33,4 +34,6 @@ public class PedidoReadResponseDTO {
     private List<Sabor> sabores;
 
     private Double valorTotal;
+
+    private EntregadorReadDTO entregador;
 }

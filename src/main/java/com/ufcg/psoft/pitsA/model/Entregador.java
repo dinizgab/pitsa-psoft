@@ -2,10 +2,13 @@ package com.ufcg.psoft.pitsA.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -46,4 +49,12 @@ public class Entregador {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Estabelecimento> estabelecimentos = new HashSet<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "entregador", fetch = FetchType.LAZY)
+    private List<Pedido> pedidos = new ArrayList<>();
+
+    public void adicionaPedido(Pedido pedido) {
+        this.pedidos.add(pedido);
+    }
 }
