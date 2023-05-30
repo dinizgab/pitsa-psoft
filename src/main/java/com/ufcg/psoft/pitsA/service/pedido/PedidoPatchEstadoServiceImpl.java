@@ -16,11 +16,10 @@ public class PedidoPatchEstadoServiceImpl implements PedidoPatchEstadoService {
     @Autowired
     ModelMapper modelMapper;
 
-    public PedidoReadResponseDTO alteraEstado(Long pedidoId) {
-        // TODO - Colocar o estado como parametro para esse metodo
+    public PedidoReadResponseDTO alteraEstado(Long pedidoId, EstadoPedido estado) {
         Pedido pedido = pedidoRepository.findById(pedidoId).orElseThrow(PedidoNaoEncontradoException::new);
 
-        pedido.setEstado(EstadoPedido.PRONTO);
+        pedido.setEstado(estado);
         return modelMapper.map(pedidoRepository.save(pedido), PedidoReadResponseDTO.class);
     }
 }

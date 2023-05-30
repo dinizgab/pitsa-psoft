@@ -4,6 +4,7 @@ import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadBodyDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
 import com.ufcg.psoft.pitsA.exception.estabelecimento.EstabelecimentoNaoExisteException;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.pedido.EstadoPedido;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;
 import com.ufcg.psoft.pitsA.service.pedido.PedidoPatchEstadoService;
@@ -26,6 +27,6 @@ public class EstabelecimentoPatchPedidoEstadoServiceImpl implements Estabelecime
         Estabelecimento estabelecimento = estabelecimentoRepository.findById(estabelecimentoId).orElseThrow(EstabelecimentoNaoExisteException::new);
         autenticador.autenticar(estabelecimento.getCodigoAcesso(), codigoAcesso);
 
-        return pedidoPatchEstadoService.alteraEstado(pedidoId);
+        return pedidoPatchEstadoService.alteraEstado(pedidoId, EstadoPedido.PRONTO);
     }
 }
