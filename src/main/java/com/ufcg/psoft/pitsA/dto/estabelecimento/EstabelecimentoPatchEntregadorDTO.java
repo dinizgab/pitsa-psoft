@@ -1,7 +1,7 @@
 package com.ufcg.psoft.pitsA.dto.estabelecimento;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ufcg.psoft.pitsA.model.Entregador;
+import com.ufcg.psoft.pitsA.model.entregador.Entregador;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -3,7 +3,7 @@ package com.ufcg.psoft.pitsA.service.pedido;
 import com.ufcg.psoft.pitsA.dto.pedido.ConfirmarPagamentoDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
 import com.ufcg.psoft.pitsA.exception.cliente.ClienteNaoExisteException;
-import com.ufcg.psoft.pitsA.model.Cliente;
+import com.ufcg.psoft.pitsA.model.cliente.Cliente;
 import com.ufcg.psoft.pitsA.model.pedido.TipoPagamento;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
 import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;

@@ -1,6 +1,7 @@
 package com.ufcg.psoft.pitsA.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ufcg.psoft.pitsA.model.entregador.Entregador;
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import jakarta.persistence.*;

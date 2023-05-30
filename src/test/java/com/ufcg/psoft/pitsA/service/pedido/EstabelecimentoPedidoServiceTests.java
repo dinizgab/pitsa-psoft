@@ -7,10 +7,10 @@ import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.exception.entregador.EntregadorNaoEstaAprovadoException;
 import com.ufcg.psoft.pitsA.exception.pedido.PedidoNaoEncontradoException;
-import com.ufcg.psoft.pitsA.model.Cliente;
-import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
-import com.ufcg.psoft.pitsA.model.TipoVeiculoEntregador;
+import com.ufcg.psoft.pitsA.model.cliente.Cliente;
+import com.ufcg.psoft.pitsA.model.entregador.Entregador;
+import com.ufcg.psoft.pitsA.model.entregador.TipoVeiculoEntregador;
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTamanho;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTipo;
@@ -198,6 +198,7 @@ public class EstabelecimentoPedidoServiceTests {
         void setUp() {
             entregador = Entregador.builder()
                             .codigoAcesso("123456")
+                            .nome("Cleber 123 da Silva 4")
                             .corVeiculo("Azul")
                             .placaVeiculo("ABC-1235")
                             .tipoVeiculo(TipoVeiculoEntregador.CARRO)

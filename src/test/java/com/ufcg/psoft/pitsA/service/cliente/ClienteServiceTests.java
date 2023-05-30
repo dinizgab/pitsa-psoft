@@ -4,7 +4,7 @@ import com.ufcg.psoft.pitsA.dto.cliente.ClienteDeleteDTO;
 import com.ufcg.psoft.pitsA.dto.cliente.ClientePostPutDTO;
 import com.ufcg.psoft.pitsA.dto.cliente.ClienteReadDTO;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
-import com.ufcg.psoft.pitsA.model.Cliente;
+import com.ufcg.psoft.pitsA.model.cliente.Cliente;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;

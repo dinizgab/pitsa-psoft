@@ -1,8 +1,8 @@
 package com.ufcg.psoft.pitsA.model.sabor;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ufcg.psoft.pitsA.model.cliente.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.cliente.Cliente;
 import com.ufcg.psoft.pitsA.model.cliente.Interessado;
 import jakarta.persistence.*;
 import lombok.*;

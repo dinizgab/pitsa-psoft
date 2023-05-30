@@ -2,10 +2,9 @@ package com.ufcg.psoft.pitsA.model.pedido;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ufcg.psoft.pitsA.dto.entregador.EntregadorVeiculoDTO;
-import com.ufcg.psoft.pitsA.model.cliente.Cliente;
-import com.ufcg.psoft.pitsA.model.cliente.Interessado;
-import com.ufcg.psoft.pitsA.model.entregador.Entregador;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.cliente.Cliente;
+import com.ufcg.psoft.pitsA.model.entregador.Entregador;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import jakarta.persistence.*;
 import lombok.*;

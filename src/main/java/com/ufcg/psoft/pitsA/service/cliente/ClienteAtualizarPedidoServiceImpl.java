@@ -4,7 +4,7 @@ import com.ufcg.psoft.pitsA.dto.pedido.PedidoPutDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
 import com.ufcg.psoft.pitsA.exception.cliente.ClienteNaoExisteException;
 import com.ufcg.psoft.pitsA.exception.pedido.PedidoNaoEncontradoException;
-import com.ufcg.psoft.pitsA.model.Cliente;
+import com.ufcg.psoft.pitsA.model.cliente.Cliente;
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
 import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;
