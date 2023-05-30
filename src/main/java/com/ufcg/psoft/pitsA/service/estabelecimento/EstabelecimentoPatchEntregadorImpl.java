@@ -18,8 +18,7 @@ public class EstabelecimentoPatchEntregadorImpl implements EstabelecimentoPatchE
     @Override
     public Estabelecimento alteraParcialmente(Long id, Entregador entregador) {
         Estabelecimento estabelecimento = estabelecimentoRepository.findById(id).orElseThrow(EstabelecimentoNaoExisteException::new);
-
-        estabelecimento.getEntregadoresPendentes().add(entregador);
+        estabelecimento.adicionaEntregadorPendente(entregador);
 
         return estabelecimentoRepository.save(estabelecimento);
     }

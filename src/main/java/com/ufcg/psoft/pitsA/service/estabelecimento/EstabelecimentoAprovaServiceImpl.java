@@ -37,13 +37,12 @@ public class EstabelecimentoAprovaServiceImpl implements EstabelecimentoAprovaSe
                 .orElseThrow(EntregadorNaoEstaPendenteException::new);
 
         if (aprovacao.isAprovado()) {
-            estabelecimento.getEntregadoresAprovados().add(entregador);
+            estabelecimento.aprovaEntregador(entregador);
+        } else {
+            estabelecimento.reprovaEntregador(entregador);
         }
 
-        estabelecimento.getEntregadoresPendentes().removeIf(e -> e.getId().equals(entregadorId));
-
         estabelecimentoRepository.save(estabelecimento);
-
         return modelMapper.map(entregador, EntregadorReadDTO.class);
     }
 }

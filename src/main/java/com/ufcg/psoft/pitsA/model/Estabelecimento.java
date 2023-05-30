@@ -42,4 +42,17 @@ public class Estabelecimento {
     @Builder.Default
     @OneToMany(mappedBy = "estabelecimentoPedido", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Pedido> pedidos = new ArrayList<>();
+
+    public void adicionaEntregadorPendente(Entregador entregador) {
+        this.entregadoresPendentes.add(entregador);
+    }
+
+    public void aprovaEntregador(Entregador entregador) {
+        this.entregadoresPendentes.remove(entregador);
+        this.entregadoresAprovados.add(entregador);
+    }
+
+    public void reprovaEntregador(Entregador entregador) {
+        this.entregadoresPendentes.remove(entregador);
+    }
 }
