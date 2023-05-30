@@ -56,4 +56,9 @@ public class Estabelecimento {
     public void reprovaEntregador(Entregador entregador) {
         this.entregadoresPendentes.remove(entregador);
     }
+
+    public void recebeNotificacaoPedidoEntregue(String nome) {
+        System.out.println("\nEstabelecimento " + this.id);
+        System.out.println("Hey! O pedido do cliente " + nome + " foi entregue!\n");
+    }
 }

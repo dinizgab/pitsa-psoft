@@ -65,7 +65,7 @@ public class EstabelecimentoSaborDispTests {
                 .codigoAcesso("123456")
                 .build();
 
-        Set<Interessado> interessados = new HashSet<>();
+        Set<Cliente> interessados = new HashSet<>();
         interessados.add(cliente);
 
         saborIndisponivel = saborRepository.save(Sabor.builder()

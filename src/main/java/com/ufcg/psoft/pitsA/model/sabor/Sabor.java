@@ -45,13 +45,14 @@ public class Sabor {
 
     @OneToMany(targetEntity = Cliente.class)
     @Builder.Default
-    private Set<Interessado> interessados = new HashSet<>();
+    // TODO - Arrumar um jeito de desacoplar isso usando uma interface
+    private Set<Cliente> interessados = new HashSet<>();
 
-    public void adicionaInteressado(Interessado interessado) {
+    public void adicionaInteressado(Cliente interessado) {
         interessados.add(interessado);
     }
 
-    public void removeInteressado(Interessado interessado) {
+    public void removeInteressado(Cliente interessado) {
         interessados.remove(interessado);
     }
 

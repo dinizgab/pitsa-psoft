@@ -65,8 +65,9 @@ public class Pedido {
         this.notificaCliente();
     }
 
-    public Double calculaValorTotal() {
-        return calculadoraPedido.calculaTotal(sabores, tipo, tamanho, tipoPagamento);
+    public void setEstadoEntregue() {
+        this.estado = EstadoPedido.ENTREGUE;
+        this.notificaEstabelecimento();
     }
 
     private void notificaCliente() {
@@ -78,5 +79,14 @@ public class Pedido {
                 .build();
 
         this.cliente.recebeNotificacaoPedidoEmRota(nome, veiculo);
+    }
+
+    private void notificaEstabelecimento() {
+        String nomeCliente = this.cliente.getNome();
+        this.estabelecimentoPedido.recebeNotificacaoPedidoEntregue(nomeCliente);
+    }
+
+    public Double calculaValorTotal() {
+        return calculadoraPedido.calculaTotal(sabores, tipo, tamanho, tipoPagamento);
     }
 }

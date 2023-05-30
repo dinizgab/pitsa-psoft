@@ -19,7 +19,14 @@ public class PedidoPatchEstadoServiceImpl implements PedidoPatchEstadoService {
     public PedidoReadResponseDTO alteraEstado(Long pedidoId, EstadoPedido estado) {
         Pedido pedido = pedidoRepository.findById(pedidoId).orElseThrow(PedidoNaoEncontradoException::new);
 
-        pedido.setEstado(estado);
+        if (estado.isEntregue()) {
+            pedido.setEstadoEntregue();
+        } else if (estado.isRota()) {
+            pedido.setEstadoEmRota();
+        } else {
+            pedido.setEstado(estado);
+        }
+
         return modelMapper.map(pedidoRepository.save(pedido), PedidoReadResponseDTO.class);
     }
 }
