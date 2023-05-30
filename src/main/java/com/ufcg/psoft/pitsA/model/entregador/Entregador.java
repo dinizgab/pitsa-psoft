@@ -1,7 +1,8 @@
-package com.ufcg.psoft.pitsA.model;
+package com.ufcg.psoft.pitsA.model.entregador;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import jakarta.persistence.*;
 import lombok.*;

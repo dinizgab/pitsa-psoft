@@ -1,8 +1,7 @@
 package com.ufcg.psoft.pitsA.service.pedido;
 
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
-import com.ufcg.psoft.pitsA.model.Entregador;
-import com.ufcg.psoft.pitsA.model.pedido.EstadoPedido;
+import com.ufcg.psoft.pitsA.model.entregador.Entregador;
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.repository.PedidoRepository;
 import org.modelmapper.ModelMapper;
@@ -18,7 +17,7 @@ public class PedidoPatchEntregadorServiceImpl implements PedidoPatchEntregadorSe
 
     public PedidoReadResponseDTO alterarEntregador(Pedido pedido, Entregador entregador) {
         pedido.setEntregador(entregador);
-        pedido.setEstado(EstadoPedido.EM_ROTA);
+        pedido.setEstadoEmRota();
 
         return modelMapper.map(pedidoRepository.save(pedido), PedidoReadResponseDTO.class);
     }

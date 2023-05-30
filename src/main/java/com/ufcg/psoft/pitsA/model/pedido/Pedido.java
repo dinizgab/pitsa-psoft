@@ -1,8 +1,10 @@
 package com.ufcg.psoft.pitsA.model.pedido;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ufcg.psoft.pitsA.model.Cliente;
-import com.ufcg.psoft.pitsA.model.Entregador;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorVeiculoDTO;
+import com.ufcg.psoft.pitsA.model.cliente.Cliente;
+import com.ufcg.psoft.pitsA.model.cliente.Interessado;
+import com.ufcg.psoft.pitsA.model.entregador.Entregador;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import jakarta.persistence.*;
@@ -36,6 +38,7 @@ public class Pedido {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToOne(optional = false)
+    // TODO - Desacoplar essa relacao arrumando um jeito de implementar uma interface
     private Cliente cliente;
 
     @ToString.Exclude
@@ -58,7 +61,23 @@ public class Pedido {
     @Builder.Default
     private CalculadoraPedido calculadoraPedido = new CalculadoraPedidoImpl();
 
+    public void setEstadoEmRota() {
+        this.estado = EstadoPedido.EM_ROTA;
+        this.notificaCliente();
+    }
+
     public Double calculaValorTotal() {
         return calculadoraPedido.calculaTotal(sabores, tipo, tamanho, tipoPagamento);
+    }
+
+    private void notificaCliente() {
+        String nome = entregador.getNome();
+        EntregadorVeiculoDTO veiculo = EntregadorVeiculoDTO.builder()
+                .corVeiculo(entregador.getCorVeiculo())
+                .placaVeiculo(entregador.getPlacaVeiculo())
+                .tipoVeiculo(entregador.getTipoVeiculo().getTipoVeiculo())
+                .build();
+
+        this.cliente.recebeNotificacaoPedidoEmRota(nome, veiculo);
     }
 }
