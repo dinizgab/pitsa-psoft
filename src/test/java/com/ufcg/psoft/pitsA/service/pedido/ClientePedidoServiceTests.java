@@ -5,7 +5,10 @@ import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.exception.pedido.TamanhoPedidoInvalidosException;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
-import com.ufcg.psoft.pitsA.model.pedido.*;
+import com.ufcg.psoft.pitsA.model.pedido.Pedido;
+import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTamanho;
+import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTipo;
+import com.ufcg.psoft.pitsA.model.pedido.TipoPagamento;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
@@ -493,6 +496,65 @@ public class ClientePedidoServiceTests {
                     .build();
 
             assertThrows(CodigoAcessoInvalidoException.class, () -> driverAtualizar.atualizarPedido(cliente.getId(), putDTO));
+        }
+    }
+
+    @Nested
+    @DisplayName("Testes do service de confirmar a entrega do pedido")
+    class ConfirmarEntregaPedido {
+        @Autowired
+        ClienteConfirmarEntregaPedidoService driverConfirmarEntrega;
+        Pedido pedido;
+
+        @BeforeEach
+        void setUp() {
+            pedido = Pedido.builder()
+                    .endereco("Rua 13 de maio, 123")
+                    .tamanho(PizzaPedidoTamanho.MEDIA)
+                    .tipo(PizzaPedidoTipo.INTEIRA)
+                    .sabores(new ArrayList<>())
+                    .estabelecimentoPedido(estabelecimento)
+                    .cliente(cliente)
+                    .build();
+
+            Sabor sabor1 = Sabor.builder()
+                    .nome("Calabresa")
+                    .tipo(TipoSabor.SALGADO)
+                    .precoGrande(60.0)
+                    .precoMedio(40.0)
+                    .estabelecimento(estabelecimento)
+                    .build();
+
+            saborRepository.save(sabor1);
+            pedido.getSabores().add(sabor1);
+            pedidoRepository.save(pedido);
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("Teste de confimar entrega de um pedido")
+        void testeConfirmaEntregaPedido() {
+            Long clienteId = cliente.getId();
+            PedidoConfirmaEntregaDTO patchBody = PedidoConfirmaEntregaDTO.builder()
+                    .codigoAcesso(cliente.getCodigoAcesso())
+                    .pedidoId(pedido.getId())
+                    .build();
+
+            PedidoReadResponseDTO resultado = driverConfirmarEntrega.confirmarEntrega(clienteId, patchBody);
+            assertTrue(resultado.getEstado().isEntregue());
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("Teste de confimar entrega de um pedido com codigo de acesso invalido")
+        void testeConfirmaEntregaPedidoCodigoAcessoInvalido() {
+            Long clienteId = cliente.getId();
+            PedidoConfirmaEntregaDTO patchBody = PedidoConfirmaEntregaDTO.builder()
+                    .codigoAcesso("AAAAAAAA")
+                    .pedidoId(pedido.getId())
+                    .build();
+
+            assertThrows(CodigoAcessoInvalidoException.class, () -> driverConfirmarEntrega.confirmarEntrega(clienteId, patchBody));
         }
     }
 }

@@ -5,13 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Data
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
-public class PedidoPatchEntregadorDTO {
+@NoArgsConstructor
+public class PedidoConfirmaEntregaDTO {
     private Long pedidoId;
-    private Long entregadorId;
     private String codigoAcesso;
-
 }
