@@ -14,6 +14,8 @@ import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.pitsA.repository.PedidoRepository;
 import com.ufcg.psoft.pitsA.repository.SaborRepository;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoListarPedidoService;
+import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoPatchPedidoEstadoService;
+import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoPatchPedidoEstadoServiceImpl;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +36,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class EstabelecimentoPedidoServiceTests {
     @Autowired
     EstabelecimentoListarPedidoService driverListar;
+    @Autowired
+    EstabelecimentoPatchPedidoEstadoService driverPatchEstado;
     @Autowired
     EstabelecimentoRepository estabelecimentoRepository;
     @Autowired
@@ -153,7 +157,29 @@ public class EstabelecimentoPedidoServiceTests {
                 () -> assertEquals("Rua 13 de maio, 123", resultado.getEndereco()),
                 () -> assertTrue(resultado.getTipo().isMeia()),
                 () -> assertTrue(resultado.getTamanho().isGrande()),
+                () -> assertTrue(resultado.getEstado().isPreparo()),
                 () -> assertEquals(45.0, resultado.getValorTotal())
+        );
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Teste de alterar o estado de um pedido pelo id")
+    void testeAlterarEstadoPedido() {
+        Long estabelecimentoId = estabelecimento.getId();
+
+        PedidoReadBodyDTO patchBody = PedidoReadBodyDTO.builder()
+                .pedidoId(pedidoId)
+                .codigoAcesso("123456")
+                .build();
+
+        PedidoReadResponseDTO resultado = driverPatchEstado.alterarEstadoPedido(estabelecimentoId, patchBody);
+
+        assertAll(
+                () -> assertEquals("Rua 13 de maio, 123", resultado.getEndereco()),
+                () -> assertTrue(resultado.getTipo().isMeia()),
+                () -> assertTrue(resultado.getTamanho().isGrande()),
+                () -> assertTrue(resultado.getEstado().isPronto())
         );
     }
 }
