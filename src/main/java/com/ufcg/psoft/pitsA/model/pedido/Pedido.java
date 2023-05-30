@@ -45,12 +45,16 @@ public class Pedido {
     @OneToMany()
     private List<Sabor> sabores;
 
+    @Column
+    @Builder.Default
+    private EstadoPedido estado = EstadoPedido.RECEBIDO;
+
     @JsonIgnore
     @Transient
     @Builder.Default
     private CalculadoraPedido calculadoraPedido = new CalculadoraPedidoImpl();
 
-    public double calculaValorTotal() {
+    public Double calculaValorTotal() {
         return calculadoraPedido.calculaTotal(sabores, tipo, tamanho, tipoPagamento);
     }
 }

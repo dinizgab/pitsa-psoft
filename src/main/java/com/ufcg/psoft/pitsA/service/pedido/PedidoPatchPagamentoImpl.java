@@ -2,6 +2,7 @@ package com.ufcg.psoft.pitsA.service.pedido;
 
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
 import com.ufcg.psoft.pitsA.exception.pedido.PedidoNaoEncontradoException;
+import com.ufcg.psoft.pitsA.model.pedido.EstadoPedido;
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.model.pedido.TipoPagamento;
 import com.ufcg.psoft.pitsA.repository.PedidoRepository;
@@ -21,6 +22,7 @@ public class PedidoPatchPagamentoImpl implements PedidoPatchPagamento {
         Pedido pedido = pedidoRepository.findById(pedidoId).orElseThrow(PedidoNaoEncontradoException::new);
 
         pedido.setTipoPagamento(tipoPagamento);
+        pedido.setEstado(EstadoPedido.EM_PREPARO);
 
         PedidoReadResponseDTO pedidoAlterado = modelMapper.map(pedidoRepository.save(pedido), PedidoReadResponseDTO.class);
         pedidoAlterado.setValorTotal(pedido.calculaValorTotal());

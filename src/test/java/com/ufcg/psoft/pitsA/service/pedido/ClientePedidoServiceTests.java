@@ -5,10 +5,7 @@ import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.exception.pedido.TamanhoPedidoInvalidosException;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
-import com.ufcg.psoft.pitsA.model.pedido.Pedido;
-import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTamanho;
-import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTipo;
-import com.ufcg.psoft.pitsA.model.pedido.TipoPagamento;
+import com.ufcg.psoft.pitsA.model.pedido.*;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
@@ -132,6 +129,7 @@ public class ClientePedidoServiceTests {
                 () -> assertEquals("Rua 20 de novembro, 321", resultado.getEndereco()),
                 () -> assertTrue(resultado.getTamanho().isGrande()),
                 () -> assertTrue(resultado.getTipo().isInteira()),
+                () -> assertTrue(resultado.getEstado().isRecebido()),
                 () -> assertEquals(1, resultado.getSabores().size()),
                 () -> assertEquals(45.0, resultado.getValorTotal())
         );
@@ -148,6 +146,7 @@ public class ClientePedidoServiceTests {
                 () -> assertEquals(cliente.getEndereco(), resultado.getEndereco()),
                 () -> assertTrue(resultado.getTamanho().isGrande()),
                 () -> assertTrue(resultado.getTipo().isMeia()),
+                () -> assertTrue(resultado.getEstado().isRecebido()),
                 () -> assertEquals(2, resultado.getSabores().size()),
                 () -> assertEquals(45.0, resultado.getValorTotal())
         );
@@ -309,6 +308,7 @@ public class ClientePedidoServiceTests {
                     () -> assertEquals(cliente.getNome(), resultado.getCliente().getNome()),
                     () -> assertEquals(cliente.getEndereco(), resultado.getEndereco()),
                     () -> assertEquals(valorFinal, resultado.getValorTotal()),
+                    () -> assertTrue(resultado.getEstado().isPreparo()),
                     () -> assertTrue(resultado.getTamanho().isMedia()),
                     () -> assertTrue(resultado.getTipo().isInteira()),
                     () -> assertTrue(resultado.getTipoPagamento().isDebito())
@@ -333,6 +333,7 @@ public class ClientePedidoServiceTests {
                     () -> assertEquals(cliente.getNome(), resultado.getCliente().getNome()),
                     () -> assertEquals(cliente.getEndereco(), resultado.getEndereco()),
                     () -> assertEquals(valorFinal, resultado.getValorTotal()),
+                    () -> assertTrue(resultado.getEstado().isPreparo()),
                     () -> assertTrue(resultado.getTamanho().isMedia()),
                     () -> assertTrue(resultado.getTipo().isInteira()),
                     () -> assertTrue(resultado.getTipoPagamento().isPix())
@@ -357,6 +358,7 @@ public class ClientePedidoServiceTests {
                     () -> assertEquals(cliente.getNome(), resultado.getCliente().getNome()),
                     () -> assertEquals(cliente.getEndereco(), resultado.getEndereco()),
                     () -> assertEquals(valorFinal, resultado.getValorTotal()),
+                    () -> assertTrue(resultado.getEstado().isPreparo()),
                     () -> assertTrue(resultado.getTamanho().isMedia()),
                     () -> assertTrue(resultado.getTipo().isInteira()),
                     () -> assertTrue(resultado.getTipoPagamento().isCredito())
