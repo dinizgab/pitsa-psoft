@@ -4,6 +4,9 @@ import com.ufcg.psoft.pitsA.dto.entregador.EntregadorReadDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoPatchEntregadorDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadBodyDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
+import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
+import com.ufcg.psoft.pitsA.exception.entregador.EntregadorNaoEstaAprovadoException;
+import com.ufcg.psoft.pitsA.exception.pedido.PedidoNaoEncontradoException;
 import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
@@ -157,7 +160,7 @@ public class EstabelecimentoPedidoServiceTests {
                 () -> assertEquals("Rua 13 de maio, 123", resultado.getEndereco()),
                 () -> assertTrue(resultado.getTipo().isMeia()),
                 () -> assertTrue(resultado.getTamanho().isGrande()),
-                () -> assertTrue(resultado.getEstado().isPreparo()),
+                () -> assertTrue(resultado.getEstado().isRecebido()),
                 () -> assertEquals(45.0, resultado.getValorTotal())
         );
     }
@@ -232,6 +235,53 @@ public class EstabelecimentoPedidoServiceTests {
                     () -> assertEquals(resultado.getEntregador(), entregadorResultado),
                     () -> assertTrue(resultado.getEstado().isRota())
             );
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("Teste de atribuir um entregador a um pedido com codigo acesso invalido")
+        void testeAtribuiEntregadorPedidoCodigoAcessoInvalido() {
+            Long estabelecimentoId = estabelecimento.getId();
+            Long entregadorId = entregador.getId();
+
+            PedidoPatchEntregadorDTO patchBody = PedidoPatchEntregadorDTO.builder()
+                    .pedidoId(pedidoId)
+                    .entregadorId(entregadorId)
+                    .codigoAcesso("654321")
+                    .build();
+
+            assertThrows(CodigoAcessoInvalidoException.class, () -> driverPatchEntregador.alterarEntregador(estabelecimentoId, patchBody));
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("Teste de atribuir um entregador a um pedido com pedido nao presente no estabelecimento")
+        void testeAtribuiEntregadorPedidoInvalido() {
+            Long estabelecimentoId = estabelecimento.getId();
+            Long entregadorId = entregador.getId();
+
+            PedidoPatchEntregadorDTO patchBody = PedidoPatchEntregadorDTO.builder()
+                    .pedidoId(14L)
+                    .entregadorId(entregadorId)
+                    .codigoAcesso("123456")
+                    .build();
+
+            assertThrows(PedidoNaoEncontradoException.class, () -> driverPatchEntregador.alterarEntregador(estabelecimentoId, patchBody));
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("Teste de atribuir um entregador a um pedido com entregador nao aprovado")
+        void testeAtribuiEntregadorPedidoEntregadorNaoAprovado() {
+            Long estabelecimentoId = estabelecimento.getId();
+
+            PedidoPatchEntregadorDTO patchBody = PedidoPatchEntregadorDTO.builder()
+                    .pedidoId(pedidoId)
+                    .entregadorId(13L)
+                    .codigoAcesso("123456")
+                    .build();
+
+            assertThrows(EntregadorNaoEstaAprovadoException.class, () -> driverPatchEntregador.alterarEntregador(estabelecimentoId, patchBody));
         }
     }
 
