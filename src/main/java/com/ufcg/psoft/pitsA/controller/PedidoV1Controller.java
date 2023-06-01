@@ -90,7 +90,7 @@ public class PedidoV1Controller {
     }
 
     @DeleteMapping("/cliente/{id}")
-    public ResponseEntity<?> removerUmPedido (
+    public ResponseEntity<?> cancelarUmPedido (
             @PathVariable("id") Long id,
             @RequestBody ClienteRemoverPedidoDTO removeBody
     ) {

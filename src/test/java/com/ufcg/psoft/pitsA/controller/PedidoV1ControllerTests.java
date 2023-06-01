@@ -258,6 +258,7 @@ public class PedidoV1ControllerTests {
                     .estabelecimentoId(estabelecimento.getId())
                     .codigoAcesso(cliente.getCodigoAcesso())
                     .build();
+            System.out.println(pedido);
 
             String responseJsonString = driver.perform(delete(URI_PEDIDOS + "/cliente/" + clienteId)
                             .contentType(MediaType.APPLICATION_JSON)
