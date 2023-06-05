@@ -15,6 +15,7 @@ public class PedidoRemoverServiceImpl implements PedidoRemoverService {
     @Override
     public void removerPedido(Long pedidoId) {
         Pedido pedido = pedidoRepository.findById(pedidoId).orElseThrow(PedidoNaoEncontradoException::new);
+        // TODO - Terminar a refatoração do estado do pedido para o padrão State
         if (pedido.getEstado().isPronto() || pedido.getEstado().isRota() || pedido.getEstado().isEntregue())
             throw new PedidoJaEstaProntoException();
 
