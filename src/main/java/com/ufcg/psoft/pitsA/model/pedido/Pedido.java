@@ -48,7 +48,7 @@ public class Pedido {
     @OneToMany()
     private List<Sabor> sabores;
 
-    @ManyToOne(optional = true)
+    @ManyToOne()
     private Entregador entregador;
 
     @Column
