@@ -3,11 +3,14 @@ package com.ufcg.psoft.pitsA.service.estabelecimento;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadBodyDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
 import com.ufcg.psoft.pitsA.exception.estabelecimento.EstabelecimentoNaoExisteException;
+import com.ufcg.psoft.pitsA.exception.estabelecimento.NenhumEntregadorDisponivelException;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.entregador.Entregador;
 import com.ufcg.psoft.pitsA.model.pedido.EstadoPedido;
+import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;
-import com.ufcg.psoft.pitsA.service.pedido.PedidoPatchEstadoService;
+import com.ufcg.psoft.pitsA.service.pedido.PedidoAtualizarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +19,7 @@ public class EstabelecimentoPatchPedidoEstadoServiceImpl implements Estabelecime
     @Autowired
     EstabelecimentoRepository estabelecimentoRepository;
     @Autowired
-    PedidoPatchEstadoService pedidoPatchEstadoService;
+    PedidoAtualizarService pedidoAtualizarService;
     @Autowired
     AutenticaCodigoAcessoService autenticador;
 
@@ -27,6 +30,17 @@ public class EstabelecimentoPatchPedidoEstadoServiceImpl implements Estabelecime
         Estabelecimento estabelecimento = estabelecimentoRepository.findById(estabelecimentoId).orElseThrow(EstabelecimentoNaoExisteException::new);
         autenticador.autenticar(estabelecimento.getCodigoAcesso(), codigoAcesso);
 
-        return pedidoPatchEstadoService.alteraEstado(pedidoId, EstadoPedido.PRONTO);
+        Pedido pedido = estabelecimento.encontraPedido(pedidoId);
+        Entregador entregador;
+        try {
+            entregador = estabelecimento.proximoEntregador();
+
+            pedido.setEntregador(entregador);
+            pedido.setEstadoEmRota();
+        } catch (NenhumEntregadorDisponivelException e) {
+            pedido.setEstado(EstadoPedido.PRONTO);
+        }
+
+        return pedidoAtualizarService.atualizarPedido(pedido);
     }
 }

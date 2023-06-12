@@ -10,7 +10,6 @@ import com.ufcg.psoft.pitsA.model.entregador.Entregador;
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;
-import com.ufcg.psoft.pitsA.service.entregador.EntregadorAdicionaPedidoService;
 import com.ufcg.psoft.pitsA.service.pedido.PedidoPatchEntregadorService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,6 @@ public class EstabelecimentoPatchPedidoEntregadorServiceImpl implements Estabele
     EstabelecimentoRepository estabelecimentoRepository;
     @Autowired
     PedidoPatchEntregadorService pedidoPatchEntregadorService;
-    @Autowired
-    EntregadorAdicionaPedidoService entregadorAdicionaPedidoService;
     @Autowired
     AutenticaCodigoAcessoService autenticador;
     @Autowired
@@ -39,16 +36,17 @@ public class EstabelecimentoPatchPedidoEntregadorServiceImpl implements Estabele
 
         Entregador resultadoEntregador = estabelecimento
                 .getEntregadoresAprovados()
-                .stream().filter(entregador -> entregador.getId().equals(entregadorId))
-                .findFirst().orElseThrow(EntregadorNaoEstaAprovadoException::new);
+                .stream()
+                .filter(entregador -> entregador.getId().equals(entregadorId))
+                .findFirst()
+                .orElseThrow(EntregadorNaoEstaAprovadoException::new);
 
         Pedido resultadoPedido = estabelecimento
                 .getPedidos()
-                .stream().filter(pedido -> pedido.getId().equals(pedidoId))
+                .stream()
+                .filter(pedido -> pedido.getId().equals(pedidoId))
                 .findFirst().orElseThrow(PedidoNaoEncontradoException::new);
 
-
-        entregadorAdicionaPedidoService.adicionaPedidoEntregador(resultadoEntregador, resultadoPedido);
         return pedidoPatchEntregadorService.alterarEntregador(resultadoPedido, resultadoEntregador);
     }
 }

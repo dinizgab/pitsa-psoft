@@ -1,14 +1,15 @@
 package com.ufcg.psoft.pitsA.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ufcg.psoft.pitsA.exception.estabelecimento.NenhumEntregadorDisponivelException;
+import com.ufcg.psoft.pitsA.exception.pedido.PedidoNaoEncontradoException;
 import com.ufcg.psoft.pitsA.model.entregador.Entregador;
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Data
@@ -47,14 +48,28 @@ public class Estabelecimento {
     public void adicionaEntregadorPendente(Entregador entregador) {
         this.entregadoresPendentes.add(entregador);
     }
-
     public void aprovaEntregador(Entregador entregador) {
         this.entregadoresPendentes.remove(entregador);
         this.entregadoresAprovados.add(entregador);
     }
-
     public void reprovaEntregador(Entregador entregador) {
         this.entregadoresPendentes.remove(entregador);
+    }
+
+    public Pedido encontraPedido(Long id) {
+        return this.pedidos
+                .stream()
+                .filter(pedido -> pedido.getId().equals(id))
+                .findFirst()
+                .orElseThrow(PedidoNaoEncontradoException::new);
+    }
+
+    public Entregador proximoEntregador() {
+        return this.getEntregadoresAprovados()
+                .stream()
+                .filter(Entregador::isDisponivel)
+                .findFirst()
+                .orElseThrow(NenhumEntregadorDisponivelException::new);
     }
 
     public void recebeNotificacaoPedidoEntregue(String nome) {
