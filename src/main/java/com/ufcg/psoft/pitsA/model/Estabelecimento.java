@@ -26,12 +26,12 @@ public class Estabelecimento {
     @Column(nullable = false)
     private String codigoAcesso;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     @Builder.Default
     private List<Entregador> entregadoresPendentes = new ArrayList<>();
 
     @Builder.Default
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Entregador> entregadoresAprovados = new ArrayList<>();
 
     @Builder.Default

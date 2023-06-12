@@ -16,8 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @DisplayName("Testes do service de Entregadores")
@@ -38,11 +37,11 @@ public class EntregadorServiceTest {
     @BeforeEach
     void setUp() {
         entregador = EntregadorPostPutDTO.builder()
-                        .nome("Gabriel Pombo Diniz")
-                        .placaVeiculo("RTJ-1235")
-                        .tipoVeiculo(TipoVeiculoEntregador.CARRO)
-                        .corVeiculo("Azul")
-                        .codigoAcesso("123456")
+                            .nome("Gabriel Pombo Diniz")
+                            .placaVeiculo("RTJ-1235")
+                            .tipoVeiculo(TipoVeiculoEntregador.CARRO)
+                            .corVeiculo("Azul")
+                            .codigoAcesso("123456")
                         .build();
     }
 

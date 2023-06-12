@@ -60,8 +60,8 @@ public class EntregadorAssociacaoServiceTest {
     @DisplayName("Quando associamos um entregador a um estabelecimento com o codigo de acesso valido")
     void testeAssociaEntregadorValido() {
         EntregadorPatchEstabelecimentoDTO entregadorDTO = EntregadorPatchEstabelecimentoDTO.builder()
-                .codigoAcesso("123467")
-                .estabelecimentoId(estabelecimentoId)
+                    .codigoAcesso("123467")
+                    .estabelecimentoId(estabelecimentoId)
                 .build();
 
         Entregador resultado = driver.alteraParcialmente(entregadorId, entregadorDTO);

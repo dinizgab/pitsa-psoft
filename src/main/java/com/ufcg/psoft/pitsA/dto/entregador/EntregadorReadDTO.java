@@ -26,4 +26,7 @@ public class EntregadorReadDTO {
 
     @JsonProperty("corVeiculo")
     private String corVeiculo;
+
+    @JsonProperty("disponiblidade")
+    private boolean disponivel;
 }

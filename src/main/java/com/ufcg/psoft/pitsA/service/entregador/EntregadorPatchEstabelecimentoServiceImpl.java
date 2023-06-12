@@ -33,9 +33,7 @@ public class EntregadorPatchEstabelecimentoServiceImpl implements EntregadorPatc
         Entregador entregador = entregadorRepository.findById(entregadorId).orElseThrow(EntregadorNaoExisteException::new);
         autenticador.autenticar(entregador.getCodigoAcesso(), codigoAcesso);
 
-        Estabelecimento estabelecimento = estabelecimentoListarService.listar(estabelecimentoId).get(0);
         estabelecimentoPatchEntregador.alteraParcialmente(estabelecimentoId, entregador);
-
         return entregador;
     }
 }

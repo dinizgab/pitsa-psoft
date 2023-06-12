@@ -1,16 +1,12 @@
 package com.ufcg.psoft.pitsA.model.entregador;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -44,6 +40,10 @@ public class Entregador {
     @Column(nullable = false)
     private String codigoAcesso;
 
+    @Column
+    @Builder.Default
+    private boolean disponivel = false;
+
     @Builder.Default
     @OneToMany(mappedBy = "entregador", fetch = FetchType.LAZY)
     private List<Pedido> pedidos = new ArrayList<>();
@@ -51,4 +51,6 @@ public class Entregador {
     public void adicionaPedido(Pedido pedido) {
         this.pedidos.add(pedido);
     }
+
+    public void alteraDisponibilidade() {this.disponivel = !this.disponivel;}
 }
