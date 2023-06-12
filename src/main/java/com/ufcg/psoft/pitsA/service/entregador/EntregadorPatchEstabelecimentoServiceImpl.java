@@ -34,8 +34,6 @@ public class EntregadorPatchEstabelecimentoServiceImpl implements EntregadorPatc
         autenticador.autenticar(entregador.getCodigoAcesso(), codigoAcesso);
 
         Estabelecimento estabelecimento = estabelecimentoListarService.listar(estabelecimentoId).get(0);
-        entregador.getEstabelecimentos().add(estabelecimento);
-
         estabelecimentoPatchEntregador.alteraParcialmente(estabelecimentoId, entregador);
 
         return entregador;

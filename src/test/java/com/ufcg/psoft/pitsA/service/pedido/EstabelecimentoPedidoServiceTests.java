@@ -202,10 +202,8 @@ public class EstabelecimentoPedidoServiceTests {
                             .corVeiculo("Azul")
                             .placaVeiculo("ABC-1235")
                             .tipoVeiculo(TipoVeiculoEntregador.CARRO)
-                            .estabelecimentos(new HashSet<>())
                             .build();
 
-            entregador.getEstabelecimentos().add(estabelecimento);
             estabelecimento.getEntregadoresAprovados().add(entregador);
 
             entregador = entregadorRepository.save(entregador);

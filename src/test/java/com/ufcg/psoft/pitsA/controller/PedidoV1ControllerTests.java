@@ -388,7 +388,6 @@ public class PedidoV1ControllerTests {
                     .build();
 
             entregador = Entregador.builder()
-                    .estabelecimentos(new HashSet<>())
                     .tipoVeiculo(TipoVeiculoEntregador.MOTO)
                     .corVeiculo("Azul")
                     .placaVeiculo("123-123")
@@ -398,7 +397,6 @@ public class PedidoV1ControllerTests {
             pedido.setEstabelecimentoPedido(estabelecimento);
             pedido = pedidoRepository.save(pedido);
 
-            entregador.getEstabelecimentos().add(estabelecimento);
             entregador = entregadorRepository.save(entregador);
 
             estabelecimento.getPedidos().add(pedido);

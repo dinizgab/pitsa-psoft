@@ -26,7 +26,7 @@ public class Estabelecimento {
     @Column(nullable = false)
     private String codigoAcesso;
 
-    @ManyToMany(mappedBy = "estabelecimentos", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<Entregador> entregadoresPendentes = new ArrayList<>();
 

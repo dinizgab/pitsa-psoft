@@ -44,13 +44,6 @@ public class Entregador {
     @Column(nullable = false)
     private String codigoAcesso;
 
-    @JsonIgnore
-    @Builder.Default
-    @ManyToMany(fetch = FetchType.LAZY)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Set<Estabelecimento> estabelecimentos = new HashSet<>();
-
     @Builder.Default
     @OneToMany(mappedBy = "entregador", fetch = FetchType.LAZY)
     private List<Pedido> pedidos = new ArrayList<>();

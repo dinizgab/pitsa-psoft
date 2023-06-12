@@ -40,7 +40,6 @@ public class EntregadorAssociacaoServiceTest {
                 .corVeiculo("Verde")
                 .placaVeiculo("FAS-5432")
                 .tipoVeiculo(TipoVeiculoEntregador.CARRO)
-                .estabelecimentos(new HashSet<>())
                 .build()
         ).getId();
 
@@ -70,7 +69,6 @@ public class EntregadorAssociacaoServiceTest {
         Estabelecimento resultadoEstabelecimento = estabelecimentoRepository.findById(estabelecimentoId).get();
 
         assertTrue(resultadoEstabelecimento.getEntregadoresPendentes().contains(resultado));
-        assertTrue(resultado.getEstabelecimentos().contains(resultadoEstabelecimento));
     }
 
     @Test
