@@ -72,7 +72,6 @@ public class EstabelecimentoPedidoServiceTests {
                 .tipo(TipoSabor.SALGADO)
                 .precoGrande(35.0)
                 .precoMedio(30.0)
-                .estabelecimento(estabelecimento)
                 .build();
 
         Sabor sabor2 = Sabor.builder()
@@ -80,7 +79,6 @@ public class EstabelecimentoPedidoServiceTests {
                 .tipo(TipoSabor.SALGADO)
                 .precoGrande(55.0)
                 .precoMedio(30.0)
-                .estabelecimento(estabelecimento)
                 .build();
 
         estabelecimento.getCardapio().add(sabor1);

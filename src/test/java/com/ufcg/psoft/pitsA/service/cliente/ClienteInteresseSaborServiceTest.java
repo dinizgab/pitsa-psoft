@@ -61,7 +61,6 @@ public class ClienteInteresseSaborServiceTest {
                         .precoMedio(25.0)
                         .tipo(TipoSabor.SALGADO)
                         .disponivel(false)
-                        .estabelecimento(estabelecimento)
                         .build()
         );
 
@@ -114,7 +113,6 @@ public class ClienteInteresseSaborServiceTest {
                         .precoMedio(25.0)
                         .tipo(TipoSabor.SALGADO)
                         .disponivel(true)
-                        .estabelecimento(estabelecimento)
                         .build()
         );
 

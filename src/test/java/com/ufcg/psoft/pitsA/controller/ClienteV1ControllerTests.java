@@ -210,7 +210,6 @@ public class ClienteV1ControllerTests {
 
             List<Sabor> cardapio = new ArrayList<>();
             cardapio.add(Sabor.builder()
-                            .estabelecimento(estabelecimento)
                             .precoGrande(55.0)
                             .precoMedio(27.5)
                             .nome("Calabresa")
@@ -219,7 +218,6 @@ public class ClienteV1ControllerTests {
                     .build()
             );
             cardapio.add(Sabor.builder()
-                            .estabelecimento(estabelecimento)
                             .precoGrande(50.0)
                             .precoMedio(25.0)
                             .nome("4 Queijos")
@@ -229,7 +227,6 @@ public class ClienteV1ControllerTests {
             );
 
             cardapio.add(Sabor.builder()
-                            .estabelecimento(estabelecimento)
                             .precoGrande(60.0)
                             .precoMedio(30.0)
                             .nome("Frango com bacon")
@@ -322,7 +319,6 @@ public class ClienteV1ControllerTests {
 
             List<Sabor> cardapio = new ArrayList<>();
             cardapio.add(Sabor.builder()
-                    .estabelecimento(estabelecimento)
                     .precoGrande(55.0)
                     .precoMedio(27.5)
                     .nome("Calabresa")
@@ -331,7 +327,6 @@ public class ClienteV1ControllerTests {
                     .build()
             );
             cardapio.add(Sabor.builder()
-                    .estabelecimento(estabelecimento)
                     .precoGrande(50.0)
                     .precoMedio(25.0)
                     .nome("4 Queijos")
@@ -341,7 +336,6 @@ public class ClienteV1ControllerTests {
             );
 
             sabor = Sabor.builder()
-                    .estabelecimento(estabelecimento)
                     .precoGrande(60.0)
                     .precoMedio(30.0)
                     .nome("Frango com bacon")

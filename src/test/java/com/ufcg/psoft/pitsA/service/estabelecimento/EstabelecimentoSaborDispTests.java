@@ -54,7 +54,6 @@ public class EstabelecimentoSaborDispTests {
                         .nome("Frango com bacon")
                         .precoGrande(50.0)
                         .precoMedio(25.0)
-                        .estabelecimento(estabelecimento)
                         .tipo(TipoSabor.SALGADO)
                 .build()
         );
@@ -72,7 +71,6 @@ public class EstabelecimentoSaborDispTests {
                 .nome("Carne de sol")
                 .precoGrande(30.0)
                 .precoMedio(15.0)
-                .estabelecimento(estabelecimento)
                 .interessados(interessados)
                 .tipo(TipoSabor.SALGADO)
                 .disponivel(false)

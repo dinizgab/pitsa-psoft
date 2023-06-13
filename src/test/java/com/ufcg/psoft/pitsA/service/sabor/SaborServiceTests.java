@@ -53,16 +53,15 @@ public class SaborServiceTests {
                         .tipo(TipoSabor.SALGADO)
                         .precoGrande(44.0)
                         .precoMedio(22.0)
-                        .estabelecimento(estabelecimento)
                         .build()
         );
 
-        Sabor sabor2 = saborRepository.save(Sabor.builder()
-                .nome("Calabresa")
-                .tipo(TipoSabor.SALGADO)
-                .precoGrande(44.0)
-                .precoMedio(22.0)
-                .estabelecimento(estabelecimento)
+        Sabor sabor2 = saborRepository.save(
+                Sabor.builder()
+                        .nome("Calabresa")
+                        .tipo(TipoSabor.SALGADO)
+                        .precoGrande(44.0)
+                        .precoMedio(22.0)
                 .build());
 
         estabelecimento.getCardapio().add(sabor);
@@ -90,7 +89,6 @@ public class SaborServiceTests {
         SaborReadDTO resultado = driverCriar.create(estabelecimento.getId(), postBody);
 
         assertAll(
-                () -> assertEquals(estabelecimento, resultado.getEstabelecimento()),
                 () -> assertEquals("4 queijos", resultado.getNome()),
                 () -> assertTrue(resultado.getTipo().isSalgado()),
                 () -> assertEquals(44.0, resultado.getPrecoGrande()),
@@ -108,8 +106,7 @@ public class SaborServiceTests {
                 () -> assertEquals(sabor.getNome(), resultado.getNome()),
                 () -> assertEquals(sabor.getPrecoGrande(), resultado.getPrecoGrande()),
                 () -> assertEquals(sabor.getPrecoMedio(), resultado.getPrecoMedio()),
-                () -> assertTrue(resultado.getTipo().isSalgado()),
-                () -> assertEquals(estabelecimento, resultado.getEstabelecimento())
+                () -> assertTrue(resultado.getTipo().isSalgado())
         );
     }
 

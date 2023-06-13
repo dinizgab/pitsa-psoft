@@ -367,7 +367,6 @@ public class EstabelecimentoV1ControllerTests {
             sabor = saborRepository.save(Sabor.builder()
                     .nome("Chocolate")
                     .tipo(TipoSabor.DOCE)
-                    .estabelecimento(estabelecimento)
                     .precoGrande(50.0)
                     .precoMedio(25.0)
                     .build());

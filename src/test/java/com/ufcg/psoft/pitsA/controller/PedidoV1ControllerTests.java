@@ -58,27 +58,24 @@ public class PedidoV1ControllerTests {
         );
 
         sabor = Sabor.builder()
-                .nome("Calabresa")
-                .tipo(TipoSabor.SALGADO)
-                .precoGrande(35.0)
-                .precoMedio(30.0)
-                .estabelecimento(estabelecimento)
+                    .nome("Calabresa")
+                    .tipo(TipoSabor.SALGADO)
+                    .precoGrande(35.0)
+                    .precoMedio(30.0)
                 .build();
 
         Sabor sabor2 = Sabor.builder()
-                .nome("4 Queijos")
-                .tipo(TipoSabor.SALGADO)
-                .precoGrande(55.0)
-                .precoMedio(30.0)
-                .estabelecimento(estabelecimento)
+                    .nome("4 Queijos")
+                    .tipo(TipoSabor.SALGADO)
+                    .precoGrande(55.0)
+                    .precoMedio(30.0)
                 .build();
 
         Sabor sabor3 = Sabor.builder()
-                .nome("Chocolate")
-                .tipo(TipoSabor.DOCE)
-                .precoGrande(45.0)
-                .precoMedio(25.0)
-                .estabelecimento(estabelecimento)
+                    .nome("Chocolate")
+                    .tipo(TipoSabor.DOCE)
+                    .precoGrande(45.0)
+                    .precoMedio(25.0)
                 .build();
 
         saborRepository.saveAll(Arrays.asList(sabor, sabor2, sabor3));

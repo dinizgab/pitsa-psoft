@@ -31,13 +31,10 @@ public class SaborCreateImplService implements SaborCreateService {
         Estabelecimento estabelecimento = estabelecimentoListarService.listar(estabelecimentoId).get(0);
         autenticador.autenticar(estabelecimento.getCodigoAcesso(), saborDTO.getCodigoAcesso());
 
-        Sabor sabor = modelMapper.map(saborDTO, Sabor.class);
-        sabor.setEstabelecimento(estabelecimento);
+        Sabor sabor = saborRepository.save(modelMapper.map(saborDTO, Sabor.class));
 
-        Sabor saborSalvo = saborRepository.save(sabor);
-
-        estabelecimentoAdicionaSabor.adicionaSabor(estabelecimentoId, saborSalvo);
-        return modelMapper.map(saborSalvo, SaborReadDTO.class);
+        estabelecimentoAdicionaSabor.adicionaSabor(estabelecimentoId, sabor);
+        return modelMapper.map(sabor, SaborReadDTO.class);
     }
 }
 

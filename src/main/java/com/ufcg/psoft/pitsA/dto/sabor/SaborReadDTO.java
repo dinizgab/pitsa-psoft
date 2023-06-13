@@ -26,7 +26,5 @@ public class SaborReadDTO {
 
     private Double precoGrande;
 
-    private Estabelecimento estabelecimento;
-
     private List<ClienteReadDTO> interessados;
 }

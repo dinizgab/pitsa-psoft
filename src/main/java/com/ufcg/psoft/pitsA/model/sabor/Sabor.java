@@ -37,12 +37,6 @@ public class Sabor {
     @Builder.Default
     private boolean disponivel = true;
 
-    @JsonIgnore
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @ManyToOne(fetch = FetchType.LAZY)
-    Estabelecimento estabelecimento;
-
     @OneToMany(targetEntity = Cliente.class)
     @Builder.Default
     // TODO - Arrumar um jeito de desacoplar isso usando uma interface

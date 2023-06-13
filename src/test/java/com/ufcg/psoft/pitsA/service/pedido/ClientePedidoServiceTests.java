@@ -54,7 +54,6 @@ public class ClientePedidoServiceTests {
                 .tipo(TipoSabor.SALGADO)
                 .precoGrande(35.0)
                 .precoMedio(30.0)
-                .estabelecimento(estabelecimento)
                 .build();
 
         Sabor sabor2 = Sabor.builder()
@@ -62,7 +61,6 @@ public class ClientePedidoServiceTests {
                 .tipo(TipoSabor.SALGADO)
                 .precoGrande(55.0)
                 .precoMedio(30.0)
-                .estabelecimento(estabelecimento)
                 .build();
 
         Sabor sabor3 = Sabor.builder()
@@ -70,7 +68,6 @@ public class ClientePedidoServiceTests {
                 .tipo(TipoSabor.DOCE)
                 .precoGrande(45.0)
                 .precoMedio(25.0)
-                .estabelecimento(estabelecimento)
                 .build();
 
         cliente = clienteRepository.save(
@@ -186,7 +183,6 @@ public class ClientePedidoServiceTests {
                     .tipo(TipoSabor.SALGADO)
                     .precoGrande(35.0)
                     .precoMedio(30.0)
-                    .estabelecimento(estabelecimento)
                     .build();
 
             Sabor sabor2 = Sabor.builder()
@@ -194,7 +190,6 @@ public class ClientePedidoServiceTests {
                     .tipo(TipoSabor.SALGADO)
                     .precoGrande(55.0)
                     .precoMedio(30.0)
-                    .estabelecimento(estabelecimento)
                     .build();
 
             Pedido pedido1 = pedidoRepository.save(Pedido.builder()
@@ -285,7 +280,6 @@ public class ClientePedidoServiceTests {
                     .tipo(TipoSabor.SALGADO)
                     .precoGrande(60.0)
                     .precoMedio(40.0)
-                    .estabelecimento(estabelecimento)
                     .build();
 
             saborRepository.save(sabor1);
@@ -522,7 +516,6 @@ public class ClientePedidoServiceTests {
                     .tipo(TipoSabor.SALGADO)
                     .precoGrande(60.0)
                     .precoMedio(40.0)
-                    .estabelecimento(estabelecimento)
                     .build();
 
             saborRepository.save(sabor1);
