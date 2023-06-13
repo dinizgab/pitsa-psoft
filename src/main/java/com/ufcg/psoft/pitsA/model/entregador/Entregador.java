@@ -1,12 +1,11 @@
 package com.ufcg.psoft.pitsA.model.entregador;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.apache.commons.lang3.builder.HashCodeExclude;
 
 @Entity
 @Data
@@ -40,6 +39,9 @@ public class Entregador {
     @Column(nullable = false)
     private String codigoAcesso;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnore
     @ManyToOne
     private Estabelecimento estabelecimento;
 

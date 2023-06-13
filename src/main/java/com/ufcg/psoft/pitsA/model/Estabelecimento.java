@@ -37,7 +37,7 @@ public class Estabelecimento {
     private List<Entregador> entregadoresAprovados = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "estabelecimento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<Sabor> cardapio = new ArrayList<>();

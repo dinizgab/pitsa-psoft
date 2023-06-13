@@ -9,6 +9,7 @@ import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.entregador.Entregador;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;
+import com.ufcg.psoft.pitsA.service.entregador.EntregadorAprovaEntregadorService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,8 @@ public class EstabelecimentoAprovaServiceImpl implements EstabelecimentoAprovaSe
     EstabelecimentoRepository estabelecimentoRepository;
     @Autowired
     AutenticaCodigoAcessoService autenticaCodigoAcessoService;
+    @Autowired
+    EntregadorAprovaEntregadorService entregadorAprovaEntregadorService;
     @Autowired
     ModelMapper modelMapper;
 
@@ -38,6 +41,7 @@ public class EstabelecimentoAprovaServiceImpl implements EstabelecimentoAprovaSe
 
         if (aprovacao.isAprovado()) {
             estabelecimento.aprovaEntregador(entregador);
+            entregadorAprovaEntregadorService.aprovar(entregador, estabelecimento);
         } else {
             estabelecimento.reprovaEntregador(entregador);
         }

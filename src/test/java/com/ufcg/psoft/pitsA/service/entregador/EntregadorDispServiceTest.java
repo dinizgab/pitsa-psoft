@@ -8,6 +8,7 @@ import com.ufcg.psoft.pitsA.model.entregador.Entregador;
 import com.ufcg.psoft.pitsA.model.entregador.TipoVeiculoEntregador;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,24 +32,25 @@ public class EntregadorDispServiceTest {
 
     @BeforeEach
     void setup() {
-        Entregador entregador = entregadorRepository.save(Entregador.builder()
-                    .nome("Julio")
-                    .codigoAcesso("123467")
-                    .corVeiculo("Verde")
-                    .placaVeiculo("FAS-5432")
-                    .tipoVeiculo(TipoVeiculoEntregador.CARRO)
-                    .disponivel(false)
-                .build()
-        );
-
         Estabelecimento estabelecimento = estabelecimentoRepository.save(Estabelecimento.builder()
-                    .codigoAcesso("123456")
+                .codigoAcesso("123456")
                 .build()
         );
 
-        entregadorId = entregador.getId();
+        Entregador entregador = entregadorRepository.save(Entregador.builder()
+                        .nome("Julio")
+                        .codigoAcesso("123467")
+                        .corVeiculo("Verde")
+                        .placaVeiculo("FAS-5432")
+                        .tipoVeiculo(TipoVeiculoEntregador.CARRO)
+                        .estabelecimento(estabelecimento)
+                        .disponivel(false)
+                .build()
+        );
+
 
         estabelecimento.getEntregadoresAprovados().add(entregador);
+        entregadorId = entregador.getId();
         estabelecimentoId = estabelecimentoRepository.save(estabelecimento).getId();
     }
 
@@ -59,6 +61,7 @@ public class EntregadorDispServiceTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("Testes de alterar a disponibilidade do entregador com sucesso")
     void testAlteraDisponibilidade() {
         EntregadorDispDTO patchDispDTO = EntregadorDispDTO.builder()

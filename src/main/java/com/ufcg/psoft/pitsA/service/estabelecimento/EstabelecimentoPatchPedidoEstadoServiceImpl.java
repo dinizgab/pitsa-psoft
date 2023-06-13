@@ -37,8 +37,7 @@ public class EstabelecimentoPatchPedidoEstadoServiceImpl implements Estabelecime
 
             pedido.setEstadoEmRota(entregador);
         } catch (NenhumEntregadorDisponivelException e) {
-            pedido.setEstado(EstadoPedido.PRONTO);
-            // TODO - Aqui que a US20 vai ficar (So usar um trigger pedido.notificaEntregadorIndisponivel())
+            pedido.setEstadoPronto();
         }
 
         return pedidoAtualizarService.atualizarPedido(pedido);
