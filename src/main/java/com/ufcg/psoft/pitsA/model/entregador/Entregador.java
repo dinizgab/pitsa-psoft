@@ -3,7 +3,10 @@ package com.ufcg.psoft.pitsA.model.entregador;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data

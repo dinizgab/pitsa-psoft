@@ -40,7 +40,7 @@ public class PedidoV1Controller {
     EstabelecimentoPatchPedidoEstadoService estabelecimentoPatchPedidoEstadoService;
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> confirmarPagamento (
+    public ResponseEntity<?> confirmarPagamento(
             @PathVariable Long id,
             @RequestBody ConfirmarPagamentoDTO confirmarPagamentoDTO
     ) {
@@ -50,7 +50,7 @@ public class PedidoV1Controller {
     }
 
     @GetMapping("/cliente/{id}")
-    public ResponseEntity<?> listarPedidosCliente (
+    public ResponseEntity<?> listarPedidosCliente(
             @PathVariable("id") Long id,
             @RequestBody PedidoReadBodyDTO readBody
     ) {
@@ -60,7 +60,7 @@ public class PedidoV1Controller {
     }
 
     @PostMapping("/cliente/{id}")
-    public ResponseEntity<?> criarNovoPedido (
+    public ResponseEntity<?> criarNovoPedido(
             @PathVariable("id") Long id,
             @RequestBody PedidoPostDTO postBody
     ) {
@@ -70,7 +70,7 @@ public class PedidoV1Controller {
     }
 
     @PutMapping("/cliente/{id}")
-    public ResponseEntity<?> atualizarPedido (
+    public ResponseEntity<?> atualizarPedido(
             @PathVariable("id") Long id,
             @RequestBody PedidoPutDTO putBody
     ) {
@@ -80,7 +80,7 @@ public class PedidoV1Controller {
     }
 
     @PatchMapping("/cliente/{id}")
-    public ResponseEntity<?> confirmarEntregaPedido (
+    public ResponseEntity<?> confirmarEntregaPedido(
             @PathVariable("id") Long id,
             @RequestBody PedidoConfirmaEntregaDTO patchBody
     ) {
@@ -90,7 +90,7 @@ public class PedidoV1Controller {
     }
 
     @DeleteMapping("/cliente/{id}")
-    public ResponseEntity<?> cancelarUmPedido (
+    public ResponseEntity<?> cancelarUmPedido(
             @PathVariable("id") Long id,
             @RequestBody ClienteRemoverPedidoDTO removeBody
     ) {
@@ -102,7 +102,7 @@ public class PedidoV1Controller {
     }
 
     @GetMapping("/estabelecimento/{id}")
-    public ResponseEntity<?> listarPedidosEstabelecimento (
+    public ResponseEntity<?> listarPedidosEstabelecimento(
             @PathVariable("id") Long id,
             @RequestBody PedidoReadBodyDTO readBody
     ) {
@@ -112,7 +112,7 @@ public class PedidoV1Controller {
     }
 
     @PatchMapping("/estabelecimento/{id}")
-    public ResponseEntity<?> alterarEstadoPedido (
+    public ResponseEntity<?> alterarEstadoPedido(
             @PathVariable("id") Long id,
             @RequestBody PedidoReadBodyDTO readBodyDTO
     ) {
@@ -122,7 +122,7 @@ public class PedidoV1Controller {
     }
 
     @PatchMapping("/estabelecimento/entregador/{id}")
-    public ResponseEntity<?> alterarEntregadorPedido (
+    public ResponseEntity<?> alterarEntregadorPedido(
             @PathVariable("id") Long id,
             @RequestBody PedidoPatchEntregadorDTO patchEntregadorBody
     ) {

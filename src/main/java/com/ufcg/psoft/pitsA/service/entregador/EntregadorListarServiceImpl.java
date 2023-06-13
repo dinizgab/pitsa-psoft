@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class EntregadorListarServiceImpl implements EntregadorListarService{
+public class EntregadorListarServiceImpl implements EntregadorListarService {
     @Autowired
     EntregadorRepository entregadorRepository;
     @Autowired

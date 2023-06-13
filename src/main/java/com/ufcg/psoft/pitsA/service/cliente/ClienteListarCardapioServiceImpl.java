@@ -41,6 +41,6 @@ public class ClienteListarCardapioServiceImpl implements ClienteListarCardapioSe
                 .map(sabor -> modelMapper.map(sabor, SaborReadDTO.class))
                 .sorted(Comparator.comparing(SaborReadDTO::isDisponivel)
                         .reversed())
-        .collect(Collectors.toList());
+                .collect(Collectors.toList());
     }
 }

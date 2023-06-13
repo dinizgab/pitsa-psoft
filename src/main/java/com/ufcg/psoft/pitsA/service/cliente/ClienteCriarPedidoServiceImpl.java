@@ -58,10 +58,10 @@ public class ClienteCriarPedidoServiceImpl implements ClienteCriarPedidoService 
 
         List<Sabor> sabores = saborListarMultiploService.listarMultiplos(saboresId);
         PedidoValidaDTO validaDTO = PedidoValidaDTO.builder()
-                        .tipoPedido(tipoPedido)
-                        .tamanho(tamanho)
-                        .quantidadeSabores(sabores.size())
-                        .build();
+                .tipoPedido(tipoPedido)
+                .tamanho(tamanho)
+                .quantidadeSabores(sabores.size())
+                .build();
         validaPedidoService.validaPedido(validaDTO);
 
         Estabelecimento estabelecimento = estabelecimentoListarService.listar(estabelecimentoId).get(0);

@@ -14,6 +14,7 @@ public class ValidaPedidoServiceImpl implements ValidaPedidoService {
         PizzaPedidoTamanho tamanho = validaDTO.getTamanho();
         Integer quantidadeSabores = validaDTO.getQuantidadeSabores();
 
-        if ((quantidadeSabores == 2 || tipoPedido.isMeia()) && tamanho.isMedia()) throw new TamanhoPedidoInvalidosException();
+        if ((quantidadeSabores == 2 || tipoPedido.isMeia()) && tamanho.isMedia())
+            throw new TamanhoPedidoInvalidosException();
     }
 }

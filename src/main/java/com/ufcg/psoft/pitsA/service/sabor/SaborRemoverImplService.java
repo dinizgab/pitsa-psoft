@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SaborRemoverImplService implements SaborRemoverService{
+public class SaborRemoverImplService implements SaborRemoverService {
     @Autowired
     SaborRepository saborRepository;
     @Autowired

@@ -9,7 +9,8 @@ import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -48,10 +49,12 @@ public class Estabelecimento {
     public void adicionaEntregadorPendente(Entregador entregador) {
         this.entregadoresPendentes.add(entregador);
     }
+
     public void aprovaEntregador(Entregador entregador) {
         this.entregadoresPendentes.remove(entregador);
         this.entregadoresAprovados.add(entregador);
     }
+
     public void reprovaEntregador(Entregador entregador) {
         this.entregadoresPendentes.remove(entregador);
     }

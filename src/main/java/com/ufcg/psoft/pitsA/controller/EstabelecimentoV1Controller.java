@@ -75,6 +75,7 @@ public class EstabelecimentoV1Controller {
                 .status(HttpStatus.NO_CONTENT)
                 .body("");
     }
+
     @PatchMapping("/{id}")
     public ResponseEntity<?> aprovaEntregador(
             @PathVariable Long id,

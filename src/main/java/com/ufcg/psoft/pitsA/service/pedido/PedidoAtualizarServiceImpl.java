@@ -13,6 +13,7 @@ public class PedidoAtualizarServiceImpl implements PedidoAtualizarService {
     PedidoRepository pedidoRepository;
     @Autowired
     ModelMapper modelMapper;
+
     public PedidoReadResponseDTO atualizarPedido(Pedido pedido) {
         return modelMapper.map(pedidoRepository.save(pedido), PedidoReadResponseDTO.class);
     }

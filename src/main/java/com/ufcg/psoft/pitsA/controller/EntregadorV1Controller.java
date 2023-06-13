@@ -68,7 +68,7 @@ public class EntregadorV1Controller {
     public ResponseEntity<?> excluirEntregador(
             @PathVariable Long id,
             @RequestBody @Valid EntregadorDeleteDTO deleteBody
-            ) {
+    ) {
         entregadorExcluirService.remover(id, deleteBody);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)

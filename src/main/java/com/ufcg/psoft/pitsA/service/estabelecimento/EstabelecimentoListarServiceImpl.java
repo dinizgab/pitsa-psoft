@@ -10,13 +10,14 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class EstabelecimentoListarServiceImpl implements EstabelecimentoListarService{
+public class EstabelecimentoListarServiceImpl implements EstabelecimentoListarService {
     @Autowired
     EstabelecimentoRepository estabelecimentoRepository;
 
     @Override
     public List<Estabelecimento> listar(Long id) {
-        if (id != null && id > 0) return Arrays.asList(estabelecimentoRepository.findById(id).orElseThrow(EstabelecimentoNaoExisteException::new));
+        if (id != null && id > 0)
+            return Arrays.asList(estabelecimentoRepository.findById(id).orElseThrow(EstabelecimentoNaoExisteException::new));
 
         return estabelecimentoRepository.findAll();
     }

@@ -5,7 +5,7 @@ public enum TipoVeiculoEntregador {
     MOTO("Moto");
     private final String tipoVeiculo;
 
-     TipoVeiculoEntregador(String tipoVeiculo) {
+    TipoVeiculoEntregador(String tipoVeiculo) {
         this.tipoVeiculo = tipoVeiculo;
     }
 

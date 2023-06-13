@@ -71,7 +71,7 @@ public class SaborController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> remover(
             @PathVariable Long id,
-            @RequestBody@Valid SaborDeleteDTO saborDTO
+            @RequestBody @Valid SaborDeleteDTO saborDTO
     ) {
         saborRemoverService.remover(id, saborDTO);
         return ResponseEntity.noContent().build();

@@ -14,6 +14,7 @@ public class EntregadorCriarServiceImpl implements EntregadorCriarService {
     EntregadorRepository entregadorRepository;
     @Autowired
     ModelMapper modelMapper;
+
     @Override
     public EntregadorReadDTO salvar(EntregadorPostPutDTO entregadorSave) {
         Entregador entregador = modelMapper.map(entregadorSave, Entregador.class);

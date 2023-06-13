@@ -18,6 +18,7 @@ public class ErrorMessage {
     private String message;
     @JsonProperty("errors")
     private List<String> errors;
+
     public ErrorMessage(PitsAException e) {
         this.message = e.getMessage();
         this.errors = new ArrayList<>();

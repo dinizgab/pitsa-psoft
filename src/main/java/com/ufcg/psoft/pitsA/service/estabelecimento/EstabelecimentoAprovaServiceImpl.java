@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EstabelecimentoAprovaServiceImpl implements EstabelecimentoAprovaService{
+public class EstabelecimentoAprovaServiceImpl implements EstabelecimentoAprovaService {
     @Autowired
     EstabelecimentoRepository estabelecimentoRepository;
     @Autowired

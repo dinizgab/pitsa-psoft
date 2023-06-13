@@ -4,8 +4,10 @@ import com.ufcg.psoft.pitsA.dto.entregador.EntregadorVeiculoDTO;
 
 public abstract class InteressadoAdapter implements Interessado {
     @Override
-    public void recebeNotificacaoDisponibilidade() {}
+    public void recebeNotificacaoDisponibilidade() {
+    }
 
     @Override
-    public void recebeNotificacaoPedidoEmRota(String nome, EntregadorVeiculoDTO veiculo) {}
+    public void recebeNotificacaoPedidoEmRota(String nome, EntregadorVeiculoDTO veiculo) {
+    }
 }

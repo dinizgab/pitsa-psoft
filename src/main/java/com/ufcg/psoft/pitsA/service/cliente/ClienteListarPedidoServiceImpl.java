@@ -48,7 +48,7 @@ public class ClienteListarPedidoServiceImpl implements ClienteListarPedidoServic
 
             return estadoFiltro != null ?
                     pedidos
-                    .stream()
+                            .stream()
                             .filter(p -> p.getEstado().equals(estadoFiltro))
                             .collect(Collectors.toList())
                     : pedidos;

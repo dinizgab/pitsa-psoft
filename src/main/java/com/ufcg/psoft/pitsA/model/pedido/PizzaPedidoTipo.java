@@ -6,7 +6,9 @@ public enum PizzaPedidoTipo {
 
     private final Double fatorTipo;
 
-    PizzaPedidoTipo(Double fatorTipo) {this.fatorTipo = fatorTipo;}
+    PizzaPedidoTipo(Double fatorTipo) {
+        this.fatorTipo = fatorTipo;
+    }
 
     public Double getFatorTipo() {
         return this.fatorTipo;

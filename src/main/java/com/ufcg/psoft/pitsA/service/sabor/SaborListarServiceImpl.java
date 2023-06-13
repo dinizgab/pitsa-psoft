@@ -20,7 +20,7 @@ public class SaborListarServiceImpl implements SaborListarService {
     ModelMapper modelMapper;
 
     @Override
-    public List<Sabor> listar(Long id){
+    public List<Sabor> listar(Long id) {
         if (id != null && id > 0) {
             Sabor resultadoBusca = saborRepository.findById(id).orElseThrow(EntregadorNaoExisteException::new);
 

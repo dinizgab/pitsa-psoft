@@ -68,9 +68,9 @@ public class ClienteV1Controller {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> excluirCliente (
+    public ResponseEntity<?> excluirCliente(
             @PathVariable Long id,
-            @RequestBody @Valid  ClienteDeleteDTO deleteBody
+            @RequestBody @Valid ClienteDeleteDTO deleteBody
     ) {
         clienteExcluirService.remover(id, deleteBody);
         return ResponseEntity

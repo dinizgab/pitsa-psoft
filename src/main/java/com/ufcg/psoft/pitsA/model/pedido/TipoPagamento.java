@@ -11,7 +11,9 @@ public enum TipoPagamento {
         this.fatorDesconto = fatorDesconto;
     }
 
-    public Double getFatorDesconto() {return this.fatorDesconto;}
+    public Double getFatorDesconto() {
+        return this.fatorDesconto;
+    }
 
     public boolean isPix() {
         return this == PIX;
