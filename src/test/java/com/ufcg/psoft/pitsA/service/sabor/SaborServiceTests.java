@@ -71,6 +71,7 @@ public class SaborServiceTests {
 
     @AfterEach
     void tearDown() {
+        saborRepository.deleteAll();
         estabelecimentoRepository.deleteAll();
     }
 
@@ -147,9 +148,9 @@ public class SaborServiceTests {
     @DisplayName("Remove um sabor")
     void testeRemoveSabor() {
         SaborDeleteDTO deleteBody = SaborDeleteDTO
-                .builder()
-                .estabelecimentoId(estabelecimento.getId())
-                .codigoAcesso("123456")
+                    .builder()
+                    .estabelecimentoId(estabelecimento.getId())
+                    .codigoAcesso("123456")
                 .build();
 
         List<Sabor> resultBefore = saborRepository.findAll();

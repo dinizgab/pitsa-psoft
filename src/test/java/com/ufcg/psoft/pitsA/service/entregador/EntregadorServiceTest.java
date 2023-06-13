@@ -67,23 +67,25 @@ public class EntregadorServiceTest {
     @DisplayName("Quando lista todos os entregadores cadastrados")
     void testeListaTodosEntregadores() {
         Entregador entregador1 = Entregador.builder()
-                .nome("Cleber Junior")
-                .placaVeiculo("QJS-1235")
-                .tipoVeiculo(TipoVeiculoEntregador.MOTO)
-                .corVeiculo("Preto")
-                .codigoAcesso("653423")
+                    .nome("Cleber Junior")
+                    .placaVeiculo("QJS-1235")
+                    .tipoVeiculo(TipoVeiculoEntregador.MOTO)
+                    .corVeiculo("Preto")
+                    .codigoAcesso("653423")
                 .build();
 
         Entregador entregador2 = Entregador.builder()
-                .nome("Cleber")
-                .placaVeiculo("JHG-9843")
-                .tipoVeiculo(TipoVeiculoEntregador.MOTO)
-                .corVeiculo("Prata")
-                .codigoAcesso("943845")
+                    .nome("Cleber")
+                    .placaVeiculo("JHG-9843")
+                    .tipoVeiculo(TipoVeiculoEntregador.MOTO)
+                    .corVeiculo("Prata")
+                    .codigoAcesso("943845")
                 .build();
 
         entregadorRepository.saveAll(Arrays.asList(entregador1, entregador2));
         List<EntregadorReadDTO> resultado = driverListar.listar(null);
+
+        System.out.println(resultado);
 
         assertEquals(2, resultado.size());
     }

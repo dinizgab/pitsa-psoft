@@ -54,6 +54,7 @@ public class EntregadorDispServiceTest {
 
     @AfterEach
     void tearDown() {
+        entregadorRepository.deleteAll();
         estabelecimentoRepository.deleteAll();
     }
 

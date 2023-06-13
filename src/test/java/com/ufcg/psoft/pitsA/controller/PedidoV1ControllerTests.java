@@ -107,12 +107,12 @@ public class PedidoV1ControllerTests {
         @BeforeEach
         void setUp() {
             pedido = Pedido.builder()
-                    .estabelecimentoPedido(estabelecimento)
-                    .cliente(cliente)
-                    .endereco("")
-                    .sabores(new ArrayList<>())
-                    .tipo(PizzaPedidoTipo.INTEIRA)
-                    .tamanho(PizzaPedidoTamanho.GRANDE)
+                        .estabelecimentoPedido(estabelecimento)
+                        .cliente(cliente)
+                        .endereco("")
+                        .sabores(new ArrayList<>())
+                        .tipo(PizzaPedidoTipo.INTEIRA)
+                        .tamanho(PizzaPedidoTamanho.GRANDE)
                     .build();
 
             pedidoPostComEnderecoDTO = PedidoPostDTO.builder()
@@ -205,7 +205,7 @@ public class PedidoV1ControllerTests {
         @Test
         @DisplayName("Quando criamos um novo pedido com endereco")
         void quandoCriarUmPedidoEndereco() throws Exception {
-            Double valorTotal = 50.0;
+            Double valorTotal = 35.0;
             String responseJsonString = driver.perform(post(URI_PEDIDOS + "/cliente/" + cliente.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(pedidoPostComEnderecoDTO)))
