@@ -1,7 +1,6 @@
 package com.ufcg.psoft.pitsA.dto.sabor;
 
 import com.ufcg.psoft.pitsA.dto.cliente.ClienteReadDTO;
-import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

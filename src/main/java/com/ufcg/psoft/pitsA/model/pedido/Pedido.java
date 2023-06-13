@@ -72,6 +72,11 @@ public class Pedido {
         this.notificaEstabelecimento();
     }
 
+    public void setEstadoPronto() {
+        this.estado = EstadoPedido.PRONTO;
+        this.notificaClienteEntregadorInsdisponivel();
+    }
+
     private void notificaCliente() {
         String nome = entregador.getNome();
         EntregadorVeiculoDTO veiculo = EntregadorVeiculoDTO.builder()
@@ -81,6 +86,10 @@ public class Pedido {
                 .build();
 
         this.cliente.recebeNotificacaoPedidoEmRota(nome, veiculo);
+    }
+
+    private void notificaClienteEntregadorInsdisponivel() {
+        this.cliente.recebeNotificacaoPedidoPronto();
     }
 
     private void notificaEstabelecimento() {

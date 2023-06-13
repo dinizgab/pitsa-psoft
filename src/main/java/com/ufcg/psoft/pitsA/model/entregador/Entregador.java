@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import jakarta.persistence.*;
 import lombok.*;
-import org.apache.commons.lang3.builder.HashCodeExclude;
 
 @Entity
 @Data

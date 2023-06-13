@@ -1,11 +1,12 @@
 package com.ufcg.psoft.pitsA.model.sabor;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.cliente.Cliente;
 import com.ufcg.psoft.pitsA.model.cliente.Interessado;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;

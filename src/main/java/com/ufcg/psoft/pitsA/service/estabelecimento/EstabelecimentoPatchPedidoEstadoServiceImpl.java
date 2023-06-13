@@ -6,7 +6,6 @@ import com.ufcg.psoft.pitsA.exception.estabelecimento.EstabelecimentoNaoExisteEx
 import com.ufcg.psoft.pitsA.exception.estabelecimento.NenhumEntregadorDisponivelException;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.entregador.Entregador;
-import com.ufcg.psoft.pitsA.model.pedido.EstadoPedido;
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;
