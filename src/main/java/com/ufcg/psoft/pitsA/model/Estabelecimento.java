@@ -27,12 +27,12 @@ public class Estabelecimento {
     @Column(nullable = false)
     private String codigoAcesso;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "estabelecimento", fetch = FetchType.LAZY)
     @Builder.Default
     private List<Entregador> entregadoresPendentes = new ArrayList<>();
 
     @Builder.Default
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "estabelecimento", fetch = FetchType.LAZY)
     private List<Entregador> entregadoresAprovados = new ArrayList<>();
 
     @Builder.Default
@@ -70,6 +70,15 @@ public class Estabelecimento {
                 .filter(Entregador::isDisponivel)
                 .findFirst()
                 .orElseThrow(NenhumEntregadorDisponivelException::new);
+    }
+
+    public void associaEntregadorDisponivel(Entregador entregador) {
+        for (Pedido p : pedidos) {
+            if (p.getEstado().isPronto()) {
+                p.setEstadoEmRota(entregador);
+                break;
+            }
+        }
     }
 
     public void recebeNotificacaoPedidoEntregue(String nome) {

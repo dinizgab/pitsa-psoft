@@ -21,8 +21,6 @@ public class PedidoPatchEstadoServiceImpl implements PedidoPatchEstadoService {
 
         if (estado.isEntregue()) {
             pedido.setEstadoEntregue();
-        } else if (estado.isRota()) {
-            pedido.setEstadoEmRota();
         } else {
             pedido.setEstado(estado);
         }

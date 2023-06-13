@@ -1,6 +1,7 @@
 package com.ufcg.psoft.pitsA.model.entregador;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,6 +37,9 @@ public class Entregador {
     @Column(nullable = false)
     private String codigoAcesso;
 
+    @ManyToOne
+    private Estabelecimento estabelecimento;
+
     @Column
     @Builder.Default
     private boolean disponivel = false;
@@ -43,6 +47,8 @@ public class Entregador {
     public void alteraDisponibilidade() {
         this.disponivel = !this.disponivel;
 
-        // TODO - Trigger de quando o entregador se tornar diponivel novamente (Estabelecimento procura novamente os pedidos prontos e associa eles a um entregador)
+        if (this.disponivel) {
+            estabelecimento.associaEntregadorDisponivel(this);
+        }
     }
 }

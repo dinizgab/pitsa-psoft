@@ -16,8 +16,7 @@ public class PedidoPatchEntregadorServiceImpl implements PedidoPatchEntregadorSe
     ModelMapper modelMapper;
 
     public PedidoReadResponseDTO alterarEntregador(Pedido pedido, Entregador entregador) {
-        pedido.setEntregador(entregador);
-        pedido.setEstadoEmRota();
+        pedido.setEstadoEmRota(entregador);
 
         return modelMapper.map(pedidoRepository.save(pedido), PedidoReadResponseDTO.class);
     }

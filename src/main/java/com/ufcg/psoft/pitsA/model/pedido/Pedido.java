@@ -60,8 +60,10 @@ public class Pedido {
     @Builder.Default
     private CalculadoraPedido calculadoraPedido = new CalculadoraPedidoImpl();
 
-    public void setEstadoEmRota() {
+    public void setEstadoEmRota(Entregador entregador) {
         this.estado = EstadoPedido.EM_ROTA;
+        this.entregador = entregador;
+
         this.notificaCliente();
     }
 
