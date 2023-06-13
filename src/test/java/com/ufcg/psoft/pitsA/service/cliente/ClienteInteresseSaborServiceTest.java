@@ -73,6 +73,7 @@ public class ClienteInteresseSaborServiceTest {
 
     @AfterEach
     void tearDown() {
+        saborRepository.deleteAll();
         estabelecimentoRepository.deleteAll();
         clienteRepository.deleteAll();
     }

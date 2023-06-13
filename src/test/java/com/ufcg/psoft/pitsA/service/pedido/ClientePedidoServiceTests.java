@@ -108,6 +108,7 @@ public class ClientePedidoServiceTests {
 
     @AfterEach
     void tearDown() {
+        saborRepository.deleteAll();
         clienteRepository.deleteAll();
         estabelecimentoRepository.deleteAll();
     }

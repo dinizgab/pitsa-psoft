@@ -5,7 +5,6 @@ import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.cliente.Cliente;
-import com.ufcg.psoft.pitsA.model.cliente.Interessado;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
@@ -88,6 +87,7 @@ public class EstabelecimentoSaborDispTests {
 
     @AfterEach
     void tearDown() {
+        saborRepository.deleteAll();
         clienteRepository.deleteAll();
         estabelecimentoRepository.deleteAll();
     }
