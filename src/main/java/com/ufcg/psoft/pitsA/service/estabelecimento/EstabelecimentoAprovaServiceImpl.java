@@ -5,8 +5,8 @@ import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoAprovaEntregadorD
 import com.ufcg.psoft.pitsA.dto.estabelecimento.StatusAprovacaoEntregador;
 import com.ufcg.psoft.pitsA.exception.entregador.EntregadorNaoEstaPendenteException;
 import com.ufcg.psoft.pitsA.exception.estabelecimento.EstabelecimentoNaoExisteException;
-import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.entregador.Entregador;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.pitsA.service.auth.AutenticaCodigoAcessoService;
 import org.modelmapper.ModelMapper;
@@ -37,13 +37,12 @@ public class EstabelecimentoAprovaServiceImpl implements EstabelecimentoAprovaSe
                 .orElseThrow(EntregadorNaoEstaPendenteException::new);
 
         if (aprovacao.isAprovado()) {
-            estabelecimento.getEntregadoresAprovados().add(entregador);
+            estabelecimento.aprovaEntregador(entregador);
+        } else {
+            estabelecimento.reprovaEntregador(entregador);
         }
 
-        estabelecimento.getEntregadoresPendentes().removeIf(e -> e.getId().equals(entregadorId));
-
         estabelecimentoRepository.save(estabelecimento);
-
         return modelMapper.map(entregador, EntregadorReadDTO.class);
     }
 }

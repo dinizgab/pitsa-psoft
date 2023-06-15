@@ -1,30 +1,34 @@
 package com.ufcg.psoft.pitsA.service.pedido;
 
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorReadDTO;
+import com.ufcg.psoft.pitsA.dto.pedido.PedidoPatchEntregadorDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadBodyDTO;
 import com.ufcg.psoft.pitsA.dto.pedido.PedidoReadResponseDTO;
-import com.ufcg.psoft.pitsA.model.Cliente;
+import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
+import com.ufcg.psoft.pitsA.exception.entregador.EntregadorNaoEstaAprovadoException;
+import com.ufcg.psoft.pitsA.exception.pedido.PedidoNaoEncontradoException;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.cliente.Cliente;
+import com.ufcg.psoft.pitsA.model.entregador.Entregador;
+import com.ufcg.psoft.pitsA.model.entregador.TipoVeiculoEntregador;
 import com.ufcg.psoft.pitsA.model.pedido.Pedido;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTamanho;
 import com.ufcg.psoft.pitsA.model.pedido.PizzaPedidoTipo;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
-import com.ufcg.psoft.pitsA.repository.ClienteRepository;
-import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
-import com.ufcg.psoft.pitsA.repository.PedidoRepository;
-import com.ufcg.psoft.pitsA.repository.SaborRepository;
+import com.ufcg.psoft.pitsA.repository.*;
 import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoListarPedidoService;
+import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoPatchPedidoEntregadorService;
+import com.ufcg.psoft.pitsA.service.estabelecimento.EstabelecimentoPatchPedidoEstadoService;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,6 +38,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class EstabelecimentoPedidoServiceTests {
     @Autowired
     EstabelecimentoListarPedidoService driverListar;
+    @Autowired
+    EstabelecimentoPatchPedidoEstadoService driverPatchEstado;
     @Autowired
     EstabelecimentoRepository estabelecimentoRepository;
     @Autowired
@@ -153,7 +159,131 @@ public class EstabelecimentoPedidoServiceTests {
                 () -> assertEquals("Rua 13 de maio, 123", resultado.getEndereco()),
                 () -> assertTrue(resultado.getTipo().isMeia()),
                 () -> assertTrue(resultado.getTamanho().isGrande()),
+                () -> assertTrue(resultado.getEstado().isRecebido()),
                 () -> assertEquals(45.0, resultado.getValorTotal())
         );
     }
+
+    @Test
+    @Transactional
+    @DisplayName("Teste de alterar o estado de um pedido pelo id")
+    void testeAlterarEstadoPedido() {
+        Long estabelecimentoId = estabelecimento.getId();
+
+        PedidoReadBodyDTO patchBody = PedidoReadBodyDTO.builder()
+                .pedidoId(pedidoId)
+                .codigoAcesso("123456")
+                .build();
+
+        PedidoReadResponseDTO resultado = driverPatchEstado.alterarEstadoPedido(estabelecimentoId, patchBody);
+
+        assertAll(
+                () -> assertEquals("Rua 13 de maio, 123", resultado.getEndereco()),
+                () -> assertTrue(resultado.getTipo().isMeia()),
+                () -> assertTrue(resultado.getTamanho().isGrande()),
+                () -> assertTrue(resultado.getEstado().isPronto())
+        );
+    }
+
+    @Nested
+    @DisplayName("Testes de atribuicao de entregador ao pedido")
+    class TestesAtribuiEntregadorPedido {
+        @Autowired
+        EstabelecimentoPatchPedidoEntregadorService driverPatchEntregador;
+        @Autowired
+        EntregadorRepository entregadorRepository;
+        Entregador entregador;
+
+        @BeforeEach
+        void setUp() {
+            entregador = Entregador.builder()
+                            .codigoAcesso("123456")
+                            .nome("Cleber 123 da Silva 4")
+                            .corVeiculo("Azul")
+                            .placaVeiculo("ABC-1235")
+                            .tipoVeiculo(TipoVeiculoEntregador.CARRO)
+                            .estabelecimentos(new HashSet<>())
+                            .build();
+
+            entregador.getEstabelecimentos().add(estabelecimento);
+            estabelecimento.getEntregadoresAprovados().add(entregador);
+
+            entregador = entregadorRepository.save(entregador);
+            estabelecimentoRepository.save(estabelecimento);
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("Teste de atribuir um entregador a um pedido")
+        void testeAtribuiEntregadorPedido() {
+            Long estabelecimentoId = estabelecimento.getId();
+            Long entregadorId = entregador.getId();
+
+            PedidoPatchEntregadorDTO patchBody = PedidoPatchEntregadorDTO.builder()
+                    .pedidoId(pedidoId)
+                    .entregadorId(entregadorId)
+                    .codigoAcesso("123456")
+                    .build();
+
+            PedidoReadResponseDTO resultado = driverPatchEntregador.alterarEntregador(estabelecimentoId, patchBody);
+            EntregadorReadDTO entregadorResultado = modelMapper.map(entregador, EntregadorReadDTO.class);
+
+            assertAll(
+                    () -> assertEquals("Rua 13 de maio, 123", resultado.getEndereco()),
+                    () -> assertTrue(resultado.getTipo().isMeia()),
+                    () -> assertTrue(resultado.getTamanho().isGrande()),
+                    () -> assertEquals(resultado.getEntregador(), entregadorResultado),
+                    () -> assertTrue(resultado.getEstado().isRota())
+            );
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("Teste de atribuir um entregador a um pedido com codigo acesso invalido")
+        void testeAtribuiEntregadorPedidoCodigoAcessoInvalido() {
+            Long estabelecimentoId = estabelecimento.getId();
+            Long entregadorId = entregador.getId();
+
+            PedidoPatchEntregadorDTO patchBody = PedidoPatchEntregadorDTO.builder()
+                    .pedidoId(pedidoId)
+                    .entregadorId(entregadorId)
+                    .codigoAcesso("654321")
+                    .build();
+
+            assertThrows(CodigoAcessoInvalidoException.class, () -> driverPatchEntregador.alterarEntregador(estabelecimentoId, patchBody));
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("Teste de atribuir um entregador a um pedido com pedido nao presente no estabelecimento")
+        void testeAtribuiEntregadorPedidoInvalido() {
+            Long estabelecimentoId = estabelecimento.getId();
+            Long entregadorId = entregador.getId();
+
+            PedidoPatchEntregadorDTO patchBody = PedidoPatchEntregadorDTO.builder()
+                    .pedidoId(14L)
+                    .entregadorId(entregadorId)
+                    .codigoAcesso("123456")
+                    .build();
+
+            assertThrows(PedidoNaoEncontradoException.class, () -> driverPatchEntregador.alterarEntregador(estabelecimentoId, patchBody));
+        }
+
+        @Test
+        @Transactional
+        @DisplayName("Teste de atribuir um entregador a um pedido com entregador nao aprovado")
+        void testeAtribuiEntregadorPedidoEntregadorNaoAprovado() {
+            Long estabelecimentoId = estabelecimento.getId();
+
+            PedidoPatchEntregadorDTO patchBody = PedidoPatchEntregadorDTO.builder()
+                    .pedidoId(pedidoId)
+                    .entregadorId(13L)
+                    .codigoAcesso("123456")
+                    .build();
+
+            assertThrows(EntregadorNaoEstaAprovadoException.class, () -> driverPatchEntregador.alterarEntregador(estabelecimentoId, patchBody));
+        }
+    }
+
+
 }

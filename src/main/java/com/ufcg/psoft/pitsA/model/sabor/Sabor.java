@@ -1,13 +1,11 @@
 package com.ufcg.psoft.pitsA.model.sabor;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.cliente.Cliente;
+import com.ufcg.psoft.pitsA.model.cliente.Interessado;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -40,26 +38,30 @@ public class Sabor {
     private boolean disponivel = true;
 
     @JsonIgnore
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     Estabelecimento estabelecimento;
 
     @OneToMany(targetEntity = Cliente.class)
     @Builder.Default
-    private Set<Interessado> interessados = new HashSet<>();
+    // TODO - Arrumar um jeito de desacoplar isso usando uma interface
+    private Set<Cliente> interessados = new HashSet<>();
 
-    public void adicionaInteressado(Interessado interessado) {
+    public void adicionaInteressado(Cliente interessado) {
         interessados.add(interessado);
     }
 
-    public void removeInteressado(Interessado interessado) {
+    public void removeInteressado(Cliente interessado) {
         interessados.remove(interessado);
     }
 
-    public void notifica() {
-        this.interessados.forEach(Interessado::recebeNotificacao);
+    private void notifica() {
+        this.interessados.forEach(Interessado::recebeNotificacaoDisponibilidade);
     }
 
     public void alteraDisponibilidade() {
         this.disponivel = !this.disponivel;
+        if (this.disponivel) this.notifica();
     }
 }

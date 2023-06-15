@@ -6,9 +6,9 @@ import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoAprovaEntregadorD
 import com.ufcg.psoft.pitsA.dto.estabelecimento.StatusAprovacaoEntregador;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
 import com.ufcg.psoft.pitsA.exception.entregador.EntregadorNaoEstaPendenteException;
-import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
-import com.ufcg.psoft.pitsA.model.TipoVeiculoEntregador;
+import com.ufcg.psoft.pitsA.model.entregador.Entregador;
+import com.ufcg.psoft.pitsA.model.entregador.TipoVeiculoEntregador;
 import com.ufcg.psoft.pitsA.repository.EntregadorRepository;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import com.ufcg.psoft.pitsA.service.entregador.EntregadorPatchEstabelecimentoService;

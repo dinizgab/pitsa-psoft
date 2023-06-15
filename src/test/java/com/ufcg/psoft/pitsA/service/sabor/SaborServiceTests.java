@@ -72,7 +72,6 @@ public class SaborServiceTests {
 
     @AfterEach
     void tearDown() {
-        saborRepository.deleteAll();
         estabelecimentoRepository.deleteAll();
     }
 

@@ -20,9 +20,6 @@ public class SaborPatchDisponibilidadeImpl implements SaborPatchDisponibilidade 
         Sabor sabor = saborRepository.findById(saborId).orElseThrow(SaborNaoExistenteException::new);
 
         sabor.alteraDisponibilidade();
-        if (sabor.isDisponivel()) {
-            sabor.notifica();
-        }
 
         return modelMapper.map(saborRepository.save(sabor), SaborReadDTO.class);
     }

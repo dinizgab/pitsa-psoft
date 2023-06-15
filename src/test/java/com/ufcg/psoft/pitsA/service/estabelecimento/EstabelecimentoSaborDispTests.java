@@ -3,9 +3,9 @@ package com.ufcg.psoft.pitsA.service.estabelecimento;
 import com.ufcg.psoft.pitsA.dto.estabelecimento.EstabelecimentoPatchDispDTO;
 import com.ufcg.psoft.pitsA.dto.sabor.SaborReadDTO;
 import com.ufcg.psoft.pitsA.exception.auth.CodigoAcessoInvalidoException;
-import com.ufcg.psoft.pitsA.model.Cliente;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
-import com.ufcg.psoft.pitsA.model.sabor.Interessado;
+import com.ufcg.psoft.pitsA.model.cliente.Cliente;
+import com.ufcg.psoft.pitsA.model.cliente.Interessado;
 import com.ufcg.psoft.pitsA.model.sabor.Sabor;
 import com.ufcg.psoft.pitsA.model.sabor.TipoSabor;
 import com.ufcg.psoft.pitsA.repository.ClienteRepository;
@@ -65,7 +65,7 @@ public class EstabelecimentoSaborDispTests {
                 .codigoAcesso("123456")
                 .build();
 
-        Set<Interessado> interessados = new HashSet<>();
+        Set<Cliente> interessados = new HashSet<>();
         interessados.add(cliente);
 
         saborIndisponivel = saborRepository.save(Sabor.builder()

@@ -1,8 +1,8 @@
 package com.ufcg.psoft.pitsA.service.estabelecimento;
 
 import com.ufcg.psoft.pitsA.exception.estabelecimento.EstabelecimentoNaoExisteException;
-import com.ufcg.psoft.pitsA.model.Entregador;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
+import com.ufcg.psoft.pitsA.model.entregador.Entregador;
 import com.ufcg.psoft.pitsA.repository.EstabelecimentoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +18,7 @@ public class EstabelecimentoPatchEntregadorImpl implements EstabelecimentoPatchE
     @Override
     public Estabelecimento alteraParcialmente(Long id, Entregador entregador) {
         Estabelecimento estabelecimento = estabelecimentoRepository.findById(id).orElseThrow(EstabelecimentoNaoExisteException::new);
-
-        estabelecimento.getEntregadoresPendentes().add(entregador);
+        estabelecimento.adicionaEntregadorPendente(entregador);
 
         return estabelecimentoRepository.save(estabelecimento);
     }

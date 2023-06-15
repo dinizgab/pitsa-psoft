@@ -1,7 +1,7 @@
 package com.ufcg.psoft.pitsA.dto.entregador;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ufcg.psoft.pitsA.model.TipoVeiculoEntregador;
+import com.ufcg.psoft.pitsA.model.entregador.TipoVeiculoEntregador;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
