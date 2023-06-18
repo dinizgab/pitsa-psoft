@@ -1,6 +1,7 @@
 package com.ufcg.psoft.pitsA.controller;
 
 import com.ufcg.psoft.pitsA.dto.entregador.EntregadorDeleteDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.EntregadorDispDTO;
 import com.ufcg.psoft.pitsA.dto.entregador.EntregadorPatchEstabelecimentoDTO;
 import com.ufcg.psoft.pitsA.dto.entregador.EntregadorPostPutDTO;
 import com.ufcg.psoft.pitsA.exception.ErrorMessage;
@@ -28,6 +29,8 @@ public class EntregadorV1Controller {
     EntregadorAtualizarService entregadorAtualizarService;
     @Autowired
     EntregadorRemoverService entregadorExcluirService;
+    @Autowired
+    EntregadorPatchDispService entregadorPatchDispService;
     @Autowired
     EntregadorPatchEstabelecimentoService entregadorPatchEstabelecimentoService;
 
@@ -82,6 +85,15 @@ public class EntregadorV1Controller {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(entregadorPatchEstabelecimentoService.alteraParcialmente(id, entregadorPatchEstabelecimentoDTO));
+    }
+
+    @PatchMapping("/disponibilidade/{id}")
+    public ResponseEntity<?> alteraDisponibilidade(
+            @PathVariable("id") Long id,
+            @RequestBody @Valid EntregadorDispDTO entregadorDispDTO) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(entregadorPatchDispService.alteraDisponibilidadeEntrega(id, entregadorDispDTO));
     }
 
     @ExceptionHandler(CodigoAcessoInvalidoException.class)

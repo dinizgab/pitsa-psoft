@@ -2,10 +2,7 @@ package com.ufcg.psoft.pitsA.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ufcg.psoft.pitsA.dto.entregador.EntregadorDeleteDTO;
-import com.ufcg.psoft.pitsA.dto.entregador.EntregadorPatchEstabelecimentoDTO;
-import com.ufcg.psoft.pitsA.dto.entregador.EntregadorPostPutDTO;
-import com.ufcg.psoft.pitsA.dto.entregador.EntregadorReadDTO;
+import com.ufcg.psoft.pitsA.dto.entregador.*;
 import com.ufcg.psoft.pitsA.exception.ErrorMessage;
 import com.ufcg.psoft.pitsA.model.Estabelecimento;
 import com.ufcg.psoft.pitsA.model.entregador.Entregador;
@@ -240,14 +237,20 @@ public class EntregadorV1ControllerTests {
 
         @BeforeEach
         void setUp() {
-            estabelecimento = estabelecimentoRepository.save(Estabelecimento.builder()
-                    .codigoAcesso("654321")
-                    .build()
-            );
+            Estabelecimento estabelecimento1 = Estabelecimento.builder()
+                        .codigoAcesso("654321")
+                    .build();
+
+            estabelecimento1.getEntregadoresAprovados().add(entregador);
+            estabelecimento = estabelecimentoRepository.save(estabelecimento1);
+
+            entregador.setEstabelecimento(estabelecimento);
+            entregadorRepository.save(entregador);
         }
 
         @AfterEach
         void tearDown() {
+            entregadorRepository.deleteAll();
             estabelecimentoRepository.deleteAll();
         }
 
@@ -299,6 +302,56 @@ public class EntregadorV1ControllerTests {
             String responseJsonString = driver.perform(patch(URI_ENTREGADORES + "/" + entregadorId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(entregadorEstabelecimentoDTO)))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            ErrorMessage resultado = objectMapper.readValue(responseJsonString, ErrorMessage.class);
+            assertAll(
+                    () -> assertEquals("O codigo de acesso informado eh invalido", resultado.getMessage())
+            );
+        }
+
+        @Test
+        @DisplayName("Quando o entregador altera sua disponibilidade com sucesso")
+        void quandoAlterarDisponibilidade() throws Exception {
+            Long entregadorId = entregador.getId();
+            String codigoAcesso = entregador.getCodigoAcesso();
+
+            EntregadorDispDTO dispPatchBody = EntregadorDispDTO.builder()
+                                .codigoAcesso(codigoAcesso)
+                            .build();
+
+            String responseJsonString = driver.perform(patch(URI_ENTREGADORES + "/disponibilidade/" + entregadorId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(dispPatchBody)))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andReturn().getResponse().getContentAsString();
+
+            EntregadorReadDTO resultado = objectMapper.readValue(responseJsonString, EntregadorReadDTO.class);
+            assertAll(
+                    () -> assertEquals(entregadorId, entregador.getId().longValue()),
+                    () -> assertEquals(resultado.getNome(), entregador.getNome()),
+                    () -> assertEquals(resultado.getTipoVeiculo(), entregador.getTipoVeiculo()),
+                    () -> assertEquals(resultado.getPlacaVeiculo(), entregador.getPlacaVeiculo()),
+                    () -> assertEquals(resultado.getCorVeiculo(), entregador.getCorVeiculo())
+            );
+        }
+
+        @Test
+        @DisplayName("Quando o entregador altera sua disponibilidade com sucesso")
+        void quandoAlterarDisponibilidadeInvalido() throws Exception {
+            Long entregadorId = entregador.getId();
+            String codigoAcesso = "777777";
+
+            EntregadorDispDTO dispPatchBody = EntregadorDispDTO.builder()
+                        .codigoAcesso(codigoAcesso)
+                    .build();
+
+            String responseJsonString = driver.perform(patch(URI_ENTREGADORES + "/disponibilidade/" + entregadorId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(dispPatchBody)))
                     .andExpect(status().isBadRequest())
                     .andDo(print())
                     .andReturn().getResponse().getContentAsString();

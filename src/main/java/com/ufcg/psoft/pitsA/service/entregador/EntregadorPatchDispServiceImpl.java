@@ -27,6 +27,7 @@ public class EntregadorPatchDispServiceImpl implements EntregadorPatchDispServic
         autenticador.autenticar(resultado.getCodigoAcesso(), codigoAcesso);
         resultado.alteraDisponibilidade();
 
+        System.out.println(resultado);
         return modelMapper.map(entregadorRepository.save(resultado), EntregadorReadDTO.class);
     }
 }
