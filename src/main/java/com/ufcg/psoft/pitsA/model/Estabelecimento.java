@@ -10,9 +10,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -36,7 +34,7 @@ public class Estabelecimento {
 
     @Builder.Default
     @OneToMany(mappedBy = "estabelecimento", fetch = FetchType.LAZY)
-    private LinkedList<Entregador> entregadoresAprovados = new LinkedList<>();
+    private List<Entregador> entregadoresAprovados = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -54,7 +52,7 @@ public class Estabelecimento {
 
     public void aprovaEntregador(Entregador entregador) {
         this.entregadoresPendentes.remove(entregador);
-        this.entregadoresAprovados.addFirst(entregador);
+        this.entregadoresAprovados.add(0, entregador);
     }
 
     public void reprovaEntregador(Entregador entregador) {
@@ -72,8 +70,8 @@ public class Estabelecimento {
     public Entregador proximoEntregador() {
         Entregador entregador = null;
 
-        if (this.entregadoresAprovados.getFirst().isDisponivel()) {
-            entregador = this.entregadoresAprovados.getFirst();
+        if (!this.entregadoresAprovados.isEmpty() && this.entregadoresAprovados.get(0).isDisponivel()) {
+            entregador = this.entregadoresAprovados.get(0);
         } else {
             for (Entregador e : entregadoresAprovados) {
                 if (e.isDisponivel()) {
