@@ -376,6 +376,12 @@ public class EstabelecimentoV1ControllerTests {
             estabelecimento = estabelecimentoRepository.save(estabelecimento);
         }
 
+        @AfterEach
+        void tearDown() {
+            estabelecimentoRepository.deleteAll();
+            saborRepository.deleteAll();
+        }
+
         @Test
         @DisplayName("Quando alteramos a disponibilidade com sucesso")
         void testeAlteraDisponibilidadeSucesso() throws Exception {
