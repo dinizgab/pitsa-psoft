@@ -10,7 +10,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -34,7 +36,7 @@ public class Estabelecimento {
 
     @Builder.Default
     @OneToMany(mappedBy = "estabelecimento", fetch = FetchType.LAZY)
-    private List<Entregador> entregadoresAprovados = new ArrayList<>();
+    private LinkedList<Entregador> entregadoresAprovados = new LinkedList<>();
 
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -52,7 +54,7 @@ public class Estabelecimento {
 
     public void aprovaEntregador(Entregador entregador) {
         this.entregadoresPendentes.remove(entregador);
-        this.entregadoresAprovados.add(entregador);
+        this.entregadoresAprovados.addFirst(entregador);
     }
 
     public void reprovaEntregador(Entregador entregador) {
@@ -68,11 +70,24 @@ public class Estabelecimento {
     }
 
     public Entregador proximoEntregador() {
-        return this.getEntregadoresAprovados()
-                .stream()
-                .filter(Entregador::isDisponivel)
-                .findFirst()
-                .orElseThrow(NenhumEntregadorDisponivelException::new);
+        Entregador entregador = null;
+
+        if (this.entregadoresAprovados.getFirst().isDisponivel()) {
+            entregador = this.entregadoresAprovados.getFirst();
+        } else {
+            for (Entregador e : entregadoresAprovados) {
+                if (e.isDisponivel()) {
+                    entregador = e;
+                    break;
+                }
+            }
+        }
+
+        if (entregador == null) {
+            throw new NenhumEntregadorDisponivelException();
+        }
+
+        return entregador;
     }
 
     public void associaEntregadorDisponivel(Entregador entregador) {
