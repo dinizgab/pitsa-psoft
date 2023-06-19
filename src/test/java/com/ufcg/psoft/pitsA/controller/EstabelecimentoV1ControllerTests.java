@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DisplayName("Testes do controlador de Entregadores")
+@DisplayName("Testes do controlador de Estabelecimentos")
 public class EstabelecimentoV1ControllerTests {
 
     @Autowired
@@ -374,6 +374,12 @@ public class EstabelecimentoV1ControllerTests {
             estabelecimento.getCardapio().add(sabor);
 
             estabelecimento = estabelecimentoRepository.save(estabelecimento);
+        }
+
+        @AfterEach
+        void tearDown() {
+            estabelecimentoRepository.deleteAll();
+            saborRepository.deleteAll();
         }
 
         @Test

@@ -52,7 +52,7 @@ public class Estabelecimento {
 
     public void aprovaEntregador(Entregador entregador) {
         this.entregadoresPendentes.remove(entregador);
-        this.entregadoresAprovados.add(entregador);
+        this.entregadoresAprovados.add(0, entregador);
     }
 
     public void reprovaEntregador(Entregador entregador) {
@@ -68,11 +68,24 @@ public class Estabelecimento {
     }
 
     public Entregador proximoEntregador() {
-        return this.getEntregadoresAprovados()
-                .stream()
-                .filter(Entregador::isDisponivel)
-                .findFirst()
-                .orElseThrow(NenhumEntregadorDisponivelException::new);
+        Entregador entregador = null;
+
+        if (!this.entregadoresAprovados.isEmpty() && this.entregadoresAprovados.get(0).isDisponivel()) {
+            entregador = this.entregadoresAprovados.get(0);
+        } else {
+            for (Entregador e : entregadoresAprovados) {
+                if (e.isDisponivel()) {
+                    entregador = e;
+                    break;
+                }
+            }
+        }
+
+        if (entregador == null) {
+            throw new NenhumEntregadorDisponivelException();
+        }
+
+        return entregador;
     }
 
     public void associaEntregadorDisponivel(Entregador entregador) {
